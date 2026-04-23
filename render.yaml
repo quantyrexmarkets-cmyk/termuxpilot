@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: termuxpilot
+    runtime: node
+    buildCommand: npm install
+    startCommand: node pilot.js
+    envVars:
+      - key: PILOT_PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
