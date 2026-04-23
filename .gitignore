@@ -1,0 +1,4 @@
+node_modules/
+processes.json
+pilot.log
+*.backup

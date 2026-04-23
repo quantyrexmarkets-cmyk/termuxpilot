@@ -1,18 +1,1 @@
-[
-  {
-    "name": "test-err",
-    "command": "node missing.js",
-    "cwd": "/data/data/com.termux/files/home",
-    "port": null,
-    "autoRestart": false,
-    "env": {}
-  },
-  {
-    "name": "test-file",
-    "command": "node /tmp/notexist.js",
-    "cwd": "/data/data/com.termux/files/home",
-    "port": null,
-    "autoRestart": false,
-    "env": {}
-  }
-]
+[]
