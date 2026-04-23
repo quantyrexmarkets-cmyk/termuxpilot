@@ -1,0 +1,20 @@
+
+  🛩️  TermuxPilot v1.0.0
+  ──────────────────────
+
+
+  🛩️  TermuxPilot v1.0.0
+  ──────────────────────
+  🌐 Local:   http://localhost:8000
+  📡 Network: http://10.219.6.90:8000
+  🔧 API:     http://localhost:8000/api/processes
+
+  ┌─────────────────┐
+  │  o → Open       │
+  │  l → List       │
+  │  r → Restart    │
+  │  s → Stats      │
+  │  q → Quit       │
+  │  h → Help       │
+  └─────────────────┘
+  

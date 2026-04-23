@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TermuxPilot</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#38bdf8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh;}
+    .topbar{background:#1e293b;border-bottom:1px solid #334155;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+    .topbar h1{font-size:18px;font-weight:800;}
+    .topbar h1 span{color:#38bdf8;}
+    .topbar-right{display:flex;align-items:center;gap:12px;}
+    .topbar-stats{display:flex;gap:16px;font-size:12px;color:#94a3b8;}
+    .topbar-stats .stat{display:flex;align-items:center;gap:4px;}
+    .dot{width:8px;height:8px;border-radius:50%;}
+    .dot.green{background:#22c55e;}
+    .dot.red{background:#ef4444;}
+    .tab-btns{display:flex;gap:6px;}
+    .main{display:grid;grid-template-columns:1fr 1fr;height:calc(100vh - 49px);}
+    .panel{border-right:1px solid #334155;overflow-y:auto;}
+    .panel-header{padding:16px 20px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between;background:#1e293b;position:sticky;top:0;z-index:10;}
+    .panel-header h2{font-size:14px;font-weight:700;}
+    .process-card{padding:16px 20px;border-bottom:1px solid #1e293b;cursor:pointer;transition:background 0.15s;}
+    .process-card:hover{background:#1e293b;}
+    .process-card.active{background:#1e293b;border-left:3px solid #38bdf8;}
+    .proc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+    .proc-name{font-weight:700;font-size:14px;}
+    .status{padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;}
+    .status.running{background:#052e16;color:#22c55e;}
+    .status.stopped{background:#1c1917;color:#ef4444;}
+    .proc-details{display:flex;gap:16px;font-size:11px;color:#64748b;flex-wrap:wrap;}
+    .proc-actions{display:flex;gap:6px;margin-top:10px;}
+    .btn{padding:6px 14px;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;}
+    .btn-blue{background:#1d4ed8;color:white;}
+    .btn-blue:hover{background:#2563eb;}
+    .btn-red{background:#7f1d1d;color:#fca5a5;}
+    .btn-red:hover{background:#991b1b;}
+    .btn-green{background:#052e16;color:#22c55e;}
+    .btn-green:hover{background:#14532d;}
+    .btn-gray{background:#1e293b;color:#94a3b8;border:1px solid #334155;}
+    .btn-gray:hover{background:#334155;}
+    .preview-panel{display:flex;flex-direction:column;}
+    .preview-header{padding:12px 20px;border-bottom:1px solid #334155;display:flex;align-items:center;gap:12px;background:#1e293b;position:sticky;top:0;z-index:10;}
+    .preview-tabs{display:flex;gap:0;}
+    .preview-tab{padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;color:#64748b;}
+    .preview-tab.active{color:#38bdf8;border-bottom-color:#38bdf8;}
+    .preview-content{flex:1;overflow:auto;}
+    .preview-iframe{width:100%;height:100%;border:none;background:white;}
+    .logs{padding:12px;font-family:'Fira Code','Courier New',monospace;font-size:11px;line-height:1.8;}
+    .log-line{display:flex;gap:8px;}
+    .log-time{color:#475569;min-width:70px;}
+    .log-text{word-break:break-all;}
+    .log-stdout{color:#e2e8f0;}
+    .log-stderr{color:#fca5a5;}
+    .log-system{color:#38bdf8;font-style:italic;}
+    .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#475569;text-align:center;padding:40px;}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;}
+    .modal{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:24px;width:90%;max-width:420px;}
+    .modal h3{margin-bottom:16px;font-size:16px;}
+    .modal input,.modal select{width:100%;padding:10px;background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:6px;font-size:13px;margin-bottom:12px;outline:none;box-sizing:border-box;}
+    .modal input:focus{border-color:#38bdf8;}
+    .modal-actions{display:flex;gap:8px;margin-top:8px;}
+    .system-bar{padding:8px 20px;background:#0f172a;border-top:1px solid #334155;display:flex;gap:20px;font-size:11px;color:#475569;}
+    .projects-panel{padding:20px;display:none;}
+    .project-card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px;margin-bottom:16px;}
+    .project-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+    .project-procs{display:flex;flex-wrap:wrap;gap:8px;}
+    .project-proc-badge{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 12px;font-size:12px;}
+    .code-layout{display:grid;grid-template-columns:200px 1fr;height:100%;overflow:hidden;}
+    .file-tree{border-right:1px solid #334155;overflow-y:auto;background:#0f172a;}
+    .file-tree-header{padding:10px 12px;font-size:11px;font-weight:700;color:#64748b;letter-spacing:1px;border-bottom:1px solid #1e293b;}
+    .file-item{padding:7px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;color:#94a3b8;transition:background 0.1s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .file-item:hover{background:#1e293b;color:#e2e8f0;}
+    .file-item.selected{background:#1e3a5f;color:#38bdf8;}
+    .code-area{overflow:auto;background:#1a1a2e;}
+    .code-header{padding:8px 16px;background:#0f172a;border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#64748b;position:sticky;top:0;z-index:5;}
+    .code-area pre{margin:0;padding:16px;font-size:12px;line-height:1.7;tab-size:2;}
+    .code-area code{font-family:'Fira Code','Courier New',monospace;}
+    .add-proj-modal{max-width:500px;max-height:80vh;overflow-y:auto;}
+    .proc-field{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px;margin-bottom:8px;}
+    .proc-field-header{display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px;color:#64748b;font-weight:600;}
+    .proc-field input{margin-bottom:6px;}
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>🛩️ Termux<span>Pilot</span></h1>
+  <div class="topbar-right">
+    <div class="topbar-stats" id="topbar-stats"></div>
+    <div class="tab-btns">
+      <button class="btn btn-blue" id="btn-processes" onclick="showPage('processes')">Processes</button>
+      <button class="btn btn-gray" id="btn-projects" onclick="showPage('projects')">Projects</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESSES PAGE -->
+<div id="page-processes">
+  <div class="main">
+    <div class="panel" id="process-panel">
+      <div class="panel-header">
+        <h2>Processes</h2>
+        <button class="btn btn-blue" onclick="showAddModal()">+ New</button>
+      </div>
+      <div id="process-list"></div>
+    </div>
+    <div class="preview-panel">
+      <div class="preview-header">
+        <div class="preview-tabs">
+          <div class="preview-tab active" onclick="switchTab('preview')" id="tab-preview">Preview</div>
+          <div class="preview-tab" onclick="switchTab('logs')" id="tab-logs">Logs</div>
+          <div class="preview-tab" onclick="switchTab('code')" id="tab-code">Code</div>
+        </div>
+        <span style="margin-left:auto;font-size:11px;color:#475569" id="selected-name">Select a process</span>
+      </div>
+      <div class="preview-content" id="preview-content">
+        <div class="empty"><p>Select a process to view preview, logs or code</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS PAGE -->
+<div class="projects-panel" id="page-projects">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+    <h2 style="font-size:18px;">Project Profiles</h2>
+    <button class="btn btn-blue" onclick="showAddProject()">+ New Project</button>
+  </div>
+  <div id="project-list"></div>
+</div>
+
+<div class="system-bar" id="system-bar"></div>
+
+<!-- ADD PROCESS MODAL -->
+<div class="modal-overlay" id="add-modal" style="display:none">
+  <div class="modal">
+    <h3>Add New Process</h3>
+    <input id="proc-name" placeholder="Name (e.g. backend)" />
+    <input id="proc-command" placeholder="Command (e.g. node server.js)" />
+    <input id="proc-cwd" placeholder="Working directory (e.g. ~/myapp)" />
+    <input id="proc-port" placeholder="Port (optional)" type="number" />
+    <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#94a3b8;margin-bottom:12px">
+      <input type="checkbox" id="proc-restart" /> Auto-restart on crash
+    </label>
+    <div class="modal-actions">
+      <button class="btn btn-blue" style="flex:1" onclick="addProcess()">Start Process</button>
+      <button class="btn btn-gray" onclick="hideAddModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD PROJECT MODAL -->
+<div class="modal-overlay" id="add-project-modal" style="display:none">
+  <div class="modal add-proj-modal">
+    <h3>New Project Profile</h3>
+    <input id="new-proj-name" placeholder="Project name (e.g. MyApp)" />
+    <div id="proj-proc-list"></div>
+    <button class="btn btn-gray" onclick="addProcField()" style="width:100%;margin-bottom:12px;">+ Add Process</button>
+    <div class="modal-actions">
+      <button class="btn btn-blue" style="flex:1" onclick="saveProject()">Save Project</button>
+      <button class="btn btn-gray" onclick="hideAddProject()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ═══════════════════════
+  // STATE
+  // ═══════════════════════
+  var selectedProcess = null;
+  var currentTab = 'preview';
+  var currentPage = 'processes';
+  var procFieldCount = 0;
+  var codeProcessCwd = null;
+
+  // ═══════════════════════
+  // PAGE SWITCHING
+  // ═══════════════════════
+  function showPage(page) {
+    currentPage = page;
+    document.getElementById('page-processes').style.display = page === 'processes' ? 'block' : 'none';
+    document.getElementById('page-projects').style.display = page === 'projects' ? 'block' : 'none';
+    document.getElementById('btn-processes').className = page === 'processes' ? 'btn btn-blue' : 'btn btn-gray';
+    document.getElementById('btn-projects').className = page === 'projects' ? 'btn btn-blue' : 'btn btn-gray';
+    if (page === 'projects') fetchProjects();
+  }
+
+  // ═══════════════════════
+  // PROCESSES
+  // ═══════════════════════
+  async function fetchProcesses() {
+    try {
+      var res = await fetch('/api/processes');
+      var data = await res.json();
+      renderProcesses(data.processes);
+      renderSystem(data.system);
+      renderTopbar(data.processes, data.system);
+    } catch(e) {}
+  }
+
+  function renderProcesses(processes) {
+    var list = document.getElementById('process-list');
+    if (!processes.length) {
+      list.innerHTML = '<div class="empty"><p>No processes yet.<br>Click "+ New" to start one.</p></div>';
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < processes.length; i++) {
+      var p = processes[i];
+      var isActive = selectedProcess === p.name;
+      var isRunning = p.running;
+      html += '<div class="process-card' + (isActive ? ' active' : '') + '" onclick="selectProcess(\'' + esc(p.name) + '\',' + (p.port || 'null') + ')">';
+      html += '<div class="proc-top"><span class="proc-name">' + esc(p.name) + '</span>';
+      html += '<span class="status ' + (isRunning ? 'running' : 'stopped') + '">' + (isRunning ? '● Running' : '● Stopped') + '</span></div>';
+      html += '<div class="proc-details">';
+      if (p.port) html += '<span>:' + p.port + '</span>';
+      html += '<span>PID: ' + (p.pid || '-') + '</span>';
+      if (isRunning) html += '<span>⏱ ' + p.uptimeFormatted + '</span>';
+      html += '<span>$ ' + esc(p.command) + '</span>';
+      html += '</div><div class="proc-actions">';
+      if (isRunning) {
+        html += '<button class="btn btn-red" onclick="event.stopPropagation();stopProc(\'' + esc(p.name) + '\')">Stop</button>';
+        html += '<button class="btn btn-green" onclick="event.stopPropagation();restartProc(\'' + esc(p.name) + '\')">Restart</button>';
+      } else {
+        html += '<button class="btn btn-blue" onclick="event.stopPropagation();restartProc(\'' + esc(p.name) + '\')">Start</button>';
+      }
+      html += '<button class="btn btn-gray" onclick="event.stopPropagation();removeProc(\'' + esc(p.name) + '\')">Remove</button>';
+      html += '</div></div>';
+    }
+    list.innerHTML = html;
+  }
+
+  function renderSystem(sys) {
+    document.getElementById('system-bar').innerHTML =
+      '<span>CPU: ' + sys.cpuCount + ' cores</span>' +
+      '<span>Load: ' + sys.loadAvg + '</span>' +
+      '<span>RAM: ' + sys.usedMemory + 'MB / ' + sys.totalMemory + 'MB (' + sys.memoryPercent + '%)</span>' +
+      '<span>Uptime: ' + sys.uptimeFormatted + '</span>' +
+      '<span>' + sys.platform + '</span>';
+  }
+
+  function renderTopbar(processes, sys) {
+    var running = processes.filter(function(p) { return p.running; }).length;
+    var stopped = processes.filter(function(p) { return !p.running; }).length;
+    document.getElementById('topbar-stats').innerHTML =
+      '<div class="stat"><span class="dot green"></span> ' + running + ' running</div>' +
+      '<div class="stat"><span class="dot red"></span> ' + stopped + ' stopped</div>' +
+      '<div class="stat">RAM: ' + sys.memoryPercent + '%</div>';
+  }
+
+  function selectProcess(name, port) {
+    selectedProcess = name;
+    document.getElementById('selected-name').textContent = name;
+    fetchProcesses();
+    if (currentTab === 'preview') showPreview(port);
+    else if (currentTab === 'logs') showLogs(name);
+    else if (currentTab === 'code') showCodeViewer(name);
+  }
+
+  function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById('tab-preview').className = 'preview-tab' + (tab === 'preview' ? ' active' : '');
+    document.getElementById('tab-logs').className = 'preview-tab' + (tab === 'logs' ? ' active' : '');
+    document.getElementById('tab-code').className = 'preview-tab' + (tab === 'code' ? ' active' : '');
+    if (!selectedProcess) return;
+    if (tab === 'preview') {
+      fetch('/api/processes').then(function(r) { return r.json(); }).then(function(data) {
+        var p = data.processes.find(function(x) { return x.name === selectedProcess; });
+        if (p) showPreview(p.port);
+      });
+    } else if (tab === 'logs') {
+      showLogs(selectedProcess);
+    } else if (tab === 'code') {
+      showCodeViewer(selectedProcess);
+    }
+  }
+
+  function showPreview(port) {
+    var el = document.getElementById('preview-content');
+    if (!port) {
+      el.innerHTML = '<div class="empty"><p>No port set.<br>Add a port number to enable live preview.</p></div>';
+      return;
+    }
+    el.innerHTML = '<iframe class="preview-iframe" src="http://localhost:' + port + '"></iframe>';
+  }
+
+  async function showLogs(name) {
+    try {
+      var res = await fetch('/api/processes/' + encodeURIComponent(name) + '/logs');
+      var data = await res.json();
+      var el = document.getElementById('preview-content');
+      if (!data.logs || !data.logs.length) {
+        el.innerHTML = '<div class="empty"><p>No logs yet.</p></div>';
+        return;
+      }
+      var html = '<div class="logs">';
+      for (var i = 0; i < data.logs.length; i++) {
+        var l = data.logs[i];
+        var time = new Date(l.time).toLocaleTimeString();
+        html += '<div class="log-line"><span class="log-time">' + time + '</span><span class="log-text log-' + l.type + '">' + escHtml(l.text) + '</span></div>';
+      }
+      html += '</div>';
+      el.innerHTML = html;
+      el.scrollTop = el.scrollHeight;
+    } catch(e) {}
+  }
+
+  // ═══════════════════════
+  // CODE VIEWER
+  // ═══════════════════════
+  async function showCodeViewer(name) {
+    var el = document.getElementById('preview-content');
+    try {
+      var res = await fetch('/api/processes');
+      var data = await res.json();
+      var proc = data.processes.find(function(p) { return p.name === name; });
+      if (!proc || !proc.cwd) {
+        el.innerHTML = '<div class="empty"><p>No working directory set.<br>Edit process and add working directory.</p></div>';
+        return;
+      }
+      codeProcessCwd = proc.cwd;
+      el.innerHTML = '<div class="code-layout"><div class="file-tree"><div class="file-tree-header">FILES</div><div id="file-list">Loading...</div></div><div class="code-area" id="code-area"><div class="empty"><p>Select a file</p></div></div></div>';
+      loadFileTree(proc.cwd);
+    } catch(e) {}
+  }
+
+  async function loadFileTree(dirPath) {
+    try {
+      var res = await fetch('/api/files?path=' + encodeURIComponent(dirPath));
+      var data = await res.json();
+      var list = document.getElementById('file-list');
+      if (!list) return;
+      if (data.error) { list.innerHTML = '<div class="file-item" style="color:#ef4444">' + esc(data.error) + '</div>'; return; }
+      var extIcons = {'.js':'JS','.jsx':'JSX','.ts':'TS','.tsx':'TSX','.json':'{}','.md':'MD','.css':'CSS','.html':'HTML','.env':'ENV','.py':'PY'};
+      var html = '';
+      if (dirPath !== codeProcessCwd) {
+        var parent = dirPath.split('/').slice(0,-1).join('/') || '/';
+        html += '<div class="file-item" onclick="loadFileTree(\'' + esc(parent) + '\')">⬆ ..</div>';
+      }
+      for (var i = 0; i < data.items.length; i++) {
+        var item = data.items[i];
+        var icon = item.isDir ? '📁' : (extIcons[item.ext] || '📄');
+        if (item.isDir) {
+          html += '<div class="file-item" onclick="loadFileTree(\'' + esc(item.path) + '\')">' + icon + ' ' + esc(item.name) + '/</div>';
+        } else {
+          html += '<div class="file-item" id="fi-' + i + '" onclick="loadFile(\'' + esc(item.path) + '\',\'' + esc(item.name) + '\',' + i + ')">' + icon + ' ' + esc(item.name) + '</div>';
+        }
+      }
+      list.innerHTML = html;
+    } catch(e) {}
+  }
+
+  async function loadFile(filePath, fileName, idx) {
+    document.querySelectorAll('.file-item').forEach(function(el) { el.classList.remove('selected'); });
+    var fi = document.getElementById('fi-' + idx);
+    if (fi) fi.classList.add('selected');
+    var codeArea = document.getElementById('code-area');
+    if (!codeArea) return;
+    codeArea.innerHTML = '<div class="empty"><p>Loading...</p></div>';
+    try {
+      var res = await fetch('/api/file?path=' + encodeURIComponent(filePath));
+      var data = await res.json();
+      if (data.error) { codeArea.innerHTML = '<div class="empty"><p style="color:#ef4444">' + esc(data.error) + '</p></div>'; return; }
+      var lineCount = data.content.split('\n').length;
+      var ext = fileName.split('.').pop();
+      var langMap = {js:'javascript',jsx:'javascript',ts:'typescript',tsx:'typescript',json:'json',css:'css',html:'html',md:'markdown',py:'python',sh:'bash'};
+      var lang = langMap[ext] || 'plaintext';
+      var escaped = data.content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      codeArea.innerHTML =
+        '<div class="code-header"><span>' + esc(fileName) + '</span><span>' + lineCount + ' lines</span></div>' +
+        '<pre><code class="language-' + lang + '">' + escaped + '</code></pre>';
+      codeArea.querySelectorAll('pre code').forEach(function(el) { hljs.highlightElement(el); });
+      codeArea.scrollTop = 0;
+    } catch(e) { codeArea.innerHTML = '<div class="empty"><p style="color:#ef4444">Failed to load</p></div>'; }
+  }
+
+    // ═══════════════════════
+  // PROCESS ACTIONS (CONTINUED)
+  // ═══════════════════════
+  async function stopProc(name) {
+    await fetch('/api/processes/' + encodeURIComponent(name) + '/stop', { method: 'POST' });
+    fetchProcesses();
+  }
+
+  async function restartProc(name) {
+    await fetch('/api/processes/' + encodeURIComponent(name) + '/restart', { method: 'POST' });
+    fetchProcesses();
+  }
+
+  async function removeProc(name) {
+    if (!confirm('Remove ' + name + '?')) return;
+    await fetch('/api/processes/' + encodeURIComponent(name), { method: 'DELETE' });
+    
+    if (selectedProcess === name) {
+      selectedProcess = null;
+      document.getElementById('preview-content').innerHTML = '<div class="empty"><p>Select a process</p></div>';
+    }
+    fetchProcesses();
+  }
+
+  function showAddModal() { document.getElementById('add-modal').style.display = 'flex'; }
+  function hideAddModal() { document.getElementById('add-modal').style.display = 'none'; }
+
+  async function addProcess() {
+    var name = document.getElementById('proc-name').value.trim();
+    var command = document.getElementById('proc-command').value.trim();
+    var cwd = document.getElementById('proc-cwd').value.trim();
+    var port = document.getElementById('proc-port').value;
+    var autoRestart = document.getElementById('proc-restart').checked;
+
+    if (!name || !command) { alert('Name and command required'); return; }
+
+    await fetch('/api/processes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        name, 
+        command, 
+        cwd: cwd || undefined, 
+        port: port ? parseInt(port) : undefined, 
+        autoRestart 
+      })
+    });
+
+    hideAddModal();
+    document.getElementById('proc-name').value = '';
+    document.getElementById('proc-command').value = '';
+    document.getElementById('proc-cwd').value = '';
+    document.getElementById('proc-port').value = '';
+    document.getElementById('proc-restart').checked = false;
+    
+    fetchProcesses();
+  }
+
+  // ═══════════════════════
+  // PROJECT MANAGEMENT
+  // ═══════════════════════
+  async function fetchProjects() {
+    try {
+      var res = await fetch('/api/projects');
+      var data = await res.json();
+      renderProjects(data.projects);
+    } catch (e) {}
+  }
+
+  function renderProjects(projects) {
+    var list = document.getElementById('project-list');
+    if (!projects || !projects.length) {
+      list.innerHTML = '<div class="empty"><p>No projects yet.<br>Click "+ New Project" to create one.</p></div>';
+      return;
+    }
+
+    var html = '';
+    for (var i = 0; i < projects.length; i++) {
+      var p = projects[i];
+      html += '<div class="project-card">';
+      html +=   '<div class="project-card-top">';
+      html +=     '<div style="font-size:14px; font-weight:700; margin-bottom:4px;">' + esc(p.name) + '</div>';
+      html +=     '<div style="font-size:12px; color:#64748b;">' + p.processes.length + ' process(es)</div>';
+      html +=   '</div>';
+      
+      html +=   '<div style="display:flex; gap:8px;">';
+      html +=     '<button class="btn btn-green" onclick="startProject(\'' + esc(p.name) + '\')">Start All</button>';
+      html +=     '<button class="btn btn-red" onclick="stopProject(\'' + esc(p.name) + '\')">Stop All</button>';
+      html +=     '<button class="btn btn-gray" onclick="restartProject(\'' + esc(p.name) + '\')">Restart</button>';
+      html +=     '<button class="btn btn-gray" onclick="deleteProject(\'' + esc(p.name) + '\')">🗑️</button>';
+      html +=   '</div>';
+      
+      html +=   '<div class="project-procs" style="margin-top:12px;">';
+      for (var j = 0; j < p.processes.length; j++) {
+        var proc = p.processes[j];
+        html += '<div class="project-proc-badge">';
+        html +=   '<div style="font-weight:500; color:#e2e8f0; margin-bottom:2px;">' + esc(proc.name) + '</div>';
+        html += '</div>';
+      }
+      html +=   '</div>';
+      html += '</div>';
+    }
+    list.innerHTML = html;
+  }
+
+  async function deleteProject(name) {
+    if (!confirm('Delete project "' + name + '"?')) return;
+    await fetch('/api/projects/' + encodeURIComponent(name), { method: 'DELETE' });
+    fetchProjects();
+  }
+
+  function showAddProject() {
+    procFieldCount = 0;
+    document.getElementById('new-proj-name').value = '';
+    document.getElementById('proj-proc-list').innerHTML = '';
+    document.getElementById('add-project-modal').style.display = 'flex';
+    addProcField();
+  }
+
+  function hideAddProject() {
+    document.getElementById('add-project-modal').style.display = 'none';
+  }
+
+  function addProcField() {
+    var id = procFieldCount++;
+    var div = document.createElement('div');
+    div.className = 'proc-field';
+    div.id = 'pf-' + id;
+    div.innerHTML = `
+      <div class="proc-field-header"><span>Process ` + (id + 1) + `</span>
+      <button onclick="document.getElementById('pf-` + id + `').remove()" 
+      style="background:none; border:none; color:#ef4444; cursor:pointer;">&times;</button></div>
+      <input placeholder="Name (e.g. backend)" id="pf-name-` + id + `" />
+      <input placeholder="Command (e.g. node server.js)" id="pf-cmd-` + id + `" />
+      <input placeholder="Working directory" id="pf-cwd-` + id + `" />
+      <input placeholder="Port (optional)" type="number" id="pf-port-` + id + `" />
+    `;
+    document.getElementById('proj-proc-list').appendChild(div);
+  }
+
+  async function saveProject() {
+    var name = document.getElementById('new-proj-name').value.trim();
+    if (!name) { alert('Project name required'); return; }
+    
+    var processes = [];
+    for (var i = 0; i < procFieldCount; i++) {
+      var nameEl = document.getElementById('pf-name-' + i);
+      var cmdEl = document.getElementById('pf-cmd-' + i);
+      var cwdEl = document.getElementById('pf-cwd-' + i);
+      var portEl = document.getElementById('pf-port-' + i);
+      
+      if (!nameEl || !cmdEl) continue;
+      
+      var pname = nameEl.value.trim();
+      var pcmd = cmdEl.value.trim();
+      
+      if (!pname || !pcmd) continue;
+      
+      processes.push({
+        name: pname,
+        command: pcmd,
+        cwd: cwdEl ? cwdEl.value.trim() : '',
+        port: portEl && portEl.value ? parseInt(portEl.value) : null,
+        autoRestart: false
+      });
+    }
+
+    if (processes.length === 0) { alert('Add at least one process'); return; }
+
+    await fetch('/api/projects', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, processes })
+    });
+
+    hideAddProject();
+    fetchProjects();
+  }
+
+  // ═══════════════════════
+  // HELPERS & INIT
+  // ═══════════════════════
+  function esc(str) {
+    return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  }
+
+  function escHtml(str) {
+    return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  fetchProcesses();
+  fetchProjects();
+
+  setInterval(function() {
+    fetchProcesses();
+    if (currentTab === 'logs' && selectedProcess) {
+      showLogs(selectedProcess);
+    }
+  }, 2000);
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(function() {});
+  }
+</script>
+</body>
+</html>
