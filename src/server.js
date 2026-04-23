@@ -4,13 +4,14 @@ const os = require('os');
 const readline = require('readline');
 const { exec } = require('child_process');
 const pm = require('./processManager');
+const projects = require('./projects');
 
 const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // ═══════════════════════════════════
-// API ROUTES
+// PROCESS API ROUTES
 // ═══════════════════════════════════
 
 app.get('/api/processes', (req, res) => {
@@ -64,23 +65,14 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', uptime: process.uptime() });
 });
 
-app.get('/{*path}', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
-});
-
-
 // ═══════════════════════════════════
 // PROJECT PROFILE ROUTES
 // ═══════════════════════════════════
-const projects = require('./projects');
-const pm2 = require('./processManager');
 
-// Get all projects
 app.get('/api/projects', (req, res) => {
   res.json({ projects: projects.getAll() });
 });
 
-// Save a project
 app.post('/api/projects', (req, res) => {
   const { name, processes } = req.body;
   if (!name || !processes || !processes.length) {
@@ -89,19 +81,17 @@ app.post('/api/projects', (req, res) => {
   res.json(projects.add({ name, processes }));
 });
 
-// Delete a project
 app.delete('/api/projects/:name', (req, res) => {
   res.json(projects.remove(req.params.name));
 });
 
-// Start all processes in a project
 app.post('/api/projects/:name/start', (req, res) => {
   const project = projects.get(req.params.name);
   if (!project) return res.status(404).json({ message: 'Project not found' });
 
   const results = [];
   project.processes.forEach(proc => {
-    const result = pm2.start({
+    const result = pm.start({
       name: proc.name,
       command: proc.command,
       cwd: proc.cwd,
@@ -114,28 +104,26 @@ app.post('/api/projects/:name/start', (req, res) => {
   res.json({ message: 'Project started', results });
 });
 
-// Stop all processes in a project
 app.post('/api/projects/:name/stop', (req, res) => {
   const project = projects.get(req.params.name);
   if (!project) return res.status(404).json({ message: 'Project not found' });
 
   const results = [];
   project.processes.forEach(proc => {
-    const result = pm2.stop(proc.name);
+    const result = pm.stop(proc.name);
     results.push({ name: proc.name, ...result });
   });
 
   res.json({ message: 'Project stopped', results });
 });
 
-// Restart all processes in a project
 app.post('/api/projects/:name/restart', (req, res) => {
   const project = projects.get(req.params.name);
   if (!project) return res.status(404).json({ message: 'Project not found' });
 
   const results = [];
   project.processes.forEach(proc => {
-    const result = pm2.restart(proc.name);
+    const result = pm.restart(proc.name);
     results.push({ name: proc.name, ...result });
   });
 
@@ -143,7 +131,35 @@ app.post('/api/projects/:name/restart', (req, res) => {
 });
 
 // ═══════════════════════════════════
-// GET NETWORK IP
+// AI BRAIN API ROUTES
+// ═══════════════════════════════════
+
+app.get('/api/ai/errors', (req, res) => {
+  res.json({ errors: pm.getAllErrors() });
+});
+
+app.get('/api/ai/errors/:name', (req, res) => {
+  res.json({ errors: pm.getErrors(req.params.name) });
+});
+
+app.delete('/api/ai/errors/:name', (req, res) => {
+  res.json(pm.clearErrors(req.params.name));
+});
+
+app.post('/api/ai/analyze', (req, res) => {
+  const { text } = req.body;
+  if (!text) return res.status(400).json({ message: 'text required' });
+  const AIBrain = require('./brain');
+  const result = AIBrain.analyze(text, 'manual');
+  res.json({ result: result || { detected: false, message: 'No known error pattern found' } });
+});
+
+app.get('/{*path}', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+});
+
+// ═══════════════════════════════════
+// NETWORK + BROWSER
 // ═══════════════════════════════════
 function getLanIP() {
   const nets = os.networkInterfaces();
@@ -157,14 +173,11 @@ function getLanIP() {
   return 'localhost';
 }
 
-// ═══════════════════════════════════
-// OPEN BROWSER
-// ═══════════════════════════════════
 function openBrowser(url) {
   exec(`termux-open-url ${url}`, (err) => {
     if (err) {
       exec(`am start -a android.intent.action.VIEW -d ${url}`, (err2) => {
-        if (err2) console.log(`  ⚠️  Could not open browser. Visit: ${url}`);
+        if (err2) console.log(`  Could not open browser. Visit: ${url}`);
       });
     }
   });
@@ -188,38 +201,38 @@ function setupCLI(PORT) {
     switch (key) {
       case 'o':
         openBrowser(`http://localhost:${PORT}`);
-        console.log('  🌐 Opening dashboard...');
+        console.log('  Opening dashboard...');
         break;
 
       case 'l':
         const procs = pm.getAll();
         if (!procs.length) {
-          console.log('  📋 No processes running');
+          console.log('  No processes running');
         } else {
-          console.log('\n  📋 Running Processes:');
+          console.log('\n  Running Processes:');
           procs.forEach(p => {
-            const status = p.running ? '🟢' : '🔴';
-            console.log(`  ${status} ${p.name} | PID: ${p.pid || '-'} | Uptime: ${p.uptimeFormatted}`);
+            const status = p.running ? 'RUNNING' : 'STOPPED';
+            console.log(`  [${status}] ${p.name} | PID: ${p.pid || '-'} | Uptime: ${p.uptimeFormatted}`);
           });
           console.log('');
         }
         break;
 
       case 'r':
-        console.log('  🔄 Restarting all running processes...');
+        console.log('  Restarting all running processes...');
         pm.getAll().filter(p => p.running).forEach(p => pm.restart(p.name));
         break;
 
       case 's':
         const sys = pm.getSystemStats();
-        console.log(`\n  💻 System Stats:`);
+        console.log(`\n  System Stats:`);
         console.log(`  RAM: ${sys.usedMemory}MB / ${sys.totalMemory}MB (${sys.memoryPercent}%)`);
         console.log(`  Load: ${sys.loadAvg}`);
         console.log(`  Uptime: ${sys.uptimeFormatted}\n`);
         break;
 
       case 'q':
-        console.log('\n  👋 Shutting down TermuxPilot...\n');
+        console.log('\n  Shutting down TermuxPilot...\n');
         process.exit(0);
         break;
 
@@ -229,23 +242,21 @@ function setupCLI(PORT) {
         break;
 
       default:
-        if (key) console.log(`  ❓ Unknown command: "${key}" — type 'h' for help`);
+        if (key) console.log(`  Unknown command: "${key}" - type 'h' for help`);
     }
   });
 }
 
 function printHelp(PORT) {
   console.log(`
-  ┌─────────────────────────────────┐
-  │     TermuxPilot Commands        │
-  ├─────────────────────────────────┤
-  │  o  →  Open dashboard           │
-  │  l  →  List all processes       │
-  │  r  →  Restart all processes    │
-  │  s  →  Show system stats        │
-  │  q  →  Quit TermuxPilot         │
-  │  h  →  Show this help           │
-  └─────────────────────────────────┘
+  TermuxPilot Commands
+  --------------------
+  o  -  Open dashboard
+  l  -  List all processes
+  r  -  Restart all processes
+  s  -  Show system stats
+  q  -  Quit TermuxPilot
+  h  -  Show this help
   Dashboard: http://localhost:${PORT}
   `);
 }
@@ -261,25 +272,17 @@ app.listen(PORT, '0.0.0.0', () => {
   const lanIP = getLanIP();
 
   console.log(`
-  🛩️  TermuxPilot v1.0.0
-  ──────────────────────
-  🌐 Local:   http://localhost:${PORT}
-  📡 Network: http://${lanIP}:${PORT}
-  🔧 API:     http://localhost:${PORT}/api/processes
+  TermuxPilot v1.0.0
+  ----------------------
+  Local:   http://localhost:${PORT}
+  Network: http://${lanIP}:${PORT}
+  API:     http://localhost:${PORT}/api/processes
 
-  ┌─────────────────┐
-  │  o → Open       │
-  │  l → List       │
-  │  r → Restart    │
-  │  s → Stats      │
-  │  q → Quit       │
-  │  h → Help       │
-  └─────────────────┘
+  o - Open    l - List    r - Restart
+  s - Stats   q - Quit    h - Help
   `);
 
-  // Auto open on first run
   setTimeout(() => openBrowser(`http://localhost:${PORT}`), 1500);
-
   setupCLI(PORT);
 });
 

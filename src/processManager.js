@@ -2,6 +2,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 const { parse } = require('shell-quote');
 const store = require('./store');
+const AIBrain = require('./brain');
 
 const TERMUX_BIN = '/data/data/com.termux/files/usr/bin';
 
@@ -19,10 +20,25 @@ class ProcessManager {
   constructor() {
     this.processes = new Map();
     this.logs = new Map();
+    this.errors = new Map(); // 🧠 AI detected errors per process
     this.maxLogLines = 200;
+    this.maxErrors = 50;
+    this._listeners = new Set(); // WebSocket broadcast listeners
   }
 
-  // ── Save to store (Fix: proper serialization) ──
+  // ── Register broadcast listener ──
+  onError(fn) {
+    this._listeners.add(fn);
+  }
+
+  // ── Broadcast AI error to all listeners ──
+  _broadcast(event) {
+    this._listeners.forEach(fn => {
+      try { fn(event); } catch(e) {}
+    });
+  }
+
+  // ── Save to store ──
   _save() {
     const serializable = Array.from(this.processes.values()).map(p => ({
       name: p.name,
@@ -33,6 +49,40 @@ class ProcessManager {
       env: p.env || {},
     }));
     store.save(serializable);
+  }
+
+  // ── 🧠 AI Brain scan a log line ──
+  _scanLine(line, name, type) {
+    // Only scan stderr and stdout for errors
+    if (type === 'system') return;
+
+    const result = AIBrain.analyze(line, name);
+    if (!result) return;
+
+    // Store the error
+    if (!this.errors.has(name)) {
+      this.errors.set(name, []);
+    }
+    const errorList = this.errors.get(name);
+    errorList.unshift(result); // newest first
+    if (errorList.length > this.maxErrors) errorList.pop();
+
+    // Add to log buffer
+    const logBuffer = this.logs.get(name) || [];
+    logBuffer.push({
+      time: new Date(),
+      type: 'ai',
+      text: `🧠 AI: ${result.type} detected — ${result.cause}`
+    });
+
+    // Broadcast to dashboard
+    this._broadcast({
+      type: 'AI_ERROR',
+      process: name,
+      error: result
+    });
+
+    console.log(`  🧠 AI Brain [${name}]: ${result.severityEmoji ? result.severityEmoji(result.severity) : '⚠️'} ${result.type} — ${result.cause}`);
   }
 
   start(config) {
@@ -65,7 +115,6 @@ class ProcessManager {
     const logBuffer = [];
     this.logs.set(name, logBuffer);
 
-    // Fix: detached + unref for true independence
     const proc = spawn(cmd, args, {
       cwd: resolvedCwd,
       env: {
@@ -81,12 +130,13 @@ class ProcessManager {
     proc.unref();
 
     proc.on('error', (err) => {
-      logBuffer.push({
-        time: new Date(),
-        type: 'stderr',
-        text: `Spawn error: ${err.message}`,
-      });
+      const text = `Spawn error: ${err.message}`;
+      logBuffer.push({ time: new Date(), type: 'stderr', text });
       if (logBuffer.length > this.maxLogLines) logBuffer.shift();
+
+      // 🧠 Scan for AI error
+      this._scanLine(text, name, 'stderr');
+
       const entry = this.processes.get(name);
       if (entry) {
         entry.running = false;
@@ -103,7 +153,10 @@ class ProcessManager {
         logBuffer.push({ time: new Date(), type: 'stdout', text: clean });
         if (logBuffer.length > this.maxLogLines) logBuffer.shift();
 
-        // Fix: Auto port detection from logs
+        // 🧠 Scan stdout for errors too
+        this._scanLine(clean, name, 'stdout');
+
+        // Auto port detection
         const match = clean.match(/localhost:(\d{2,5})/);
         if (match) {
           const detectedPort = parseInt(match[1]);
@@ -128,7 +181,10 @@ class ProcessManager {
         logBuffer.push({ time: new Date(), type: 'stderr', text: clean });
         if (logBuffer.length > this.maxLogLines) logBuffer.shift();
 
-        // Also detect port from stderr (Vite logs to stderr)
+        // 🧠 Scan stderr for errors
+        this._scanLine(clean, name, 'stderr');
+
+        // Also detect port from stderr
         const match = clean.match(/localhost:(\d{2,5})/);
         if (match) {
           const detectedPort = parseInt(match[1]);
@@ -162,7 +218,6 @@ class ProcessManager {
       });
       if (logBuffer.length > this.maxLogLines) logBuffer.shift();
 
-      // Fix: restart race condition - use flag instead of setTimeout
       if (entry.restarting) {
         entry.restarting = false;
         setTimeout(() => {
@@ -178,7 +233,6 @@ class ProcessManager {
         return;
       }
 
-      // Auto restart on crash
       if (entry.autoRestart && code !== 0 && code !== null) {
         logBuffer.push({
           time: new Date(),
@@ -232,7 +286,6 @@ class ProcessManager {
     entry.autoRestart = false;
     entry.restarting = false;
 
-    // Fix: kill entire process group
     try {
       process.kill(-entry.pid, 'SIGTERM');
     } catch (e) {
@@ -253,7 +306,6 @@ class ProcessManager {
     const entry = this.processes.get(name);
     if (!entry) return { success: false, message: `${name} not found` };
 
-    // Fix: use restarting flag to avoid race condition
     entry.restarting = true;
 
     try {
@@ -269,8 +321,8 @@ class ProcessManager {
     const entry = this.processes.get(name);
     if (entry && entry.running) this.stop(name);
     this.processes.delete(name);
-    // Fix: clear logs on remove to prevent memory leak
     this.logs.delete(name);
+    this.errors.delete(name); // 🧠 Clean up AI errors too
     this._save();
     return { success: true, message: `${name} removed` };
   }
@@ -320,6 +372,27 @@ class ProcessManager {
 
   getLogs(name) {
     return this.logs.get(name) || [];
+  }
+
+  // 🧠 Get AI errors for a process
+  getErrors(name) {
+    return this.errors.get(name) || [];
+  }
+
+  // 🧠 Get ALL AI errors across all processes
+  getAllErrors() {
+    const all = [];
+    for (const [name, errors] of this.errors) {
+      errors.forEach(e => all.push({ ...e, process: name }));
+    }
+    // Sort newest first
+    return all.sort((a, b) => new Date(b.time) - new Date(a.time));
+  }
+
+  // 🧠 Clear AI errors for a process
+  clearErrors(name) {
+    this.errors.set(name, []);
+    return { success: true };
   }
 
   clearLogs(name) {
