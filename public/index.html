@@ -1,66 +1,397 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>TermuxPilot</title><style>
-*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0a0a14;--sf:#111122;--sf2:#161630;--bd:#1e1e3a;--tx:#e0e0e8;--tx2:#888899;--ac:#6c5ce7;--ac2:#a29bfe;--gn:#00b894;--rd:#ff4444;--or:#ff8800;--yw:#ffd700;--bl:#0984e3;--r:10px}body{background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;min-height:100vh}.hd{background:var(--sf);border-bottom:1px solid var(--bd);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}.hd-t{font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px}.hd-t svg{width:22px;height:22px}.tabs{display:flex;background:var(--sf);border-bottom:1px solid var(--bd);overflow-x:auto}.tab{padding:10px 16px;font-size:13px;color:var(--tx2);cursor:pointer;border-bottom:2px solid transparent;display:flex;align-items:center;gap:6px}.tab.active{color:var(--ac2);border-bottom-color:var(--ac)}.tab svg{width:14px;height:14px}.ct{padding:16px;max-width:900px;margin:0 auto}.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:14px}.card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.card-t{font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px}.pc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:10px}.pc:hover{border-color:var(--ac)}.pc-h{display:flex;align-items:center;justify-content:space-between}.pc-n{font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px}.sd{width:8px;height:8px;border-radius:50%;display:inline-block}.sd.on{background:var(--gn);box-shadow:0 0 6px var(--gn)}.sd.off{background:var(--rd)}.pc-m{display:flex;gap:14px;margin-top:8px;font-size:12px;color:var(--tx2);flex-wrap:wrap}.pc-m span{display:flex;align-items:center;gap:4px}.pc-m svg{width:12px;height:12px}.pc-a{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}.btn{padding:6px 12px;border:1px solid var(--bd);border-radius:6px;background:var(--sf2);color:var(--tx);font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px}.btn:active{transform:scale(.96)}.btn svg{width:13px;height:13px}.btn-p{background:var(--ac);border-color:var(--ac);color:#fff}.btn-d{border-color:var(--rd);color:var(--rd)}.btn-g{border-color:var(--gn);color:var(--gn)}.ig{margin-bottom:12px}.ig label{display:block;font-size:12px;color:var(--tx2);margin-bottom:4px}.ig input{width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--bd);border-radius:6px;color:var(--tx);font-size:13px;outline:none}.ig input:focus{border-color:var(--ac)}.lv{background:#050510;border:1px solid var(--bd);border-radius:var(--r);padding:12px;max-height:400px;overflow-y:auto;font-family:monospace;font-size:11px;line-height:1.6}.ll{display:flex;gap:8px}.lt{color:#444;min-width:70px}.lo{color:#ccc}.le{color:var(--rd)}.ls{color:var(--bl)}.la{color:var(--yw);font-weight:bold}.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}.sc{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:14px;text-align:center}.sv{font-size:22px;font-weight:700;color:var(--ac2)}.sl{font-size:11px;color:var(--tx2);margin-top:4px}
-.ae{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:12px}.ae.critical{border-left:3px solid var(--rd)}.ae.high{border-left:3px solid var(--or)}.ae.medium{border-left:3px solid var(--yw)}.ae.low{border-left:3px solid var(--gn)}.as{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase}.as.critical{background:#ff444422;color:var(--rd)}.as.high{background:#ff880022;color:var(--or)}.as.medium{background:#ffd70022;color:var(--yw)}.as.low{background:#00b89422;color:var(--gn)}.ar{background:var(--bg);border-radius:4px;padding:8px;font-size:11px;color:#ff8888;font-family:monospace;margin:8px 0;word-break:break-all}.af li{font-size:12px;color:var(--tx2);margin:4px 0;list-style:none;display:flex;align-items:flex-start;gap:6px}.af li svg{width:12px;min-width:12px;height:12px;margin-top:2px;color:var(--gn)}.fab{position:fixed;bottom:20px;right:20px;width:50px;height:50px;background:var(--sf);border:1px solid var(--ac);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:9997;box-shadow:0 4px 15px rgba(108,92,231,.3)}.fab:active{transform:scale(.95)}.fab svg{width:22px;height:22px;color:var(--ac2)}.fab-b{position:absolute;top:-4px;right:-4px;background:var(--rd);color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center}.ap{position:fixed;top:0;right:-400px;width:380px;height:100vh;background:var(--bg);border-left:1px solid var(--bd);z-index:9998;overflow-y:auto;transition:right .3s}.ap.open{right:0}.ap-h{padding:16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg)}.ap-t{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px}.toast{position:fixed;bottom:80px;right:20px;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:14px;z-index:9999;min-width:280px;max-width:360px;animation:ti .3s}.toast.critical{border-left:3px solid var(--rd)}.toast.high{border-left:3px solid var(--or)}.es{text-align:center;padding:40px 20px;color:var(--tx2)}.es svg{width:48px;height:48px;color:#333;margin-bottom:12px}.mo{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9990;display:none;align-items:center;justify-content:center}.mo.open{display:flex}.md{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:20px;width:90%;max-width:420px}.md h3{font-size:16px;margin-bottom:16px;display:flex;align-items:center;gap:8px}.md h3 svg{width:18px;height:18px}@keyframes ti{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes to{from{opacity:1}to{opacity:0;transform:translateX(40px)}}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:4px}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a14;--sf:#111122;--bd:#1e1e3a;--tx:#e0e0e8;--tx2:#666;--ac:#6c5ce7;--ac2:#a29bfe;--gn:#00b894;--rd:#ff4444;--or:#ff8800;--yw:#ffd700}
+body{background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── Header ── */
+.hd{background:var(--sf);border-bottom:1px solid var(--bd);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.hd-t{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.hd-t svg{width:20px;height:20px}
+.hd-r{display:flex;gap:6px;align-items:center}
+
+/* ── Main Layout ── */
+.main{display:flex;flex:1;overflow:hidden}
+
+/* ── Left Sidebar ── */
+.sb{width:180px;min-width:180px;background:var(--sf);border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden}
+.sb-h{padding:10px 12px;font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.sb-list{flex:1;overflow-y:auto;padding:6px}
+.proc-item{padding:8px 10px;border-radius:8px;cursor:pointer;margin-bottom:4px;border:1px solid transparent;transition:.15s}
+.proc-item:hover{background:var(--bd)}
+.proc-item.active{background:#6c5ce722;border-color:var(--ac)}
+.proc-item-n{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.proc-item-c{font-size:10px;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sd.on{background:var(--gn);box-shadow:0 0 5px var(--gn)}
+.sd.off{background:var(--rd)}
+.sb-actions{padding:8px;border-top:1px solid var(--bd);display:flex;flex-direction:column;gap:4px}
+
+/* ── Workspace ── */
+.ws{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── Workspace Header ── */
+.ws-h{background:var(--sf);border-bottom:1px solid var(--bd);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ws-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.ws-tabs{display:flex;gap:4px}
+.ws-tab{padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;color:var(--tx2);border:1px solid transparent}
+.ws-tab.active{background:var(--ac);color:#fff}
+.ws-tab:hover:not(.active){background:var(--bd)}
+
+/* ── Panels ── */
+.panels{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.panel{display:flex;flex-direction:column;overflow:hidden;border-bottom:1px solid var(--bd)}
+.panel:last-child{border-bottom:none}
+.panel-h{padding:6px 14px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid var(--bd)}
+.panel-title{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px}
+.panel-title svg{width:12px;height:12px}
+.panel-body{flex:1;overflow-y:auto;overflow-x:hidden}
+
+/* ── Editor Panel ── */
+.editor-wrap{height:240px}
+.editor{width:100%;height:100%;background:#050510;color:var(--tx);font-family:monospace;font-size:12px;padding:12px;border:none;outline:none;resize:none;line-height:1.6}
+.editor-empty{padding:20px;color:var(--tx2);font-size:13px;text-align:center}
+.file-tree{padding:6px}
+.ft-item{padding:5px 8px;border-radius:6px;cursor:pointer;font-size:12px;display:flex;align-items:center;gap:6px;color:var(--tx2)}
+.ft-item:hover{background:var(--bd);color:var(--tx)}
+.ft-item.active{color:var(--ac2)}
+.ft-item svg{width:13px;height:13px;flex-shrink:0}
+
+/* ── Preview Panel ── */
+.preview-wrap{height:200px}
+.preview-frame{width:100%;height:100%;border:none;background:#fff}
+.preview-empty{padding:20px;color:var(--tx2);font-size:13px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.preview-empty svg{width:32px;height:32px;color:#333}
+
+/* ── Logs Panel ── */
+.logs-wrap{flex:1;min-height:120px}
+.lv{padding:8px 12px;font-family:monospace;font-size:11px;line-height:1.6}
+.ll{display:flex;gap:8px;margin-bottom:1px}
+.lt{color:#333;min-width:65px;flex-shrink:0}
+.lo{color:#aaa;word-break:break-all}
+.le{color:var(--rd);word-break:break-all}
+.ls{color:#0984e3}
+.la{color:var(--yw);font-weight:bold}
+
+/* ── AI Inline Error ── */
+.ai-inline{margin:4px 0;background:#1a0a0a;border:1px solid var(--rd)44;border-left:3px solid var(--rd);border-radius:6px;padding:8px 10px}
+.ai-inline.high{border-left-color:var(--or);background:#1a0f00}
+.ai-inline.medium{border-left-color:var(--yw);background:#1a1800}
+.ai-type{font-size:11px;font-weight:700;color:var(--rd);margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}
+.ai-inline.high .ai-type{color:var(--or)}
+.ai-inline.medium .ai-type{color:var(--yw)}
+.ai-cause{font-size:11px;color:var(--tx2);margin-bottom:6px}
+.ai-fix-btn{padding:3px 8px;background:var(--ac);border:none;color:#fff;border-radius:4px;font-size:10px;cursor:pointer}
+
+/* ── Footer ── */
+.ft{background:var(--sf);border-top:1px solid var(--bd);padding:5px 16px;display:flex;gap:20px;align-items:center;flex-shrink:0}
+.ft-stat{font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:4px}
+.ft-stat svg{width:11px;height:11px}
+.ft-dot{width:6px;height:6px;border-radius:50%;background:var(--gn)}
+
+/* ── Buttons ── */
+.btn{padding:5px 10px;border:1px solid var(--bd);border-radius:6px;background:#161630;color:var(--tx);font-size:11px;cursor:pointer;display:flex;align-items:center;gap:4px}
+.btn:active{transform:scale(.96)}
+.btn svg{width:12px;height:12px}
+.btn-p{background:var(--ac);border-color:var(--ac);color:#fff}
+.btn-d{border-color:var(--rd);color:var(--rd)}
+.btn-g{border-color:var(--gn);color:var(--gn)}
+.btn-sm{padding:3px 7px;font-size:10px}
+
+/* ── Modal ── */
+.mo{position:fixed;inset:0;background:#000a;z-index:990;display:none;align-items:center;justify-content:center}
+.mo.open{display:flex}
+.md{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:20px;width:90%;max-width:400px}
+.md h3{font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ig{margin-bottom:10px}
+.ig label{display:block;font-size:11px;color:var(--tx2);margin-bottom:3px}
+.ig input{width:100%;padding:7px 10px;background:var(--bg);border:1px solid var(--bd);border-radius:6px;color:var(--tx);font-size:12px;outline:none}
+.ig input:focus{border-color:var(--ac)}
+
+/* ── AI Toast ── */
+.ai-toast{position:fixed;top:50px;right:12px;background:var(--sf);border:1px solid var(--bd);border-left:3px solid var(--rd);border-radius:8px;padding:10px 12px;z-index:999;min-width:260px;max-width:320px;animation:ti .3s}
+@keyframes ti{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+
+/* ── Mobile sidebar toggle ── */
+.sb-toggle{display:none}
+@media(max-width:600px){
+  .sb{position:fixed;left:-180px;top:0;height:100%;z-index:100;transition:left .3s}
+  .sb.open{left:0}
+  .sb-toggle{display:flex}
+  .overlay{display:none;position:fixed;inset:0;background:#0007;z-index:99}
+  .overlay.show{display:block}
+}
 </style></head><body>
-<div class="hd"><div class="hd-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>TermuxPilot</div><div><button class="btn btn-p" onclick="openAdd()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New</button></div></div>
-<div class="tabs"><div class="tab active" onclick="sw('processes')" id="tab-processes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Processes</div><div class="tab" onclick="sw('logs')" id="tab-logs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Logs</div><div class="tab" onclick="sw('system')" id="tab-system"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>System</div><div class="tab" onclick="sw('ai')" id="tab-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4c0 1.95-1.4 3.57-3.25 3.92L12 14"/><circle cx="12" cy="19" r="2"/><path d="M5 8a7 7 0 0114 0"/><path d="M2 12a10 10 0 0120 0"/></svg>AI Brain<span id="ai-tb" style="background:var(--rd);color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;display:none;align-items:center;justify-content:center;font-weight:700;margin-left:4px"></span></div></div>
-<div class="ct" id="ct"><div class="es"><div>Loading...</div></div></div>
-<div class="mo" id="add-mo"><div class="md"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Process</h3><div class="ig"><label>Name</label><input type="text" id="i-n" placeholder="my-server"></div><div class="ig"><label>Command</label><input type="text" id="i-c" placeholder="node server.js"></div><div class="ig"><label>Working Directory</label><input type="text" id="i-d" placeholder="~/myproject"></div><div class="ig"><label>Port (optional)</label><input type="number" id="i-p" placeholder="3000"></div><div class="ig" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="i-r"><label for="i-r" style="margin:0">Auto-restart on crash</label></div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-p" onclick="addProc()" style="flex:1">Start Process</button><button class="btn" onclick="closeAdd()">Cancel</button></div></div></div>
-<div class="ap" id="ap"><div class="ap-h"><div class="ap-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M12 2a4 4 0 014 4c0 1.95-1.4 3.57-3.25 3.92L12 14"/><circle cx="12" cy="19" r="2"/><path d="M5 8a7 7 0 0114 0"/><path d="M2 12a10 10 0 0120 0"/></svg>AI Brain</div><div style="display:flex;gap:6px"><button class="btn" onclick="clearAI()" id="ai-cl" style="display:none">Clear</button><button class="btn" onclick="closeAP()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div></div><div class="ap-b" id="ap-b"></div></div>
-<div class="fab" onclick="toggleAP()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4c0 1.95-1.4 3.57-3.25 3.92L12 14"/><circle cx="12" cy="19" r="2"/><path d="M5 8a7 7 0 0114 0"/><path d="M2 12a10 10 0 0120 0"/></svg><div class="fab-b" id="fab-b">0</div></div>
-<div class="hd"><div class="hd-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>TermuxPilot</div><div><button class="btn btn-p" onclick="openAdd()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New</button></div></div>
-<div class="tabs"><div class="tab active" onclick="sw('processes')" id="tab-processes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Processes</div><div class="tab" onclick="sw('logs')" id="tab-logs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Logs</div><div class="tab" onclick="sw('system')" id="tab-system"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>System</div><div class="tab" onclick="sw('ai')" id="tab-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4c0 1.95-1.4 3.57-3.25 3.92L12 14"/><circle cx="12" cy="19" r="2"/><path d="M5 8a7 7 0 0114 0"/><path d="M2 12a10 10 0 0120 0"/></svg>AI Brain<span id="ai-tb" style="background:var(--rd);color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;display:none;align-items:center;justify-content:center;font-weight:700;margin-left:4px"></span></div></div>
-<div class="ct" id="ct"><div class="es"><div>Loading...</div></div></div>
-<div class="mo" id="add-mo"><div class="md"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Process</h3><div class="ig"><label>Name</label><input type="text" id="i-n" placeholder="my-server"></div><div class="ig"><label>Command</label><input type="text" id="i-c" placeholder="node server.js"></div><div class="ig"><label>Working Directory</label><input type="text" id="i-d" placeholder="~/myproject"></div><div class="ig"><label>Port (optional)</label><input type="number" id="i-p" placeholder="3000"></div><div class="ig" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="i-r"><label for="i-r" style="margin:0">Auto-restart on crash</label></div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-p" onclick="addProc()" style="flex:1">Start Process</button><button class="btn" onclick="closeAdd()">Cancel</button></div></div></div>
-<div class="ap" id="ap"><div class="ap-h"><div class="ap-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M12 2a4 4 0 014 4c0 1.95-1.4 3.57-3.25 3.92L12 14"/><circle cx="12" cy="19" r="2"/><path d="M5 8a7 7 0 0114 0"/><path d="M2 12a10 10 0 0120 0"/></svg>AI Brain</div><div style="display:flex;gap:6px"><button class="btn" onclick="clearAI()" id="ai-cl" style="display:none">Clear</button><button class="btn" onclick="closeAP()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div></div><div class="ap-b" id="ap-b"></div></div>
-<div class="fab" onclick="toggleAP()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4c0 1.95-1.4 3.57-3.25 3.92L12 14"/><circle cx="12" cy="19" r="2"/><path d="M5 8a7 7 0 0114 0"/><path d="M2 12a10 10 0 0120 0"/></svg><div class="fab-b" id="fab-b">0</div></div>
+<!-- Header -->
+<div class="hd">
+<div class="hd-t">
+<button class="btn btn-sm sb-toggle" onclick="toggleSB()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>TermuxPilot</div>
+<div class="hd-r"><span id="hd-err" style="display:none;font-size:11px;color:var(--rd);cursor:pointer" onclick="scrollToErr()"></span></div>
+</div>
+
+<!-- Mobile Overlay -->
+<div class="overlay" id="overlay" onclick="toggleSB()"></div>
+
+<!-- Main -->
+<div class="main">
+
+<!-- Sidebar -->
+<div class="sb" id="sb">
+<div class="sb-h">Processes <button class="btn btn-sm btn-p" onclick="openAdd()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></div>
+<div class="sb-list" id="sb-list"></div>
+<div class="sb-actions" id="sb-actions">
+<button class="btn btn-sm" onclick="openAdd()" style="width:100%;justify-content:center">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Process</button>
+</div>
+</div>
+
+<!-- Workspace -->
+<div class="ws">
+<div class="ws-h">
+<div class="ws-title" id="ws-title">Select a process</div>
+<div class="ws-tabs" id="ws-tabs">
+<div class="ws-tab active" onclick="setMode('code')" id="m-code">Code</div>
+<div class="ws-tab" onclick="setMode('files')" id="m-files">Files</div>
+</div>
+</div>
+<div class="panels">
+<!-- Editor/Files Panel -->
+<div class="panel editor-wrap" id="p-editor">
+<div class="panel-h"><div class="panel-title" id="editor-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Editor</div><div id="editor-actions"></div></div>
+<div class="panel-body" id="editor-body"><div class="editor-empty">Click a file to edit</div></div>
+</div>
+<!-- Preview Panel -->
+<div class="panel preview-wrap" id="p-preview">
+<div class="panel-h"><div class="panel-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Preview</div><div id="preview-actions"></div></div>
+<div class="panel-body" id="preview-body"><div class="preview-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>No preview</div></div>
+</div>
+<!-- Logs Panel -->
+<div class="panel logs-wrap" id="p-logs">
+<div class="panel-h"><div class="panel-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>Logs</div><div id="log-actions"></div></div>
+<div class="panel-body" id="log-body"><div class="lv" id="lv"></div></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Footer -->
+<div class="ft" id="ft">
+<div class="ft-stat"><div class="ft-dot" id="ft-dot"></div><span id="ft-procs">0 running</span></div>
+<div class="ft-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg><span id="ft-cpu">0.00</span></div>
+<div class="ft-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span id="ft-ram">0%</span></div>
+<div class="ft-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="ft-up">0s</span></div>
+</div>
+
+<!-- Add Process Modal -->
+<div class="mo" id="add-mo"><div class="md"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Process</h3><div class="ig"><label>Name</label><input type="text" id="i-n" placeholder="my-server"></div><div class="ig"><label>Command</label><input type="text" id="i-c" placeholder="node server.js"></div><div class="ig"><label>Directory</label><input type="text" id="i-d" placeholder="~/project"></div><div class="ig"><label>Port</label><input type="number" id="i-p" placeholder="3000"></div><div class="ig" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="i-r"><label for="i-r" style="margin:0;font-size:11px">Auto-restart</label></div><div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-p" onclick="addProc()" style="flex:1">Start</button><button class="btn" onclick="closeAdd()">Cancel</button></div></div></div>
 <script>
-let tab='processes',procs=[],sys={},errs=[],selLog=null,lastEC=0;
+let procs=[],sys={},errs=[],sel=null,editPath=null,curDir='~',mode='code',lastEC=0;
 const ic={
-play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
-stop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12"/></svg>',
+fo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>',
+fi:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+sv:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>',
 rf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>',
 tr:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>',
-tm:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>',
+stop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12"/></svg>',
+play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21"/></svg>',
+lk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
+up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>',
+x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
 ck:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
 al:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-cl:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-cp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>',
-zp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
-sr:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
-ey:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
-gl:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>',
-br:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4c0 1.95-1.4 3.57-3.25 3.92L12 14"/><circle cx="12" cy="19" r="2"/><path d="M5 8a7 7 0 0114 0"/><path d="M2 12a10 10 0 0120 0"/></svg>',
-x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
-lk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>',
-sh:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
+R:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="14" rx="2"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><path d="M9 16h6"/><line x1="12" y1="2" x2="12" y2="6"/><circle cx="12" cy="2" r="1"/></svg>'
 };
-function E(s){if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
-async function fp(){try{const r=await fetch('/api/processes');const d=await r.json();procs=d.processes||[];sys=d.system||{};if(tab==='processes')rp();if(tab==='system')rs()}catch(e){}}
-async function fl(n){try{const r=await fetch('/api/processes/'+n+'/logs');const d=await r.json();return d.logs||[]}catch(e){return[]}}
-async function fe(){try{const r=await fetch('/api/ai/errors');const d=await r.json();errs=d.errors||[];ub()}catch(e){}}
-function sw(t){tab=t;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+t).classList.add('active');if(t==='processes')rp();else if(t==='logs')rl();else if(t==='system')rs();else if(t==='ai')ra()}
-function rp(){const el=document.getElementById('ct');if(!procs.length){el.innerHTML='<div class="es"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:48px;height:48px;color:#333"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><div style="margin-top:12px;font-size:15px">No processes running</div><div style="font-size:12px;margin-top:4px">Click <strong>New</strong> to start one</div></div>';return}el.innerHTML=procs.map(p=>{const s=p.running?'on':'off',st=p.running?'Running':'Stopped';return'<div class="pc"><div class="pc-h"><div class="pc-n"><span class="sd '+s+'"></span>'+E(p.name)+'</div><span style="font-size:11px;color:var(--tx2)">'+st+'</span></div><div class="pc-m"><span>'+ic.tm+' '+E(p.command)+'</span>'+(p.port?'<span>'+ic.gl+' :'+p.port+'</span>':'')+(p.running?'<span>'+ic.cl+' '+p.uptimeFormatted+'</span>':'')+(p.pid?'<span>PID '+p.pid+'</span>':'')+'</div><div class="pc-a">'+(p.running?'<button class="btn btn-d" onclick="sp(''+E(p.name)+'')">'+ic.stop+' Stop</button><button class="btn" onclick="rsp(''+E(p.name)+'')">'+ic.rf+' Restart</button>':'<button class="btn btn-g" onclick="rsp(''+E(p.name)+'')">'+ic.play+' Start</button>')+'<button class="btn" onclick="vl(''+E(p.name)+'')">'+ic.ey+' Logs</button>'+(p.port?'<button class="btn" onclick="window.open('http://localhost:'+p.port+'')">'+ic.lk+' Open</button>':'')+'<button class="btn btn-d" onclick="rmp(''+E(p.name)+'')">'+ic.tr+'</button></div></div>'}).join('')}
-async function rl(){const el=document.getElementById('ct');if(!procs.length){el.innerHTML='<div class="es"><div>No processes</div></div>';return}const n=selLog||procs[0]?.name;selLog=n;const sel=procs.map(p=>'<option value="'+E(p.name)+'"'+(p.name===n?' selected':'')+'>'+E(p.name)+'</option>').join('');const logs=await fl(n);const lh=logs.length===0?'<div style="color:var(--tx2);padding:20px;text-align:center">No logs yet</div>':logs.map(l=>{const t=new Date(l.time).toLocaleTimeString();const c=l.type==='ai'?'la':l.type==='stderr'?'le':l.type==='system'?'ls':'lo';return'<div class="ll"><span class="lt">'+t+'</span><span class="'+c+'">'+E(l.text)+'</span></div>'}).join('');el.innerHTML='<div class="card"><div class="card-h"><div class="card-t">'+ic.tm+' Logs</div><div style="display:flex;gap:6px;align-items:center"><select onchange="selLog=this.value;rl()" style="background:var(--bg);border:1px solid var(--bd);color:var(--tx);padding:4px 8px;border-radius:6px;font-size:12px">'+sel+'</select><button class="btn" onclick="clrl(''+E(n)+'')">'+ic.tr+'</button><button class="btn" onclick="rl()">'+ic.rf+'</button></div></div><div class="lv" id="lv">'+lh+'</div></div>';const v=document.getElementById('lv');if(v)v.scrollTop=v.scrollHeight}
-function rs(){const s=sys,el=document.getElementById('ct');el.innerHTML='<div class="card"><div class="card-h"><div class="card-t">'+ic.cp+' System</div></div><div class="sg"><div class="sc"><div class="sv">'+(s.memoryPercent||0)+'%</div><div class="sl">Memory</div></div><div class="sc"><div class="sv">'+(s.usedMemory||0)+'MB</div><div class="sl">Used / '+(s.totalMemory||0)+'MB</div></div><div class="sc"><div class="sv">'+(s.loadAvg||'0.00')+'</div><div class="sl">CPU Load</div></div><div class="sc"><div class="sv">'+(s.cpuCount||0)+'</div><div class="sl">Cores</div></div><div class="sc"><div class="sv">'+(s.uptimeFormatted||'0s')+'</div><div class="sl">Uptime</div></div><div class="sc"><div class="sv">'+procs.filter(p=>p.running).length+'</div><div class="sl">Active</div></div></div></div>'}
-function ra(){const el=document.getElementById('ct');if(!errs.length){el.innerHTML='<div class="es">'+ic.sh+'<div style="margin-top:12px;font-size:15px">All clear</div><div style="font-size:12px;margin-top:4px">AI Brain is monitoring</div></div>';return}el.innerHTML='<div class="card"><div class="card-h"><div class="card-t">'+ic.br+' '+errs.length+' Error'+(errs.length!==1?'s':'')+' Detected</div><button class="btn btn-d" onclick="clearAI()">'+ic.tr+' Clear</button></div>'+errs.map((e,i)=>ec(e,i)).join('')+'</div>'}
-function ec(e,i){const t=e.time?new Date(e.time).toLocaleTimeString():'';const fx=(e.fixes||[]).map(f=>'<li>'+ic.ck+' '+E(f)+'</li>').join('');return'<div class="ae '+e.severity+'"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span class="as '+e.severity+'">'+ic.al+' '+e.severity+'</span><span style="color:var(--tx2);font-size:11px">'+t+'</span></div><div style="font-weight:600;font-size:14px;margin-bottom:2px">'+E(e.type||'Error')+'</div><div style="font-size:12px;color:var(--tx2);margin-bottom:6px">'+E(e.process||'')+'</div><div class="ar">'+E(e.rawError||'')+'</div><div style="font-size:12px;margin-bottom:6px"><span style="color:var(--tx)">'+ic.sr+' Cause:</span> <span style="color:var(--tx2)">'+E(e.cause||'')+'</span></div><div class="af"><div style="font-size:12px;margin-bottom:4px">'+ic.zp+' Fixes:</div><ul style="margin:0;padding:0">'+fx+'</ul></div><div style="display:flex;gap:6px;margin-top:10px">'+(e.canAutoFix?'<button class="btn btn-p" onclick="afix(''+E(e.process)+'','+i+')" style="flex:1">'+ic.zp+' Auto Fix</button>':'')+'<button class="btn" onclick="de('+i+')">'+ic.x+' Dismiss</button></div></div>'}
-function toggleAP(){const p=document.getElementById('ap');p.classList.toggle('open');if(p.classList.contains('open'))rapb()}
-function closeAP(){document.getElementById('ap').classList.remove('open')}
-function rapb(){const b=document.getElementById('ap-b'),c=document.getElementById('ai-cl');if(!errs.length){c.style.display='none';b.innerHTML='<div class="es">'+ic.sh+'<div style="margin-top:10px">No errors</div></div>';return}c.style.display='block';b.innerHTML=errs.map((e,i)=>ec(e,i)).join('')}
-function ub(){const fb=document.getElementById('fab-b'),tb=document.getElementById('ai-tb');const n=errs.length;if(fb){fb.textContent=n;fb.style.display=n>0?'flex':'none'}if(tb){tb.textContent=n;tb.style.display=n>0?'flex':'none'}}
-function toast(e){const old=document.querySelector('.toast');if(old)old.remove();const t=document.createElement('div');t.className='toast '+e.severity;t.innerHTML='<div style="display:flex;align-items:center;gap:10px"><div style="width:20px;height:20px;color:var(--ac2)">'+ic.br+'</div><div style="flex:1"><div style="font-weight:600;font-size:13px">'+E(e.type||'Error')+'</div><div style="font-size:11px;color:var(--tx2);margin-top:2px">'+E(e.process)+' - '+E(e.cause)+'</div></div><button class="btn" onclick="this.closest('.toast').remove();toggleAP()" style="font-size:11px">View</button></div>';document.body.appendChild(t);setTimeout(()=>{t.style.animation='to .3s';setTimeout(()=>t.remove(),300)},5000)}
-async function afix(n,i){try{await fetch('/api/processes/'+n+'/restart',{method:'POST'});setTimeout(()=>de(i),1000)}catch(e){}}
-function de(i){errs.splice(i,1);ub();if(tab==='ai')ra();rapb()}
-async function clearAI(){errs=[];ub();if(tab==='ai')ra();rapb()}
-async function addProc(){const n=document.getElementById('i-n').value.trim(),c=document.getElementById('i-c').value.trim(),d=document.getElementById('i-d').value.trim(),p=document.getElementById('i-p').value,ar=document.getElementById('i-r').checked;if(!n||!c)return alert('Name and command required');await fetch('/api/processes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,command:c,cwd:d||undefined,port:p?parseInt(p):undefined,autoRestart:ar})});closeAdd();fp()}
-async function sp(n){await fetch('/api/processes/'+n+'/stop',{method:'POST'});fp()}
-async function rsp(n){await fetch('/api/processes/'+n+'/restart',{method:'POST'});fp()}
-async function rmp(n){if(!confirm('Remove '+n+'?'))return;await fetch('/api/processes/'+n,{method:'DELETE'});fp()}
-function vl(n){selLog=n;sw('logs')}
-async function clrl(n){await fetch('/api/processes/'+n+'/logs',{method:'DELETE'});rl()}
+function E(s){if(!s)return'';s=s.replace(/\x1b\[[0-9;]*m/g,'').replace(/\u001b\[[0-9;]*m/g,'').replace(/\[\d+m/g,'');const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function fsize(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB'}
+
+// Mobile sidebar
+function toggleSB(){document.getElementById('sb').classList.toggle('open');document.getElementById('overlay').classList.toggle('show')}
+
+// Fetch
+async function fp(){try{const r=await fetch('/api/processes');const d=await r.json();procs=d.processes||[];sys=d.system||{};renderSB();renderFT()}catch(e){}}
+async function fe(){try{const r=await fetch('/api/ai/errors');const d=await r.json();errs=d.errors||[];updateErrBadge()}catch(e){}}
+
+// Select process
+function selProc(name){sel=name;renderSB();renderWS();loadLogs()}
+
+// Render sidebar
+function renderSB(){const el=document.getElementById('sb-list');if(!procs.length){el.innerHTML='<div style="padding:16px;text-align:center;color:var(--tx2);font-size:12px">No processes</div>';return}
+el.innerHTML=procs.map(p=>{const active=p.name===sel?'active':'';const s=p.running?'on':'off';return'<div class="proc-item '+active+'" onclick="selProc(\''+E(p.name)+'\')"><div class="proc-item-n"><span class="sd '+s+'"></span>'+E(p.name)+'</div><div class="proc-item-c">'+E(p.command)+'</div></div>'}).join('');
+if(!sel&&procs.length){sel=procs[0].name;renderSB();renderWS();loadLogs()}}
+
+// Render workspace header
+function renderWS(){if(!sel)return;const p=procs.find(x=>x.name===sel);if(!p)return;
+const acts=p.running?'<button class="btn btn-sm btn-d" onclick="stopP(\''+E(sel)+'\')">'+ic.stop+'Stop</button><button class="btn btn-sm" onclick="restP(\''+E(sel)+'\')">'+ic.rf+'</button>':'<button class="btn btn-sm btn-g" onclick="restP(\''+E(sel)+'\')">'+ic.play+'Start</button>';
+document.getElementById('ws-title').innerHTML='<span class="sd '+(p.running?'on':'off')+'"></span>'+E(p.name)+' <span style="font-weight:400;color:var(--tx2);font-size:11px">'+E(p.command)+'</span>';
+document.getElementById('ws-tabs').innerHTML=acts+'<div style="width:1px;height:16px;background:var(--bd);margin:0 4px"></div><div class="ws-tab '+(mode==='code'?'active':'')+'" onclick="setMode(\'code\')" id="m-code">Code</div><div class="ws-tab '+(mode==='files'?'active':'')+'" onclick="setMode(\'files\')" id="m-files">Files</div>';
+if(p.port&&p.running){renderPreview(p.port)}else{document.getElementById('preview-body').innerHTML='<div class="preview-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:32px;height:32px;color:#333"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>No preview - no port detected</div>';document.getElementById('preview-actions').innerHTML=''}}
+// Mode switch
+function setMode(m){mode=m;if(m==='code'){document.getElementById('editor-title').innerHTML=ic.fi+' Editor';if(editPath)loadFile(editPath);else document.getElementById('editor-body').innerHTML='<div class="editor-empty">Click a file to edit</div>'}else{loadDir(curDir)}document.querySelectorAll('.ws-tab').forEach(t=>{if(t.id==='m-'+m)t.classList.add('active');else if(t.id&&t.id.startsWith('m-'))t.classList.remove('active')})}
+
+// Preview
+function renderPreview(port){document.getElementById('preview-body').innerHTML='<iframe class="preview-frame" id="pv-frame" src="http://localhost:'+port+'"></iframe>';document.getElementById('preview-actions').innerHTML='<div style="display:flex;gap:4px"><button class="btn btn-sm" onclick="document.getElementById(\'pv-frame\').src=document.getElementById(\'pv-frame\').src">'+ic.rf+'</button><button class="btn btn-sm" onclick="window.open(\'http://localhost:'+port+'\')">'+ic.lk+'</button></div>'}
+
+// Logs
+async function loadLogs(){if(!sel)return;try{const r=await fetch('/api/processes/'+sel+'/logs');const d=await r.json();const logs=d.logs||[];renderLogs(logs)}catch(e){}}
+function renderLogs(logs){const el=document.getElementById('lv');if(!logs.length){el.innerHTML='<div style="color:var(--tx2);padding:12px;text-align:center;font-size:12px">No logs yet</div>';return}
+let html='';logs.forEach(l=>{const t=new Date(l.time).toLocaleTimeString();const c=l.type==='ai'?'la':l.type==='stderr'?'le':l.type==='system'?'ls':'lo';html+='<div class="ll"><span class="lt">'+t+'</span><span class="'+c+'">'+E(l.text)+'</span></div>'});
+// Add AI errors inline
+const procErrs=errs.filter(e=>e.process===sel);procErrs.forEach(e=>{html+='<div class="ai-inline '+e.severity+'"><div class="ai-type"><span>'+ic.R+' '+E(e.type)+'</span><span style="font-size:10px;color:var(--tx2)">'+new Date(e.time).toLocaleTimeString()+'</span></div><div class="ai-cause">'+E(e.cause)+'</div><div style="display:flex;gap:4px;flex-wrap:wrap">'+(e.fixes||[]).map(f=>'<span style="font-size:10px;color:var(--tx2);background:var(--bg);padding:2px 6px;border-radius:4px">'+E(f)+'</span>').join('')+'</div>'+(e.canAutoFix?'<button class="ai-fix-btn" onclick="autoFix(\''+E(e.process)+'\')">Auto Fix</button>':'')+'</div>'});
+el.innerHTML=html;el.parentElement.scrollTop=el.parentElement.scrollHeight;
+document.getElementById('log-actions').innerHTML='<div style="display:flex;gap:4px"><button class="btn btn-sm" onclick="loadLogs()">'+ic.rf+'</button><button class="btn btn-sm" onclick="clearLogs()">'+ic.tr+'</button></div>'}
+
+// Files
+async function loadDir(dir){curDir=dir;try{const r=await fetch('/api/files?path='+encodeURIComponent(dir));const d=await r.json();if(d.error)return;const short=d.path.replace('/data/data/com.termux/files/home','~');document.getElementById('editor-title').innerHTML=ic.fo+' '+E(short);
+let html='';if(d.parent){html+='<div class="ft-item" onclick="loadDir(\''+E(d.parent)+'\')">'+ic.up+' ..</div>'}
+d.items.forEach(f=>{if(f.type==='dir'){html+='<div class="ft-item" onclick="loadDir(\''+E(f.path)+'\')">'+ic.fo+' '+E(f.name)+'</div>'}else{html+='<div class="ft-item" onclick="openFile(\''+E(f.path)+'\')">'+ic.fi+' '+E(f.name)+' <span style="margin-left:auto;font-size:10px;color:var(--tx2)">'+fsize(f.size)+'</span></div>'}});
+document.getElementById('editor-body').innerHTML='<div class="file-tree">'+html+'</div>';document.getElementById('editor-actions').innerHTML='<div style="display:flex;gap:4px"><button class="btn btn-sm" onclick="newFile()">'+ic.fi+'</button><button class="btn btn-sm" onclick="newDir()">'+ic.fo+'</button></div>'}catch(e){}}
+
+// Open file in editor
+async function openFile(p){editPath=p;mode='code';try{const r=await fetch('/api/files/read?path='+encodeURIComponent(p));const d=await r.json();if(d.error){document.getElementById('editor-body').innerHTML='<div class="editor-empty">'+E(d.error)+'</div>';return}const short=d.path.replace('/data/data/com.termux/files/home','~');document.getElementById('editor-title').innerHTML=ic.fi+' '+E(short);document.getElementById('editor-body').innerHTML='<textarea class="editor" id="ed-area">'+E(d.content)+'</textarea>';document.getElementById('editor-actions').innerHTML='<div style="display:flex;gap:4px"><button class="btn btn-sm btn-p" onclick="saveFile()">'+ic.sv+' Save</button><button class="btn btn-sm" onclick="setMode(\'files\')">'+ic.up+'</button></div>';document.querySelectorAll('.ws-tab').forEach(t=>{if(t.id==='m-code')t.classList.add('active');else if(t.id&&t.id.startsWith('m-'))t.classList.remove('active')})}catch(e){}}
+
+// Save file
+async function saveFile(){if(!editPath)return;const c=document.getElementById('ed-area').value;try{await fetch('/api/files/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:editPath,content:c})})}catch(e){}}
+
+// New file/dir
+async function newFile(){const n=prompt('File name:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:curDir+'/'+n,type:'file'})});loadDir(curDir)}
+async function newDir(){const n=prompt('Folder name:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:curDir+'/'+n,type:'dir'})});loadDir(curDir)}
+
+// Footer
+function renderFT(){const running=procs.filter(p=>p.running).length;document.getElementById('ft-procs').textContent=running+' running';document.getElementById('ft-cpu').textContent=sys.loadAvg||'0.00';document.getElementById('ft-ram').textContent=(sys.memoryPercent||0)+'%';document.getElementById('ft-up').textContent=sys.uptimeFormatted||'0s';document.getElementById('ft-dot').style.background=running>0?'var(--gn)':'var(--rd)'}
+// Mode switch
+function setMode(m){mode=m;if(m==='code')renderEditor();else renderFiles()}
+
+// Preview
+function renderPreview(port){
+document.getElementById('preview-body').innerHTML='<iframe class="preview-frame" id="pv-frame" src="http://localhost:'+port+'"></iframe>';
+document.getElementById('preview-actions').innerHTML='<div style="display:flex;gap:4px"><button class="btn btn-sm" onclick="document.getElementById(\'pv-frame\').src=document.getElementById(\'pv-frame\').src">'+ic.rf+'</button><button class="btn btn-sm" onclick="window.open(\'http://localhost:'+port+'\')">'+ic.lk+'</button></div>'}
+
+// Editor
+async function renderEditor(){
+const eb=document.getElementById('editor-body');
+const et=document.getElementById('editor-title');
+const ea=document.getElementById('editor-actions');
+if(!editPath){eb.innerHTML='<div class="editor-empty">Click Files tab and select a file to edit</div>';et.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Editor';ea.innerHTML='';return}
+try{const r=await fetch('/api/files/read?path='+encodeURIComponent(editPath));const d=await r.json();
+if(d.error){eb.innerHTML='<div class="editor-empty">'+E(d.error)+'</div>';return}
+const short=d.path.replace('/data/data/com.termux/files/home','~');
+et.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+E(short);
+ea.innerHTML='<button class="btn btn-sm btn-p" onclick="saveFile()">'+ic.sv+'Save</button>';
+eb.innerHTML='<textarea class="editor" id="ed-area">'+E(d.content)+'</textarea>';
+document.getElementById('ed-area').addEventListener('keydown',function(e){if(e.key==='Tab'){e.preventDefault();const s=this.selectionStart,en=this.selectionEnd;this.value=this.value.substring(0,s)+'  '+this.value.substring(en);this.selectionStart=this.selectionEnd=s+2}})
+}catch(e){eb.innerHTML='<div class="editor-empty">Error loading file</div>'}}
+
+async function saveFile(){if(!editPath)return;const c=document.getElementById('ed-area').value;
+try{const r=await fetch('/api/files/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:editPath,content:c})});
+const d=await r.json();if(d.success){const ea=document.getElementById('editor-actions');ea.innerHTML='<button class="btn btn-sm btn-g">'+ic.ck+'Saved!</button>';setTimeout(()=>{ea.innerHTML='<button class="btn btn-sm btn-p" onclick="saveFile()">'+ic.sv+'Save</button>'},1500)}}catch(e){}}
+
+// Files
+async function renderFiles(){
+const eb=document.getElementById('editor-body');
+const et=document.getElementById('editor-title');
+const ea=document.getElementById('editor-actions');
+et.innerHTML=ic.fo+' Files';
+ea.innerHTML='<div style="display:flex;gap:4px"><button class="btn btn-sm" onclick="newFile()">'+ic.fi+'</button><button class="btn btn-sm" onclick="newDir()">'+ic.fo+'</button></div>';
+try{const r=await fetch('/api/files?path='+encodeURIComponent(curDir));const d=await r.json();
+if(d.error){eb.innerHTML='<div class="editor-empty">'+E(d.error)+'</div>';return}
+const short=d.path.replace('/data/data/com.termux/files/home','~');
+let html='<div class="file-tree"><div style="padding:4px 8px;font-size:11px;color:var(--tx2);margin-bottom:4px">'+E(short)+'</div>';
+if(d.parent)html+='<div class="ft-item" onclick="curDir=\''+E(d.parent)+'\';renderFiles()">'+ic.up+' ..</div>';
+d.items.forEach(f=>{if(f.type==='dir'){html+='<div class="ft-item" onclick="curDir=\''+E(f.path)+'\';renderFiles()">'+ic.fo+' '+E(f.name)+'</div>'}else{html+='<div class="ft-item'+(f.path===editPath?' active':'')+'" onclick="editPath=\''+E(f.path)+'\';setMode(\'code\')">'+ic.fi+' '+E(f.name)+' <span style="margin-left:auto;font-size:10px;color:var(--tx2)">'+fsize(f.size)+'</span></div>'}});
+html+='</div>';eb.innerHTML=html}catch(e){eb.innerHTML='<div class="editor-empty">Error</div>'}}
+
+async function newFile(){const n=prompt('File name:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:curDir+'/'+n,type:'file'})});renderFiles()}
+async function newDir(){const n=prompt('Folder name:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:curDir+'/'+n,type:'dir'})});renderFiles()}
+
+// Logs
+async function loadLogs(){if(!sel)return;
+try{const r=await fetch('/api/processes/'+sel+'/logs');const d=await r.json();const logs=d.logs||[];
+const lv=document.getElementById('lv');
+const procErrs=errs.filter(e=>e.process===sel);
+let html=logs.map(l=>{const t=new Date(l.time).toLocaleTimeString();const c=l.type==='ai'?'la':l.type==='stderr'?'le':l.type==='system'?'ls':'lo';
+let line='<div class="ll"><span class="lt">'+t+'</span><span class="'+c+'">'+E(l.text)+'</span></div>';
+if(l.type==='ai'){const err=procErrs.find(e=>l.text.includes(e.type));if(err)line+=renderAIInline(err)}
+return line}).join('');
+lv.innerHTML=html||'<div style="padding:12px;color:var(--tx2);font-size:12px">No logs yet</div>';
+const lb=document.getElementById('log-body');lb.scrollTop=lb.scrollHeight;
+document.getElementById('log-actions').innerHTML='<div style="display:flex;gap:4px"><button class="btn btn-sm" onclick="loadLogs()">'+ic.rf+'</button><button class="btn btn-sm" onclick="clearLogs()">'+ic.tr+'</button></div>'
+}catch(e){}}
+
+async function clearLogs(){if(!sel)return;await fetch('/api/processes/'+sel+'/logs',{method:'DELETE'});loadLogs()}
+// AI Inline render
+function renderAIInline(err){
+var fixes=(err.fixes||[]).slice(0,2).map(function(f){return'<span style="font-size:10px;color:var(--tx2)">'+E(f)+'</span>'}).join('');
+var ed=encodeURIComponent(JSON.stringify(err));
+var btns='<div style="display:flex;gap:4px;margin-top:6px">';
+if(err.canAutoFix||err.action){btns+='<button class="ai-fix-btn" onclick="healErr(\''+ed+'\')">Fix Now</button>'}
+btns+='<button class="ai-fix-btn" style="background:var(--ac)" onclick="explErr(\''+ed+'\')">Explain</button></div>';
+return'<div class="ai-inline '+err.severity+'"><div class="ai-type"><span>'+E(err.type)+'</span><span style="font-size:10px;color:var(--tx2)">'+err.severity+'</span></div><div class="ai-cause">'+E(err.cause)+'</div><div style="display:flex;flex-direction:column;gap:2px;margin-bottom:4px">'+fixes+'</div>'+btns+'</div>'}
+
+// AI Toast
+function showToast(err){const old=document.querySelector('.ai-toast');if(old)old.remove();
+const t=document.createElement('div');t.className='ai-toast';
+t.innerHTML='<div style="display:flex;align-items:center;gap:8px"><div style="width:18px;height:18px;color:var(--rd)">'+ic.al+'</div><div style="flex:1"><div style="font-size:12px;font-weight:600">'+E(err.type)+'</div><div style="font-size:10px;color:var(--tx2)">'+E(err.process)+' - '+E(err.cause)+'</div></div><button class="btn btn-sm" onclick="this.closest(\'.ai-toast\').remove()">'+ic.x+'</button></div>';
+document.body.appendChild(t);setTimeout(()=>t.remove(),5000)}
+
+function updateErrBadge(){const el=document.getElementById('hd-err');const n=errs.length;
+if(n>0){el.style.display='flex';el.innerHTML=ic.R+' '+n+' error'+(n!==1?'s':'')}else{el.style.display='none'}}
+
+function scrollToErr(){if(sel){loadLogs();const lb=document.getElementById('log-body');setTimeout(()=>lb.scrollTop=lb.scrollHeight,200)}}
+
+async function autoFix(name){try{await fetch('/api/processes/'+name+'/restart',{method:'POST'});fp();setTimeout(()=>loadLogs(),1500)}catch(e){}}
+
+// Footer
+function renderFT(){const running=procs.filter(p=>p.running).length;
+document.getElementById('ft-procs').textContent=running+' running';
+document.getElementById('ft-cpu').textContent=sys.loadAvg||'0.00';
+document.getElementById('ft-ram').textContent=(sys.memoryPercent||0)+'%';
+document.getElementById('ft-up').textContent=sys.uptimeFormatted||'0s';
+document.getElementById('ft-dot').style.background=running>0?'var(--gn)':'var(--rd)'}
+
+// Process actions
+async function addProc(){const n=document.getElementById('i-n').value.trim(),c=document.getElementById('i-c').value.trim(),d=document.getElementById('i-d').value.trim(),p=document.getElementById('i-p').value,ar=document.getElementById('i-r').checked;
+if(!n||!c)return alert('Name and command required');
+await fetch('/api/processes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,command:c,cwd:d||undefined,port:p?parseInt(p):undefined,autoRestart:ar})});
+closeAdd();fp();setTimeout(()=>{sel=n;renderSB();renderWS();loadLogs()},500)}
+async function stopP(n){await fetch('/api/processes/'+n+'/stop',{method:'POST'});fp();setTimeout(()=>loadLogs(),500)}
+async function restP(n){await fetch('/api/processes/'+n+'/restart',{method:'POST'});fp();setTimeout(()=>loadLogs(),500)}
 function openAdd(){document.getElementById('add-mo').classList.add('open');document.getElementById('i-n').value='';document.getElementById('i-c').value='';document.getElementById('i-d').value='';document.getElementById('i-p').value='';document.getElementById('i-r').checked=false}
 function closeAdd(){document.getElementById('add-mo').classList.remove('open')}
-async function poll(){try{const r=await fetch('/api/ai/errors');const d=await r.json();const ne=d.errors||[];if(ne.length>lastEC)for(let i=0;i<ne.length-lastEC;i++)toast(ne[i]);lastEC=ne.length;errs=ne;ub();if(tab==='ai')ra();if(document.getElementById('ap').classList.contains('open'))rapb()}catch(e){}}
-document.addEventListener('DOMContentLoaded',()=>{fp();fe();setInterval(()=>{fp();poll()},3000);document.getElementById('add-mo').addEventListener('click',e=>{if(e.target===e.currentTarget)closeAdd()})});
+
+// Poll
+async function poll(){try{const r=await fetch('/api/ai/errors');const d=await r.json();const ne=d.errors||[];
+if(ne.length>lastEC){for(let i=0;i<ne.length-lastEC;i++)showToast(ne[i]);if(sel)loadLogs()}
+lastEC=ne.length;errs=ne;updateErrBadge()}catch(e){}}
+
+
+async function smartAction(type,path,cmd){
+try{const r=await fetch('/api/ai/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:type,path:path,command:cmd})});
+const d=await r.json();if(d.success){showToast({type:'ACTION_COMPLETE',process:'system',cause:'Action completed successfully',severity:'low'});if(type==='create_file'&&path){editPath=path;setMode('code')}fp()}else{alert(d.error||'Action failed')}}catch(e){alert('Error')}}
+
+async function healError(ej){
+try{const err=JSON.parse(decodeURIComponent(ej));
+const r=await fetch('/api/ai/heal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({error:err})});
+const d=await r.json();
+if(d.success){showToast({type:'HEALED',process:err.process,cause:d.message||'Fixed!',severity:'low'});setTimeout(()=>{fp();loadLogs()},2000)}
+else{alert(d.message||'Fix failed')}}
+catch(e){alert('Heal error')}}
+
+async function explainError(ej){
+try{const err=JSON.parse(decodeURIComponent(ej));
+const r=await fetch('/api/ai/explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({error:err})});
+const d=await r.json();
+alert((d.source==='llm'?'AI: ':'')+ d.explanation + (d.fixes.length?'\n\nFixes:\n'+d.fixes.join('\n'):''))}
+catch(e){alert('Explain error')}}
+
+// Init
+document.addEventListener('DOMContentLoaded',()=>{
+fp();fe();
+setInterval(()=>{fp();poll()},8000);
+setInterval(()=>{if(sel)loadLogs()},10000);
+document.getElementById('add-mo').addEventListener('click',e=>{if(e.target===e.currentTarget)closeAdd()});
+setMode('code')});
 </script></body></html>

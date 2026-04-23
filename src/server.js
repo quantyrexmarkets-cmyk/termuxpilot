@@ -154,7 +154,97 @@ app.post('/api/ai/analyze', (req, res) => {
   res.json({ result: result || { detected: false, message: 'No known error pattern found' } });
 });
 
-app.get('/{*path}', (req, res) => {
+
+// ═══════════════════════════════════
+// FILE MANAGER API
+// ═══════════════════════════════════
+const fm = require('./fileManager');
+
+app.get('/api/files', (req, res) => {
+  const dir = req.query.path || '~';
+  res.json(fm.listDir(dir));
+});
+
+app.get('/api/files/read', (req, res) => {
+  if (!req.query.path) return res.status(400).json({ error: 'path required' });
+  res.json(fm.readFile(req.query.path));
+});
+
+app.post('/api/files/write', (req, res) => {
+  const { path, content } = req.body;
+  if (!path) return res.status(400).json({ error: 'path required' });
+  res.json(fm.writeFile(path, content));
+});
+
+app.post('/api/files/create', (req, res) => {
+  const { path, type } = req.body;
+  if (!path) return res.status(400).json({ error: 'path required' });
+  res.json(type === 'dir' ? fm.createDir(path) : fm.createFile(path));
+});
+
+app.delete('/api/files', (req, res) => {
+  if (!req.query.path) return res.status(400).json({ error: 'path required' });
+  res.json(fm.deleteItem(req.query.path));
+});
+
+app.post('/api/files/rename', (req, res) => {
+  const { path, newName } = req.body;
+  if (!path || !newName) return res.status(400).json({ error: 'path and newName required' });
+  res.json(fm.renameItem(path, newName));
+});
+
+
+// Smart Action API
+app.post('/api/ai/action', (req, res) => {
+  const { type, path: filePath, command } = req.body;
+  if (type === 'create_file' && filePath) {
+    const fm = require('./fileManager');
+    res.json(fm.createFile(filePath));
+  } else if (type === 'run_command' && command) {
+    const { exec } = require('child_process');
+    exec(command, { cwd: process.env.HOME }, (err, stdout, stderr) => {
+      res.json({ success: !err, output: stdout || stderr || 'Done' });
+    });
+  } else {
+    res.status(400).json({ error: 'Invalid action' });
+  }
+});
+
+
+// ═══════════════════════════════════
+// SELF-HEALING + LLM API
+// ═══════════════════════════════════
+const Healer = require('./healer');
+const llm = require('./llm');
+const healer = new Healer(pm);
+
+// Heal an error
+app.post('/api/ai/heal', async (req, res) => {
+  const { error } = req.body;
+  if (!error) return res.status(400).json({ message: 'error required' });
+  const result = await healer.heal(error);
+  res.json(result);
+});
+
+// Explain an error with LLM
+app.post('/api/ai/explain', async (req, res) => {
+  const { error } = req.body;
+  if (!error) return res.status(400).json({ message: 'error required' });
+  const result = await llm.explain(error);
+  res.json(result);
+});
+
+// Heal history
+app.get('/api/ai/heal/history', (req, res) => {
+  res.json({ history: healer.getHistory() });
+});
+
+// Check LLM status
+app.get('/api/ai/llm/status', (req, res) => {
+  res.json({ available: llm.isAvailable(), model: llm.model });
+});
+
+app.use( (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
@@ -266,7 +356,7 @@ function printHelp(PORT) {
 // ═══════════════════════════════════
 pm.restore();
 
-const PORT = process.env.PILOT_PORT || 8000;
+const PORT = process.env.PILOT_PORT || 3000;
 
 app.listen(PORT, '0.0.0.0', () => {
   const lanIP = getLanIP();
