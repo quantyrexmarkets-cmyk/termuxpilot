@@ -124,6 +124,14 @@ body{background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;heigh
   .overlay{display:none;position:fixed;inset:0;background:#0007;z-index:99}
   .overlay.show{display:block}
 }
+
+.term-panel{background:#050510;border-top:1px solid var(--bd);display:flex;flex-direction:column}
+.term-output{flex:1;padding:8px 12px;font-family:monospace;font-size:11px;line-height:1.6;overflow-y:auto;color:#ccc;white-space:pre-wrap;word-break:break-all}
+.term-output .t-err{color:var(--rd)}
+.term-output .t-sys{color:#0984e3}
+.term-input{display:flex;border-top:1px solid var(--bd);background:#0a0a14}
+.term-prompt{padding:8px;color:var(--gn);font-family:monospace;font-size:12px;display:flex;align-items:center}
+.term-cmd{flex:1;padding:8px;background:transparent;border:none;color:var(--tx);font-family:monospace;font-size:12px;outline:none}
 </style></head><body>
 <!-- Header -->
 <div class="hd">
@@ -155,7 +163,7 @@ body{background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;heigh
 <div class="ws-title" id="ws-title">Select a process</div>
 <div class="ws-tabs" id="ws-tabs">
 <div class="ws-tab active" onclick="setMode('code')" id="m-code">Code</div>
-<div class="ws-tab" onclick="setMode('files')" id="m-files">Files</div>
+<div class="ws-tab" onclick="setMode('files')" id="m-files">Files</div><div class="ws-tab" onclick="setMode('terminal')" id="m-terminal">Terminal</div>
 </div>
 </div>
 <div class="panels">
@@ -168,6 +176,12 @@ body{background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;heigh
 <div class="panel preview-wrap" id="p-preview">
 <div class="panel-h"><div class="panel-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Preview</div><div id="preview-actions"></div></div>
 <div class="panel-body" id="preview-body"><div class="preview-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>No preview</div></div>
+</div>
+<!-- Terminal Panel -->
+<div class="panel term-panel" id="p-term" style="height:180px;display:none">
+<div class="panel-h"><div class="panel-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>Terminal</div><div id="term-actions"><button class="btn btn-sm" onclick="clearTerm()">Clear</button></div></div>
+<div class="term-output" id="term-out"></div>
+<div class="term-input"><span class="term-prompt">$</span><input class="term-cmd" id="term-cmd" placeholder="Type command..." onkeydown="if(event.key==='Enter')sendCmd()"></div>
 </div>
 <!-- Logs Panel -->
 <div class="panel logs-wrap" id="p-logs">
@@ -286,7 +300,7 @@ async function newDir(){const n=prompt('Folder name:');if(!n)return;await fetch(
 // Footer
 function renderFT(){const running=procs.filter(p=>p.running).length;document.getElementById('ft-procs').textContent=running+' running';document.getElementById('ft-cpu').textContent=sys.loadAvg||'0.00';document.getElementById('ft-ram').textContent=(sys.memoryPercent||0)+'%';document.getElementById('ft-up').textContent=sys.uptimeFormatted||'0s';document.getElementById('ft-dot').style.background=running>0?'var(--gn)':'var(--rd)'}
 // Mode switch
-function setMode(m){mode=m;if(m==='code')renderEditor();else renderFiles()}
+function setMode(m){mode=m;hideTerm();if(m==='code')renderEditor();else if(m==='files')renderFiles();else if(m==='terminal'){showTerm();document.getElementById('editor-body').innerHTML='<div class="editor-empty">Terminal active below</div>'}}
 
 // Preview
 function renderPreview(port){
@@ -348,6 +362,7 @@ async function clearLogs(){if(!sel)return;await fetch('/api/processes/'+sel+'/lo
 // AI Inline render
 function renderAIInline(err){
 var fixes=(err.fixes||[]).slice(0,2).map(function(f){return'<span style="font-size:10px;color:var(--tx2)">'+E(f)+'</span>'}).join('');
+if(document.getElementById('m-terminal'))document.getElementById('m-terminal').className='ws-tab'+(mode==='terminal'?' active':'');
 var ed=encodeURIComponent(JSON.stringify(err));
 var btns='<div style="display:flex;gap:4px;margin-top:6px">';
 if(err.canAutoFix||err.action){btns+='<button class="ai-fix-btn" onclick="healErr(\''+ed+'\')">Fix Now</button>'}
@@ -409,6 +424,57 @@ const r=await fetch('/api/ai/explain',{method:'POST',headers:{'Content-Type':'ap
 const d=await r.json();
 alert((d.source==='llm'?'AI: ':'')+ d.explanation + (d.fixes.length?'\n\nFixes:\n'+d.fixes.join('\n'):''))}
 catch(e){alert('Explain error')}}
+
+
+var termId=null;
+var termPollTimer=null;
+var lastTermTime=null;
+
+async function initTerm(){
+if(termId)return;
+try{var r=await fetch('/api/terminal/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:'~'})});
+var d=await r.json();
+if(d.id){termId=d.id;lastTermTime=null;pollTerm();termPollTimer=setInterval(pollTerm,1000)}
+}catch(e){}}
+
+async function sendCmd(){
+var input=document.getElementById('term-cmd');
+var cmd=input.value;
+if(!cmd||!termId)return;
+input.value='';
+appendTerm('$ '+cmd+'\n','stdout');
+try{await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})})}catch(e){}
+setTimeout(pollTerm,200)}
+
+async function pollTerm(){
+if(!termId)return;
+try{var url='/api/terminal/'+termId+'/output';
+if(lastTermTime)url+='?since='+encodeURIComponent(lastTermTime);
+var r=await fetch(url);var d=await r.json();
+if(d.output&&d.output.length){
+d.output.forEach(function(o){
+lastTermTime=o.time;
+var cls=o.type==='stderr'?'t-err':o.type==='system'?'t-sys':'';
+appendTerm(o.text,cls)})}}catch(e){}}
+
+function appendTerm(text,cls){
+var out=document.getElementById('term-out');
+var span=document.createElement('span');
+if(cls)span.className=cls;
+span.textContent=text;
+out.appendChild(span);
+out.scrollTop=out.scrollHeight}
+
+function clearTerm(){document.getElementById('term-out').innerHTML=''}
+
+function showTerm(){
+document.getElementById('p-term').style.display='flex';
+initTerm();
+setTimeout(function(){document.getElementById('term-cmd').focus()},100)}
+
+function hideTerm(){
+document.getElementById('p-term').style.display='none';
+if(termPollTimer){clearInterval(termPollTimer);termPollTimer=null}}
 
 // Init
 document.addEventListener('DOMContentLoaded',()=>{

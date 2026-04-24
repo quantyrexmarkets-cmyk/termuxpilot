@@ -284,6 +284,38 @@ app.get('/app', (req, res) => {
   res.sendFile(require('path').join(__dirname, '..', 'public', 'dashboard.html'));
 });
 
+
+// ═══════════════════════════════════
+// TERMINAL API
+// ═══════════════════════════════════
+const terminal = require('./terminal');
+
+app.post('/api/terminal/create', (req, res) => {
+  const { cwd } = req.body;
+  const id = 'term_' + Date.now();
+  res.json(terminal.create(id, cwd || '~'));
+});
+
+app.post('/api/terminal/:id/write', (req, res) => {
+  const { command } = req.body;
+  if (!command) return res.status(400).json({ error: 'command required' });
+  res.json(terminal.write(req.params.id, command));
+});
+
+app.get('/api/terminal/:id/output', (req, res) => {
+  const since = req.query.since;
+  res.json(terminal.getOutput(req.params.id, since));
+});
+
+app.delete('/api/terminal/:id', (req, res) => {
+  terminal.destroy(req.params.id);
+  res.json({ success: true });
+});
+
+app.get('/api/terminal/list', (req, res) => {
+  res.json({ sessions: terminal.list() });
+});
+
 app.use( (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'dashboard.html'));
 });
