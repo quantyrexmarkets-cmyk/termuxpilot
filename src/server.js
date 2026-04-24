@@ -281,11 +281,11 @@ app.get('/', (req, res) => {
 
 // App dashboard
 app.get('/app', (req, res) => {
-  res.sendFile(require('path').join(__dirname, '..', 'public', 'index.html'));
+  res.sendFile(require('path').join(__dirname, '..', 'public', 'dashboard.html'));
 });
 
 app.use( (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'public', 'dashboard.html'));
 });
 
 // ═══════════════════════════════════
