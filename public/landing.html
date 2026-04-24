@@ -1,0 +1,280 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>TermuxPilot - Mobile Developer OS</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a14;--sf:#111122;--bd:#1e1e3a;--tx:#e0e0e8;--tx2:#888;--ac:#6c5ce7;--ac2:#a29bfe;--gn:#00b894;--rd:#ff4444}
+body{background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;background:var(--bg)dd;backdrop-filter:blur(10px);border-bottom:1px solid var(--bd)}
+.nav-logo{font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px}
+.nav-logo svg{width:22px;height:22px;color:var(--ac2)}
+.nav-links{display:flex;gap:8px;align-items:center}
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;border:none;font-weight:600}
+.btn-outline{background:transparent;border:1px solid var(--bd);color:var(--tx)}
+.btn-primary{background:var(--ac);color:#fff}
+.btn-lg{padding:12px 28px;font-size:15px;border-radius:10px}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 24px 60px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;width:600px;height:600px;background:var(--ac);opacity:.06;border-radius:50%;filter:blur(80px);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--ac)22;border:1px solid var(--ac)44;border-radius:20px;font-size:12px;color:var(--ac2);margin-bottom:24px}
+.hero-badge svg{width:12px;height:12px}
+.hero h1{font-size:clamp(32px,7vw,64px);font-weight:800;line-height:1.1;margin-bottom:20px;max-width:800px}
+.hero h1 span{color:var(--ac2)}
+.hero p{font-size:clamp(14px,2.5vw,18px);color:var(--tx2);max-width:560px;line-height:1.6;margin-bottom:36px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.hero-stats{display:flex;gap:32px;margin-top:60px;flex-wrap:wrap;justify-content:center}
+.stat{text-align:center}
+.stat-n{font-size:28px;font-weight:800;color:var(--ac2)}
+.stat-l{font-size:12px;color:var(--tx2);margin-top:2px}
+
+/* FEATURES */
+.section{padding:80px 24px;max-width:1000px;margin:0 auto}
+.section-label{font-size:12px;font-weight:700;color:var(--ac2);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px}
+.section-title{font-size:clamp(24px,4vw,40px);font-weight:800;margin-bottom:16px}
+.section-sub{font-size:15px;color:var(--tx2);max-width:500px;line-height:1.6;margin-bottom:48px}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.feat{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:24px;transition:.2s}
+.feat:hover{border-color:var(--ac);transform:translateY(-2px)}
+.feat-icon{width:40px;height:40px;background:var(--ac)22;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.feat-icon svg{width:20px;height:20px;color:var(--ac2)}
+.feat h3{font-size:15px;font-weight:700;margin-bottom:6px}
+.feat p{font-size:13px;color:var(--tx2);line-height:1.5}
+
+/* HOW IT WORKS */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;margin-top:48px}
+.step{text-align:center;padding:24px}
+.step-n{width:40px;height:40px;background:var(--ac);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;margin:0 auto 14px}
+.step h3{font-size:15px;font-weight:700;margin-bottom:6px}
+.step p{font-size:13px;color:var(--tx2);line-height:1.5}
+
+/* AI SECTION */
+.ai-section{background:var(--sf);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:80px 24px}
+.ai-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.ai-demo{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:16px;font-family:monospace;font-size:12px}
+.ai-demo-line{display:flex;gap:8px;margin-bottom:6px}
+.ai-time{color:#333;min-width:65px}
+.ai-err{color:var(--rd)}
+.ai-info{color:#0984e3}
+.ai-card{background:#1a0a0a;border:1px solid var(--rd)44;border-left:3px solid var(--rd);border-radius:8px;padding:12px;margin-top:10px}
+.ai-card-t{font-size:11px;font-weight:700;color:var(--rd);margin-bottom:4px}
+.ai-card-c{font-size:11px;color:#888;margin-bottom:8px}
+.ai-fix-btn{padding:4px 10px;background:var(--ac);border:none;color:#fff;border-radius:4px;font-size:10px;cursor:pointer}
+
+/* PRICING */
+.pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:48px}
+.plan{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:28px;position:relative}
+.plan.featured{border-color:var(--ac);background:var(--ac)11}
+.plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--ac);color:#fff;padding:3px 12px;border-radius:10px;font-size:11px;font-weight:700}
+.plan-name{font-size:16px;font-weight:700;margin-bottom:4px}
+.plan-price{font-size:36px;font-weight:800;color:var(--ac2);margin:12px 0 4px}
+.plan-price span{font-size:14px;color:var(--tx2);font-weight:400}
+.plan-desc{font-size:13px;color:var(--tx2);margin-bottom:20px}
+.plan-features{list-style:none;margin-bottom:24px}
+.plan-features li{font-size:13px;padding:6px 0;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;color:var(--tx2)}
+.plan-features li svg{width:14px;height:14px;color:var(--gn);flex-shrink:0}
+.plan-features li.no{color:#444}
+.plan-features li.no svg{color:#333}
+
+/* CTA */
+.cta{text-align:center;padding:80px 24px;max-width:600px;margin:0 auto}
+.cta h2{font-size:clamp(24px,4vw,40px);font-weight:800;margin-bottom:16px}
+.cta p{font-size:15px;color:var(--tx2);margin-bottom:32px;line-height:1.6}
+
+/* FOOTER */
+footer{background:var(--sf);border-top:1px solid var(--bd);padding:24px;text-align:center;font-size:12px;color:var(--tx2)}
+
+@media(max-width:600px){
+.ai-inner{grid-template-columns:1fr}
+.nav-links .btn-outline{display:none}
+}
+</style></head><body>
+
+<nav>
+<div class="nav-logo">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+TermuxPilot
+</div>
+<div class="nav-links">
+<a href="#features"><button class="btn btn-outline">Features</button></a>
+<a href="#pricing"><button class="btn btn-outline">Pricing</button></a>
+<a href="/login.html"><button class="btn btn-outline">Login</button></a>
+<a href="/login.html"><button class="btn btn-primary">Get Started</button></a>
+</div>
+</nav>
+
+<section class="hero">
+<div class="hero-glow"></div>
+<div class="hero-badge">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+The first Mobile Developer OS
+</div>
+<h1>Build apps from your <span>phone</span>. No laptop needed.</h1>
+<p>TermuxPilot gives you a full development environment on Android. Run servers, manage processes, edit code, and let AI fix your errors automatically.</p>
+<div class="hero-btns">
+<a href="/login.html"><button class="btn btn-primary btn-lg">Start Building Free</button></a>
+<a href="#features"><button class="btn btn-outline btn-lg">See Features</button></a>
+</div>
+<div class="hero-stats">
+<div class="stat"><div class="stat-n">18+</div><div class="stat-l">Error Patterns</div></div>
+<div class="stat"><div class="stat-n">100%</div><div class="stat-l">Offline Ready</div></div>
+<div class="stat"><div class="stat-n">1-click</div><div class="stat-l">Auto Fix</div></div>
+<div class="stat"><div class="stat-n">0ms</div><div class="stat-l">Setup Time</div></div>
+</div>
+</section>
+
+<section class="section" id="features">
+<div class="section-label">Features</div>
+<div class="section-title">Everything you need to develop on mobile</div>
+<div class="section-sub">Stop switching between apps. TermuxPilot brings your entire dev environment into one place.</div>
+<div class="features">
+<div class="feat">
+<div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+<h3>Process Manager</h3>
+<p>Start, stop and restart your servers with one tap. Auto-restart on crash keeps your apps alive.</p>
+</div>
+<div class="feat">
+<div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="14" rx="2"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><path d="M9 16h6"/><line x1="12" y1="2" x2="12" y2="6"/><circle cx="12" cy="2" r="1"/></svg></div>
+<h3>AI Brain</h3>
+<p>Detects errors in real-time. Understands the cause. Suggests the exact fix. One click to apply.</p>
+</div>
+<div class="feat">
+<div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+<h3>Code Editor</h3>
+<p>Edit your files directly in the browser. Syntax-aware, auto-save, and mobile-optimized.</p>
+</div>
+<div class="feat">
+<div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+<h3>Live Preview</h3>
+<p>See your app running in real-time. Embedded preview updates as your server restarts.</p>
+</div>
+<div class="feat">
+<div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+<h3>File Manager</h3>
+<p>Browse, create, edit and delete files without leaving your dashboard.</p>
+</div>
+<div class="feat">
+<div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+<h3>Self-Healing</h3>
+<p>AI detects errors and automatically runs fixes. Your environment repairs itself.</p>
+</div>
+</div>
+</section>
+
+<section class="ai-section">
+<div class="ai-inner">
+<div>
+<div class="section-label">AI Brain</div>
+<div class="section-title">Errors fixed before you even notice</div>
+<p style="color:var(--tx2);line-height:1.6;margin-bottom:20px">TermuxPilot watches your logs in real-time. When something breaks, AI instantly identifies the cause and shows you exactly how to fix it.</p>
+<ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+<li style="display:flex;align-items:center;gap:10px;font-size:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--gn)"><polyline points="20 6 9 17 4 12"/></svg>Detects 18+ error patterns</li>
+<li style="display:flex;align-items:center;gap:10px;font-size:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--gn)"><polyline points="20 6 9 17 4 12"/></svg>Tells you the exact cause</li>
+<li style="display:flex;align-items:center;gap:10px;font-size:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--gn)"><polyline points="20 6 9 17 4 12"/></svg>One-click auto fix</li>
+<li style="display:flex;align-items:center;gap:10px;font-size:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--gn)"><polyline points="20 6 9 17 4 12"/></svg>Restarts process automatically</li>
+</ul>
+</div>
+<div class="ai-demo">
+<div class="ai-demo-line"><span class="ai-time">10:23:41</span><span class="ai-err">Error: Cannot find module 'express'</span></div>
+<div class="ai-demo-line"><span class="ai-time">10:23:41</span><span class="ai-info">AI: PACKAGE_NOT_FOUND detected</span></div>
+<div class="ai-card">
+<div class="ai-card-t">PACKAGE_NOT_FOUND — critical</div>
+<div class="ai-card-c">NPM package not installed: express</div>
+<div style="font-size:10px;color:#666;margin-bottom:8px">Run: npm install express</div>
+<button class="ai-fix-btn">Fix Now</button>
+</div>
+<div class="ai-demo-line" style="margin-top:10px"><span class="ai-time">10:23:42</span><span style="color:var(--gn)">Installing express...</span></div>
+<div class="ai-demo-line"><span class="ai-time">10:23:45</span><span style="color:var(--gn)">Fixed! Restarting server...</span></div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-label">How it works</div>
+<div class="section-title">Up and running in seconds</div>
+<div class="steps">
+<div class="step">
+<div class="step-n">1</div>
+<h3>Install Termux</h3>
+<p>Get Termux from F-Droid on your Android device</p>
+</div>
+<div class="step">
+<div class="step-n">2</div>
+<h3>Run TermuxPilot</h3>
+<p>One command installs everything you need</p>
+</div>
+<div class="step">
+<div class="step-n">3</div>
+<h3>Start Building</h3>
+<p>Open the dashboard and start your first project</p>
+</div>
+<div class="step">
+<div class="step-n">4</div>
+<h3>AI Watches</h3>
+<p>Errors get caught and fixed automatically while you code</p>
+</div>
+</div>
+</section>
+
+<section class="section" id="pricing">
+<div class="section-label">Pricing</div>
+<div class="section-title">Simple, honest pricing</div>
+<div class="section-sub">Start free. Upgrade when you need more.</div>
+<div class="pricing">
+<div class="plan">
+<div class="plan-name">Free</div>
+<div class="plan-price">$0<span>/month</span></div>
+<div class="plan-desc">Perfect for personal projects</div>
+<ul class="plan-features">
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>2 processes</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>AI Brain</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>File Manager</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Code Editor</li>
+<li class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>LLM Integration</li>
+<li class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Priority support</li>
+</ul>
+<a href="/login.html"><button class="btn btn-outline" style="width:100%;padding:10px">Get Started</button></a>
+</div>
+<div class="plan featured">
+<div class="plan-badge">Most Popular</div>
+<div class="plan-name">Pro</div>
+<div class="plan-price">$9<span>/month</span></div>
+<div class="plan-desc">For serious mobile developers</div>
+<ul class="plan-features">
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Unlimited processes</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>AI Brain + LLM</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>File Manager</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Code Editor</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>LLM Integration</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Priority support</li>
+</ul>
+<a href="/login.html"><button class="btn btn-primary" style="width:100%;padding:10px">Start Pro Trial</button></a>
+</div>
+<div class="plan">
+<div class="plan-name">Team</div>
+<div class="plan-price">$29<span>/month</span></div>
+<div class="plan-desc">For teams building together</div>
+<ul class="plan-features">
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Everything in Pro</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>5 team members</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Shared workspaces</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Team AI memory</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Admin dashboard</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Priority support</li>
+</ul>
+<a href="/login.html"><button class="btn btn-outline" style="width:100%;padding:10px">Contact Us</button></a>
+</div>
+</div>
+</section>
+
+<section class="cta">
+<h2>Start building from your phone today</h2>
+<p>Join developers who ditched their laptops and build full-stack apps straight from Android.</p>
+<a href="/login.html"><button class="btn btn-primary btn-lg">Get Started Free</button></a>
+</section>
+
+<footer>
+<p>TermuxPilot © 2026 — The Mobile Developer OS</p>
+</footer>
+
+</body></html>
