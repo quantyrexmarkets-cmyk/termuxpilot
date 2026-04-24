@@ -8,20 +8,55 @@ a{color:inherit;text-decoration:none}
 ::selection{background:var(--ac);color:#fff}
 
 /* ── Nav ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 12px;height:46px;display:flex;align-items:center;justify-content:space-between;background:var(--bg)ee;backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);overflow:hidden}
-
-.nav-logo{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px;letter-spacing:-.3px}
-.nav-logo svg{width:20px;height:20px;color:var(--ac2)}
-.nav-links{display:flex;gap:6px}
-.nav-link{padding:4px 8px;font-size:12px;color:var(--tx2);border-radius:6px;transition:.2s}
-.nav-link:hover{color:var(--tx);background:var(--bd)}
-.btn{padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;border:none;font-weight:600;transition:.15s;display:inline-flex;align-items:center;gap:6px}
-.btn:active{transform:scale(.97)}
-.btn-ghost{background:transparent;color:var(--tx);border:1px solid var(--bd)}
-.btn-ghost:hover{border-color:var(--ac);color:var(--ac2)}
-.btn-ac{background:var(--ac);color:#fff}
-.btn-ac:hover{background:var(--ac2);color:#000}
-.btn-lg{padding:12px 24px;font-size:14px;border-radius:10px}
+.nav{
+position:fixed;
+top:0;
+left:0;
+right:0;
+z-index:100;
+height:48px;
+padding:0 10px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+background:#050510ee;
+backdrop-filter:blur(12px);
+border-bottom:1px solid #151530;
+overflow:hidden
+}
+.nav-logo{
+font-size:15px;
+font-weight:800;
+display:flex;
+align-items:center;
+gap:6px;
+min-width:0;
+white-space:nowrap
+}
+.nav-logo svg{
+width:16px;
+height:16px;
+color:#b4a8ff;
+flex-shrink:0
+}
+.nav-right{
+display:flex;
+align-items:center;
+gap:6px;
+flex-shrink:0
+}
+.nav-start{
+padding:6px 10px;
+background:#7c6cf0;
+color:#fff;
+border:none;
+border-radius:6px;
+font-size:11px;
+font-weight:700;
+line-height:1;
+white-space:nowrap;
+cursor:pointer
+}
 
 /* ── Hero ── */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 24px 60px;position:relative;overflow:hidden}
@@ -142,14 +177,15 @@ a{color:inherit;text-decoration:none}
 <body>
 
 <!-- Nav -->
-<nav style="position:fixed;top:0;left:0;width:100%;z-index:100;height:44px;background:#050510ee;backdrop-filter:blur(12px);border-bottom:1px solid #151530;overflow:hidden">
-<div style="max-width:100%;margin:0 auto;height:44px;display:table;width:100%">
-<div style="display:table-cell;vertical-align:middle;padding-left:12px;text-align:left">
-<span style="font-size:15px;font-weight:800;color:#d4d4e8">CodeDeck</span>
+<nav class="nav">
+<div class="nav-logo">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+</svg>
+<span>CodeDeck</span>
 </div>
-<div style="display:table-cell;vertical-align:middle;padding-right:12px;text-align:right">
-<a href="/login.html"><button style="padding:5px 12px;background:#7c6cf0;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer">Start Free</button></a>
-</div>
+<div class="nav-right">
+<a href="/login.html"><button class="nav-start">Start Free</button></a>
 </div>
 </nav>
 
