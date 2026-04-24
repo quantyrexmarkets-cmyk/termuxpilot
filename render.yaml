@@ -1,11 +1,11 @@
 services:
   - type: web
-    name: termuxpilot
+    name: codedeck
     runtime: node
     buildCommand: npm install
-    startCommand: node pilot.js
+    startCommand: node codedeck.js
     envVars:
-      - key: PILOT_PORT
+      - key: CODEDECK_PORT
         value: 10000
       - key: NODE_ENV
         value: production

@@ -362,7 +362,7 @@ function setupCLI(PORT) {
         break;
 
       case 'q':
-        console.log('\n  Shutting down TermuxPilot...\n');
+        console.log('\n  Shutting down CodeDeck...\n');
         process.exit(0);
         break;
 
@@ -379,13 +379,13 @@ function setupCLI(PORT) {
 
 function printHelp(PORT) {
   console.log(`
-  TermuxPilot Commands
+  CodeDeck Commands
   --------------------
   o  -  Open dashboard
   l  -  List all processes
   r  -  Restart all processes
   s  -  Show system stats
-  q  -  Quit TermuxPilot
+  q  -  Quit CodeDeck
   h  -  Show this help
   Dashboard: http://localhost:${PORT}
   `);
@@ -396,13 +396,13 @@ function printHelp(PORT) {
 // ═══════════════════════════════════
 pm.restore();
 
-const PORT = process.env.PILOT_PORT || 3100;
+const PORT = process.env.CODEDECK_PORT || 3100;
 
 const server = app.listen(PORT, '0.0.0.0', () => {
   const lanIP = getLanIP();
 
   console.log(`
-  TermuxPilot v1.0.0
+  CodeDeck v1.0.0
   ----------------------
   Local:   http://localhost:${PORT}
   Network: http://${lanIP}:${PORT}
@@ -412,7 +412,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   s - Stats   q - Quit    h - Help
   `);
 
-  if (process.env.TERMUXPILOT_LOCAL === '1') {
+  if (process.env.CODEDECK_LOCAL === '1') {
     setTimeout(() => openBrowser(`http://localhost:${PORT}`), 1500);
     setupCLI(PORT);
   }

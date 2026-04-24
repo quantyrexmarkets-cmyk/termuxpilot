@@ -1,17 +1,17 @@
 {
-  "name": "termuxpilot",
+  "name": "codedeck",
   "version": "2.0.0",
-  "description": "Mobile developer OS - process manager with AI brain",
-  "main": "pilot.js",
+  "description": "CodeDeck - The Mobile Developer OS",
+  "main": "codedeck.js",
   "scripts": {
-    "start": "node pilot.js",
-    "dev": "node pilot.js"
+    "start": "node codedeck.js",
+    "dev": "CODEDECK_LOCAL=1 node codedeck.js"
   },
   "dependencies": {
-    "bcryptjs": "^3.0.3",
+    "bcryptjs": "^2.4.3",
     "chalk": "^5.6.2",
     "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
+    "jsonwebtoken": "^9.0.0",
     "shell-quote": "^1.8.3",
     "ws": "^8.20.0"
   }
