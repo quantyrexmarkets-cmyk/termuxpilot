@@ -1,49 +1,120 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>CodeDeck - Login</title><style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>CodeDeck — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a14;color:#e0e0e8;font-family:system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center}
-.auth-box{width:90%;max-width:380px;background:#111122;border:1px solid #1e1e3a;border-radius:14px;padding:30px 24px}
-.logo{text-align:center;margin-bottom:24px}
-.logo svg{width:40px;height:40px;color:#a29bfe;margin-bottom:8px}
-.logo h1{font-size:20px;font-weight:700}
-.logo p{font-size:12px;color:#666;margin-top:4px}
-.ig{margin-bottom:14px}
-.ig label{display:block;font-size:12px;color:#888;margin-bottom:4px}
-.ig input{width:100%;padding:10px 12px;background:#0a0a14;border:1px solid #1e1e3a;border-radius:8px;color:#e0e0e8;font-size:14px;outline:none}
-.ig input:focus{border-color:#6c5ce7}
-.btn{width:100%;padding:12px;background:#6c5ce7;border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:6px}
-.btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.6}
-.switch{text-align:center;margin-top:16px;font-size:13px;color:#666}
-.switch a{color:#a29bfe;cursor:pointer;text-decoration:none}
-.switch a:hover{text-decoration:underline}
-.err{background:#ff444422;border:1px solid #ff444444;border-radius:8px;padding:8px 12px;font-size:12px;color:#ff4444;margin-bottom:12px;display:none}
+body{background:#050510;color:#d4d4e8;font-family:'Inter',system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+
+/* Background */
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(#151530 1px,transparent 1px),linear-gradient(90deg,#151530 1px,transparent 1px);background-size:60px 60px;opacity:.2;pointer-events:none}
+.bg-glow{position:fixed;width:600px;height:600px;top:-200px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,#7c6cf0 0%,transparent 70%);opacity:.06;pointer-events:none}
+
+/* Card */
+.auth-card{position:relative;width:92%;max-width:400px;background:#0a0a1a;border:1px solid #151530;border-radius:16px;padding:32px 28px;z-index:1}
+
+/* Logo */
+.logo{text-align:center;margin-bottom:28px}
+.logo-icon{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;background:#7c6cf015;border:1px solid #7c6cf030;border-radius:12px;margin-bottom:12px}
+.logo-icon svg{width:22px;height:22px;color:#b4a8ff}
+.logo h1{font-size:20px;font-weight:800;letter-spacing:-.3px}
+.logo p{font-size:13px;color:#555;margin-top:4px}
+
+/* Social Buttons */
+.socials{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.social-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:10px;background:#0f0f24;border:1px solid #151530;border-radius:10px;color:#d4d4e8;font-size:13px;font-weight:500;cursor:pointer;transition:.15s}
+.social-btn:hover{border-color:#7c6cf060;background:#151530}
+.social-btn:active{transform:scale(.98)}
+.social-btn svg{width:18px;height:18px;flex-shrink:0}
+.social-btn .badge{margin-left:auto;font-size:10px;color:#555;font-weight:400}
+
+/* Divider */
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0}
+.divider span{font-size:11px;color:#333;text-transform:uppercase;letter-spacing:1px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#151530}
+
+/* Form */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;color:#555;margin-bottom:5px;font-weight:500}
+.field input{width:100%;padding:10px 14px;background:#050510;border:1px solid #151530;border-radius:10px;color:#d4d4e8;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:.2s}
+.field input:focus{border-color:#7c6cf0;box-shadow:0 0 0 3px #7c6cf015}
+.field input::placeholder{color:#333}
+
+/* Name field hidden by default */
 .name-field{display:none}
-</style></head><body>
-<div class="auth-box">
+
+/* Submit */
+.submit-btn{width:100%;padding:11px;background:#7c6cf0;border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:.15s;font-family:'Inter',sans-serif;margin-top:4px}
+.submit-btn:hover{background:#b4a8ff;color:#000}
+.submit-btn:active{transform:scale(.98)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* Links */
+.auth-links{margin-top:20px;text-align:center;font-size:13px;color:#555;display:flex;flex-direction:column;gap:8px}
+.auth-links a{color:#b4a8ff;cursor:pointer;text-decoration:none;font-weight:500}
+.auth-links a:hover{text-decoration:underline}
+
+/* Error */
+.err-box{background:#ef444415;border:1px solid #ef444430;border-radius:10px;padding:10px 14px;font-size:12px;color:#ef4444;margin-bottom:14px;display:none;line-height:1.5}
+
+/* Back to home */
+.back-home{position:fixed;top:16px;left:16px;z-index:10;display:flex;align-items:center;gap:6px;font-size:12px;color:#555;text-decoration:none;font-weight:500;transition:.2s}
+.back-home:hover{color:#b4a8ff}
+.back-home svg{width:14px;height:14px}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<a href="/" class="back-home">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+Home
+</a>
+
+<div class="auth-card">
 <div class="logo">
+<div class="logo-icon">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
-<h1>CodeDeck</h1>
-<p id="auth-subtitle">Sign in to your workspace</p>
 </div>
-<div class="err" id="err"></div>
-<div class="ig name-field" id="name-group">
+<h1 id="auth-title">Sign in to CodeDeck</h1>
+<p id="auth-subtitle">Your mobile development workspace</p>
+</div>
+
+<div class="err-box" id="err"></div>
+
+<div class="socials">
+<button class="social-btn" onclick="alert('GitHub login coming soon')">
+<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+GitHub
+</button>
+<button class="social-btn" onclick="alert('Google login coming soon')">
+<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+Google
+<span class="badge">Coming soon</span>
+</button>
+</div>
+
+<div class="divider"><span>or</span></div>
+
+<div class="field name-field" id="name-group">
 <label>Name</label>
 <input type="text" id="i-name" placeholder="Your name">
 </div>
-<div class="ig">
+<div class="field">
 <label>Email</label>
 <input type="email" id="i-email" placeholder="you@example.com">
 </div>
-<div class="ig">
+<div class="field">
 <label>Password</label>
 <input type="password" id="i-pass" placeholder="Min 6 characters">
 </div>
-<button class="btn" id="auth-btn" onclick="doAuth()">Sign In</button>
-<div class="switch">
-<span id="switch-text">No account?</span>
-<a id="switch-link" onclick="toggleMode()">Create one</a>
+
+<button class="submit-btn" id="auth-btn" onclick="doAuth()">Sign In</button>
+
+<div class="auth-links">
+<div><span id="switch-text">Need an account?</span> <a id="switch-link" onclick="toggleMode()">Sign up</a></div>
 </div>
 </div>
+
 <script>
 let mode='login';
 
@@ -51,36 +122,34 @@ function toggleMode(){
   mode=mode==='login'?'register':'login';
   document.getElementById('name-group').style.display=mode==='register'?'block':'none';
   document.getElementById('auth-btn').textContent=mode==='register'?'Create Account':'Sign In';
-  document.getElementById('switch-text').textContent=mode==='register'?'Have an account?':'No account?';
-  document.getElementById('switch-link').textContent=mode==='register'?'Sign in':'Create one';
-  document.getElementById('auth-subtitle').textContent=mode==='register'?'Create your workspace':'Sign in to your workspace';
+  document.getElementById('switch-text').textContent=mode==='register'?'Have an account?':'Need an account?';
+  document.getElementById('switch-link').textContent=mode==='register'?'Sign in':'Sign up';
+  document.getElementById('auth-title').textContent=mode==='register'?'Create your account':'Sign in to CodeDeck';
+  document.getElementById('auth-subtitle').textContent=mode==='register'?'Start building from your phone':'Your mobile development workspace';
   hideErr();
 }
 
-function showErr(msg){
-  const el=document.getElementById('err');
-  el.textContent=msg;el.style.display='block';
-}
-function hideErr(){document.getElementById('err').style.display='none';}
+function showErr(msg){var el=document.getElementById('err');el.textContent=msg;el.style.display='block'}
+function hideErr(){document.getElementById('err').style.display='none'}
 
 async function doAuth(){
   hideErr();
-  const email=document.getElementById('i-email').value.trim();
-  const pass=document.getElementById('i-pass').value;
-  const name=document.getElementById('i-name').value.trim();
-  const btn=document.getElementById('auth-btn');
+  var email=document.getElementById('i-email').value.trim();
+  var pass=document.getElementById('i-pass').value;
+  var name=document.getElementById('i-name').value.trim();
+  var btn=document.getElementById('auth-btn');
 
   if(!email||!pass)return showErr('Email and password required');
   if(mode==='register'&&pass.length<6)return showErr('Password must be at least 6 characters');
 
   btn.disabled=true;
-  btn.textContent=mode==='register'?'Creating...':'Signing in...';
+  btn.textContent=mode==='register'?'Creating account...':'Signing in...';
 
   try{
-    const url=mode==='register'?'/api/auth/register':'/api/auth/login';
-    const body=mode==='register'?{email,password:pass,name:name||undefined}:{email,password:pass};
-    const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    const d=await r.json();
+    var url=mode==='register'?'/api/auth/register':'/api/auth/login';
+    var body=mode==='register'?{email:email,password:pass,name:name||undefined}:{email:email,password:pass};
+    var r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    var d=await r.json();
 
     if(d.error){showErr(d.error);btn.disabled=false;btn.textContent=mode==='register'?'Create Account':'Sign In';return}
 
@@ -90,16 +159,13 @@ async function doAuth(){
       window.location.href='/app';
     }
   }catch(e){
-    showErr('Connection error');
+    showErr('Connection error. Please try again.');
     btn.disabled=false;
     btn.textContent=mode==='register'?'Create Account':'Sign In';
   }
 }
 
-// Auto-login check
 if(localStorage.getItem('codedeck_token')){window.location.href='/app';}
-
-// Enter key
-document.addEventListener('keydown',e=>{if(e.key==='Enter')doAuth()});
+document.addEventListener('keydown',function(e){if(e.key==='Enter')doAuth()});
 </script>
 </body></html>
