@@ -1,0 +1,16 @@
+[
+  {
+    "id": "u_1777018108863",
+    "email": "test@test.com",
+    "name": "Test",
+    "password": "$2b$10$/cESvZqem1BK7RPOjI3ntuzEv0E64oYYbH0RYc8aHhqZk3R3Yhsim",
+    "createdAt": "2026-04-24T08:08:28.863Z"
+  },
+  {
+    "id": "u_1777018276978",
+    "email": "kelvinmike5056@gmail.com",
+    "name": "Kelvinp",
+    "password": "$2b$10$dbfQSbRwGQBYDVid2QSyLOo67cxeavs5v2e20wE.DP8TkbYZPxuYy",
+    "createdAt": "2026-04-24T08:11:16.978Z"
+  }
+]
