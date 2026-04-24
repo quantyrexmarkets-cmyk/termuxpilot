@@ -273,6 +273,17 @@ app.get('/api/ai/llm/status', (req, res) => {
   res.json({ available: llm.isAvailable(), model: llm.model });
 });
 
+
+// Landing page as homepage
+app.get('/', (req, res) => {
+  res.sendFile(require('path').join(__dirname, '..', 'public', 'landing.html'));
+});
+
+// App dashboard
+app.get('/app', (req, res) => {
+  res.sendFile(require('path').join(__dirname, '..', 'public', 'index.html'));
+});
+
 app.use( (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });

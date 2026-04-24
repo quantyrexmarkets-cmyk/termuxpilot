@@ -87,7 +87,7 @@ async function doAuth(){
     if(d.token){
       localStorage.setItem('pilot_token',d.token);
       localStorage.setItem('pilot_user',JSON.stringify(d.user));
-      window.location.href='/';
+      window.location.href='/app';
     }
   }catch(e){
     showErr('Connection error');
@@ -97,7 +97,7 @@ async function doAuth(){
 }
 
 // Auto-login check
-if(localStorage.getItem('pilot_token')){window.location.href='/';}
+if(localStorage.getItem('pilot_token')){window.location.href='/app';}
 
 // Enter key
 document.addEventListener('keydown',e=>{if(e.key==='Enter')doAuth()});
