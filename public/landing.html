@@ -8,12 +8,12 @@ a{color:inherit;text-decoration:none}
 ::selection{background:var(--ac);color:#fff}
 
 /* ── Nav ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 16px;height:46px;display:flex;align-items:center;justify-content:space-between;background:var(--bg)ee;backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 12px;height:46px;display:flex;align-items:center;justify-content:space-between;background:var(--bg)ee;backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);overflow:hidden}
 
 .nav-logo{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px;letter-spacing:-.3px}
 .nav-logo svg{width:20px;height:20px;color:var(--ac2)}
 .nav-links{display:flex;gap:6px}
-.nav-link{padding:6px 12px;font-size:13px;color:var(--tx2);border-radius:6px;transition:.2s}
+.nav-link{padding:4px 8px;font-size:12px;color:var(--tx2);border-radius:6px;transition:.2s}
 .nav-link:hover{color:var(--tx);background:var(--bd)}
 .btn{padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;border:none;font-weight:600;transition:.15s;display:inline-flex;align-items:center;gap:6px}
 .btn:active{transform:scale(.97)}
@@ -132,6 +132,7 @@ a{color:inherit;text-decoration:none}
 .footer-links a:hover{color:var(--ac2)}
 
 @media(max-width:768px){
+  .nav-link{display:none}
   .hero-inner{grid-template-columns:1fr}
   .showcase-inner{grid-template-columns:1fr}
   .stats-inner{grid-template-columns:repeat(2,1fr)}
