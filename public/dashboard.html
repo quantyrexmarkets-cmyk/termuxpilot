@@ -168,9 +168,10 @@ var smartCmds={
 
 function smartInterpret(cmd){
 var lower=cmd.toLowerCase().trim();
-if(smartCmds[lower]){
-w('→ '+smartCmds[lower]+'\n','t-sys');
-return smartCmds[lower]}
+if(smartCmds[lower]!==undefined){
+var mapped=smartCmds[lower];
+w('→ '+mapped+'\n','t-sys');
+return mapped}
 return cmd}
 
 function E(s){if(!s)return'';s=String(s).replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'').replace(/\u001b\[[0-9;]*[a-zA-Z]/g,'').replace(/\[\d+[a-zA-Z]/g,'').replace(/\[K/g,'').replace(/\[\?\d+[a-zA-Z]/g,'').replace(/\]\d+;[^\x07]*\x07/g,'');var d=document.createElement('div');d.textContent=s;return d.innerHTML}
@@ -187,8 +188,8 @@ if(d.success){termId=d.id;w('Shell ready ('+d.shell.split('/').pop()+')\n','t-sy
 fetch('/api/processes').then(function(r){return r.json()}).then(function(pd){
 var running=(pd.processes||[]).filter(function(p){return p.running});
 if(running.length>0)w(running.length+' process(es) already running\n','t-sys')});
-fetch('/api/files/read?path='+encodeURIComponent('~/termuxpilot/package.json')).then(function(r){return r.json()}).then(function(pj){
-if(!pj.error){try{var pkg=JSON.parse(pj.content||'{}');w('Project: '+(pkg.name||'unknown')+' v'+(pkg.version||'?')+'\n','t-sys')}catch(e){}}});
+fetch('/api/files/read?path='+encodeURIComponent('~/termuxpilot/package.json'),{}).then(function(r){return r.json()}).then(function(pj){
+if(!pj.error){try{var pkg=JSON.parse(pj.content||'{}');w('Project: '+(pkg.name||'unknown')+' v'+(pkg.version||'?')+'\n','t-sys')}catch(e){}}})
 w('','');addPrompt()}
 else{w('Terminal error: '+(d.error||'unknown')+'\n','t-err')}}
 catch(e){w('Cannot connect to terminal\n','t-err')}}
@@ -269,26 +270,63 @@ if(inp)inp.focus()}
 
 async function send(){
 var input=document.getElementById('tcmd');
-var cmd=input.value.trim();
-if(!cmd)return;
-input.parentElement.innerHTML='<span class="ps">$</span><span>'+E(cmd)+'</span>';
+var raw=input.value.trim();
+if(!raw)return;
+input.value='';
 
-if(cmd==='clear'){document.getElementById('tout').innerHTML='';addPrompt();return}
-if(cmd==='help'){w('\nCommands:\n','t-sys');w('  clear    - clear screen\n','t-sys');w('  procs    - processes panel\n','t-sys');w('  files    - files panel\n','t-sys');w('  edit     - editor panel\n','t-sys');w('  ai       - AI brain panel\n','t-sys');w('  preview  - preview panel\n','t-sys');w('  new      - new process\n','t-sys');w('  logout   - sign out\n\n','t-sys');addPrompt();return}
-if(cmd==='procs'){toggle('procs');addPrompt();return}
-if(cmd==='files'){toggle('files');addPrompt();return}
-if(cmd==='edit'){toggle('editor');addPrompt();return}
-if(cmd==='ai'){toggle('ai');addPrompt();return}
-if(cmd==='preview'){toggle('preview');addPrompt();return}
-if(cmd==='new'){openAdd();addPrompt();return}
-if(cmd==='logout'){logout();return}
+hist.push(raw);
+histIdx=hist.length;
 
-w('$ '+cmd+'\n','t-in');
-if(!termId){w('No shell session\n','t-err');return}
-try{await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
-setTimeout(readOutput,300);
-setTimeout(readOutput,800);
-setTimeout(function(){readOutput();setTimeout(addPrompt,300)},1000)}catch(e){w('Error\n','t-err');addPrompt()}}
+var lower=raw.toLowerCase();
+
+if(lower==='clear'){
+  document.getElementById('tout').innerHTML='';
+  return;
+}
+if(lower==='help'){
+  w('Commands:\n','t-sys');
+  w('  clear    - clear screen\n','t-sys');
+  w('  procs    - open processes\n','t-sys');
+  w('  files    - open files\n','t-sys');
+  w('  edit     - open editor\n','t-sys');
+  w('  ai       - open AI panel\n','t-sys');
+  w('  preview  - open preview\n','t-sys');
+  w('  new      - new process\n','t-sys');
+  w('  logout   - sign out\n','t-sys');
+  w('','t-sys');
+  return;
+}
+if(lower==='procs'){toggle('procs');return}
+if(lower==='files'){toggle('files');return}
+if(lower==='edit'){toggle('editor');return}
+if(lower==='ai'){toggle('ai');return}
+if(lower==='preview'){toggle('preview');return}
+if(lower==='new'){openAdd();return}
+if(lower==='logout'){logout();return}
+
+var cmd=smartInterpret(raw);
+
+w('$ '+raw+'\n','t-in');
+
+if(!termId){
+  w('No shell session\n','t-err');
+  return;
+}
+
+try{
+  await fetch('/api/terminal/'+termId+'/write',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({command:cmd})
+  });
+  setTimeout(async function(){
+    await readOutput();
+    setTimeout(addPrompt,300);
+  },700);
+}catch(e){
+  w('Error sending command\n','t-err');
+}
+}
 
 var lastTime=null;
 async function readOutput(){
