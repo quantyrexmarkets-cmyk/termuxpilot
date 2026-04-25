@@ -166,7 +166,15 @@ var smartCmds={
 'commit':'git add -A && git commit -m',
 'push':'git push origin main',
 'pull':'git pull',
-'log':'git log --oneline -10'
+'log':'git log --oneline -10',
+'glog':'git log --oneline --graph --all -10',
+'staged':'git diff --staged',
+'unstage':'git reset HEAD',
+'undo':'git checkout -- .',
+'branches':'git branch -a',
+'stash':'git stash',
+'unstash':'git stash pop',
+'remote':'git remote -v'
 };
 
 function smartInterpret(cmd){
@@ -285,6 +293,19 @@ if(lower==='ext'){toggle('ext');addPrompt();return}
 if(lower==='new'){openAdd();return}
 if(lower==='logout'){logout();return}
 
+if(lower==='git status'||lower==='status'){gitCmd('status');return}
+if(lower==='git log'||lower==='log'){gitCmd('log');return}
+if(lower==='git diff'||lower==='diff'){gitCmd('diff');return}
+if(lower==='git push'||lower==='push'){gitCmd('push');return}
+if(lower==='git pull'||lower==='pull'){gitCmd('pull');return}
+if(lower==='git init'||lower==='init'){gitCmd('init');return}
+if(lower.startsWith('commit ')){gitCmd('commit',raw.slice(7));return}
+if(lower.startsWith('git commit -m ')){gitCmd('commit',raw.slice(14));return}
+if(lower.startsWith('branch ')){gitCmd('branch',raw.slice(7));return}
+if(lower.startsWith('git clone ')){gitCmd('clone',raw.slice(10));return}
+if(lower==='branches'){gitCmd('branch');return}
+
+
 var cmd=smartInterpret(raw);
 if(!termId){out('No shell','t-err');addPrompt();return}
 try{
@@ -304,6 +325,32 @@ var cls=o.type==='stderr'?'t-err':o.type==='system'?'t-sys':'t-out';
 out(clean,cls);
 if(o.type==='stderr')checkAI(clean);
 else detectPort(clean)})}}catch(e){}}
+
+
+async function gitCmd(action,arg){
+try{var r,d;
+if(action==='status'){r=await fetch('/api/git/status');d=await r.json();out(d.output||'Clean','t-ok')}
+else if(action==='log'){r=await fetch('/api/git/log');d=await r.json();out(d.output||'No commits','t-out')}
+else if(action==='diff'){r=await fetch('/api/git/diff');d=await r.json();out(d.output||'No changes','t-out')}
+else if(action==='push'){r=await fetch('/api/git/push',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});d=await r.json();out(d.output||d.error,'t-ok')}
+else if(action==='pull'){r=await fetch('/api/git/pull',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});d=await r.json();out(d.output||d.error,'t-ok')}
+else if(action==='commit'){
+if(!arg){out('Usage: commit "your message"','t-err');addPrompt();return}
+r=await fetch('/api/git/commit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:arg})});
+d=await r.json();out(d.output||d.error||'Done',d.success?'t-ok':'t-err')}
+else if(action==='branch'){
+r=await fetch('/api/git/branch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:arg})});
+d=await r.json();out(d.output||d.error,'t-ok')}
+else if(action==='clone'){
+if(!arg){out('Usage: clone <url>','t-err');addPrompt();return}
+out('Cloning...','t-sys');
+r=await fetch('/api/git/clone',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:arg})});
+d=await r.json();out(d.output||d.error,d.success?'t-ok':'t-err')}
+else if(action==='init'){
+r=await fetch('/api/git/init',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
+d=await r.json();out(d.output||d.error,'t-ok')}
+}catch(e){out('Git error: '+e.message,'t-err')}
+addPrompt()}
 
 // ═══ Inline AI ═══
 async function checkAI(text){

@@ -340,6 +340,59 @@ app.delete('/api/extensions/:id', (req, res) => {
   res.json(extensions.remove(req.params.id));
 });
 
+
+// ═══════════════════════════════════
+// GIT API
+// ═══════════════════════════════════
+const git = require('./git');
+
+app.get('/api/git/status', async (req, res) => {
+  const cwd = req.query.cwd || process.env.HOME;
+  res.json(await git.status(cwd));
+});
+
+app.get('/api/git/log', async (req, res) => {
+  const cwd = req.query.cwd || process.env.HOME;
+  res.json(await git.log(cwd));
+});
+
+app.get('/api/git/diff', async (req, res) => {
+  const cwd = req.query.cwd || process.env.HOME;
+  res.json(await git.diff(cwd));
+});
+
+app.post('/api/git/commit', async (req, res) => {
+  const { message, cwd } = req.body;
+  if (!message) return res.status(400).json({ error: 'message required' });
+  res.json(await git.commit(message, cwd));
+});
+
+app.post('/api/git/push', async (req, res) => {
+  const { cwd } = req.body || {};
+  res.json(await git.push(cwd));
+});
+
+app.post('/api/git/pull', async (req, res) => {
+  const { cwd } = req.body || {};
+  res.json(await git.pull(cwd));
+});
+
+app.post('/api/git/branch', async (req, res) => {
+  const { name, cwd } = req.body || {};
+  res.json(await git.branch(name, cwd));
+});
+
+app.post('/api/git/clone', async (req, res) => {
+  const { url, cwd } = req.body || {};
+  if (!url) return res.status(400).json({ error: 'url required' });
+  res.json(await git.clone(url, cwd));
+});
+
+app.post('/api/git/init', async (req, res) => {
+  const { cwd } = req.body || {};
+  res.json(await git.init(cwd));
+});
+
 app.use( (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'dashboard.html'));
 });
