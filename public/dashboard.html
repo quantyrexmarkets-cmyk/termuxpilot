@@ -152,13 +152,17 @@ if(USER)document.getElementById('uname').textContent=USER.name||USER.email;
 var smartCmds={
 'run server':'node server.js',
 'run':'node server.js',
-'start':'npm start',
-'dev':'npm run dev',
+'start':'cd ~/termuxpilot && npm start',
+'run start':'npm start',
+'dev':'cd ~/termuxpilot && npm run dev',
+'run dev':'npm run dev',
 'start dev':'npm run dev',
-'install':'npm install',
+'install':'cd ~/termuxpilot && npm install',
+'install here':'npm install',
 'install deps':'npm install',
 'deps':'npm install',
-'build':'npm run build',
+'build':'cd ~/termuxpilot && npm run build',
+'run build':'npm run build',
 'test':'npm test',
 'stop all':'pkill -f node',
 'll':'ls -la',
@@ -217,6 +221,11 @@ ts.appendChild(d)}
 ts.scrollTop=ts.scrollHeight;
 var inp=document.getElementById('tcmd');if(inp)inp.scrollIntoView({block:'nearest'})}
 
+function updatePrompt(){
+var cwd=gitCwd||'~';
+var short=cwd.replace('/data/data/com.termux/files/home','~');
+var ps=document.querySelector('.prompt-ps');
+if(ps)ps.textContent=short+' $ '}
 function addPrompt(){
 var ts=document.getElementById('ts');
 var row=document.createElement('div');
@@ -236,6 +245,7 @@ if(ts)ts.scrollTop=ts.scrollHeight;
 if(inp)inp.scrollIntoView({behavior:'smooth',block:'end'})},200)}}
 
 function lockInput(){
+updatePrompt();
 var inp=document.getElementById('tcmd');
 if(!inp)return;
 var val=inp.value;
@@ -348,7 +358,7 @@ var clean=E(o.text).trim();
 if(!clean)return;
 var cls=o.type==='stderr'?'t-err':o.type==='system'?'t-sys':'t-out';
 out(clean,cls);
-if(o.type==='stderr')checkAI(clean);
+if(o.type==='stderr'&&(clean.toLowerCase().startsWith('error:')||clean.toLowerCase().startsWith('syntaxerror')||clean.toLowerCase().startsWith('typeerror')||clean.toLowerCase().startsWith('referenceerror')||clean.toLowerCase().includes('cannot find module')))checkAI(clean);
 else detectPort(clean)})}}catch(e){}}
 
 
