@@ -11,17 +11,22 @@ body{background:var(--bg);color:var(--tx);font-family:'JetBrains Mono',monospace
 .term-user{font-size:10px;color:var(--tx2)}
 .term-logout{padding:2px 8px;background:none;border:1px solid var(--bd);border-radius:4px;color:var(--tx2);font-size:9px;cursor:pointer;font-family:inherit}
 
-.term-body{flex:1;overflow-y:auto;padding:10px 12px 70px 12px;font-size:12px;line-height:1.7;background:var(--bg);min-height:0}
+.term-body{flex:1;overflow-y:auto;padding:10px 12px 60px 12px;font-size:13px;line-height:1.8;background:var(--bg);min-height:0;cursor:text}
 .term-body span{display:inline}
 .t-in{color:var(--gn)}
+.term-line{display:flex;align-items:center}
+.term-line .ps{color:var(--gn);margin-right:6px;flex-shrink:0}
+.term-line input{background:none;border:none;color:var(--tx);font-size:13px;font-family:inherit;outline:none;flex:1;padding:0;caret-color:var(--gn)}
+.term-cursor{display:inline-block;width:7px;height:15px;background:var(--gn);animation:blink 1s infinite;vertical-align:middle;margin-left:1px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 .t-out{color:#aaa}
 .t-err{color:var(--rd)}
 .t-sys{color:#0984e3}
 .t-ai{color:var(--yw)}
 
-.term-input-bar{display:flex;align-items:center;background:#0a0a18;border-top:1px solid var(--bd);flex-shrink:0}
-.term-ps1{padding:8px 4px 8px 12px;color:var(--gn);font-size:13px;font-weight:700}
-.term-in{flex:1;padding:8px 12px 8px 4px;background:none;border:none;color:var(--tx);font-size:13px;font-family:inherit;outline:none}
+
+
+
 
 .dock{position:fixed;bottom:6px;left:50%;transform:translateX(-50%);background:#0a0a1aee;backdrop-filter:blur(10px);border:1px solid var(--bd);padding:4px 6px;border-radius:12px;display:flex;gap:3px;z-index:90;max-width:96vw}
 .dk{width:34px;height:34px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx2);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-shrink:0}
@@ -100,10 +105,7 @@ function logout(){localStorage.removeItem('codedeck_token');localStorage.removeI
 <button class="term-logout" onclick="logout()">logout</button>
 </div>
 <div class="term-body" id="tout"></div>
-<div class="term-input-bar">
-<span class="term-ps1">$</span>
-<input class="term-in" id="tcmd" placeholder="type a command..." onkeydown="if(event.key==='Enter')send()" autofocus>
-</div>
+
 </div>
 
 <div class="dock">
@@ -152,20 +154,30 @@ if(d.success){termId=d.id;w('Shell ready ('+d.shell+')\n\n','t-sys')}
 else{w('Terminal error: '+(d.error||'unknown')+'\n','t-err')}}
 catch(e){w('Cannot connect to terminal\n','t-err')}}
 
+function addPrompt(){
+var o=document.getElementById('tout');
+var line=document.createElement('div');
+line.className='term-line';
+line.innerHTML='<span class="ps">$</span><input id="tcmd" onkeydown="if(event.key===\'Enter\')send()" autofocus>';
+o.appendChild(line);
+o.scrollTop=o.scrollHeight;
+var inp=document.getElementById('tcmd');
+if(inp)inp.focus()}
+
 async function send(){
 var input=document.getElementById('tcmd');
 var cmd=input.value.trim();
 if(!cmd)return;
-input.value='';
+input.parentElement.innerHTML='<span class="ps">$</span><span>'+E(cmd)+'</span>';
 
-if(cmd==='clear'){document.getElementById('tout').innerHTML='';return}
-if(cmd==='help'){w('\nCommands:\n','t-sys');w('  clear    - clear screen\n','t-sys');w('  procs    - processes panel\n','t-sys');w('  files    - files panel\n','t-sys');w('  edit     - editor panel\n','t-sys');w('  ai       - AI brain panel\n','t-sys');w('  preview  - preview panel\n','t-sys');w('  new      - new process\n','t-sys');w('  logout   - sign out\n\n','t-sys');return}
-if(cmd==='procs'){toggle('procs');return}
-if(cmd==='files'){toggle('files');return}
-if(cmd==='edit'){toggle('editor');return}
-if(cmd==='ai'){toggle('ai');return}
-if(cmd==='preview'){toggle('preview');return}
-if(cmd==='new'){openAdd();return}
+if(cmd==='clear'){document.getElementById('tout').innerHTML='';addPrompt();return}
+if(cmd==='help'){w('\nCommands:\n','t-sys');w('  clear    - clear screen\n','t-sys');w('  procs    - processes panel\n','t-sys');w('  files    - files panel\n','t-sys');w('  edit     - editor panel\n','t-sys');w('  ai       - AI brain panel\n','t-sys');w('  preview  - preview panel\n','t-sys');w('  new      - new process\n','t-sys');w('  logout   - sign out\n\n','t-sys');addPrompt();return}
+if(cmd==='procs'){toggle('procs');addPrompt();return}
+if(cmd==='files'){toggle('files');addPrompt();return}
+if(cmd==='edit'){toggle('editor');addPrompt();return}
+if(cmd==='ai'){toggle('ai');addPrompt();return}
+if(cmd==='preview'){toggle('preview');addPrompt();return}
+if(cmd==='new'){openAdd();addPrompt();return}
 if(cmd==='logout'){logout();return}
 
 w('$ '+cmd+'\n','t-in');
@@ -173,7 +185,7 @@ if(!termId){w('No shell session\n','t-err');return}
 try{await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
 setTimeout(readOutput,300);
 setTimeout(readOutput,800);
-setTimeout(readOutput,1500)}catch(e){w('Error\n','t-err')}}
+setTimeout(readOutput,1500);setTimeout(addPrompt,1600)}catch(e){w('Error\n','t-err');addPrompt()}}
 
 var lastTime=null;
 async function readOutput(){
@@ -294,6 +306,7 @@ function rlPv(){var f=document.querySelector('.preview-frame');if(f)f.src=f.src}
 
 // ═══ Init ═══
 document.addEventListener('DOMContentLoaded',function(){
+document.getElementById('tout').addEventListener('click',function(){var i=document.getElementById('tcmd');if(i)i.focus()});
 initTerm();
 fetchP();
 fetchAI();
