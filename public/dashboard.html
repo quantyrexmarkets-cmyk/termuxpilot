@@ -2,15 +2,15 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#050510;--sf:#0a0a1a;--bd:#151530;--tx:#d4d4e8;--tx2:#555;--ac:#7c6cf0;--ac2:#b4a8ff;--gn:#10b981;--rd:#ef4444;--yw:#eab308}
-body{background:var(--bg);color:var(--tx);font-family:'JetBrains Mono',monospace;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+html,body{margin:0;padding:0;max-width:100vw;overflow-x:hidden}body{background:var(--bg);color:var(--tx);font-family:'JetBrains Mono',monospace;height:100vh;width:100%;display:flex;flex-direction:column;overflow:hidden}
 
 /* Full screen terminal */
-.term-root{flex:1;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
-.term-header{height:36px;background:var(--sf);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 10px;gap:8px;flex-shrink:0}
+.term-root{flex:1;display:flex;flex-direction:column;background:var(--bg);overflow:hidden;min-height:0;max-width:100vw}
+.term-header{height:40px;background:var(--sf);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 10px;gap:8px;flex-shrink:0;padding-top:env(safe-area-inset-top,0)}
 .term-title{font-size:12px;color:var(--tx2);flex:1}
 .term-tab{padding:3px 10px;font-size:11px;color:var(--tx2);border-radius:4px;cursor:pointer;border:1px solid transparent}
 .term-tab.active{color:var(--ac2);border-color:var(--ac);background:var(--ac)15}
-.term-body{flex:1;overflow-y:auto;padding:12px 14px;font-size:13px;line-height:1.7;color:#ccc;white-space:pre-wrap;word-break:break-all}
+.term-body{flex:1;overflow-y:auto;padding:12px 14px 60px 14px;font-size:13px;line-height:1.7;color:#ccc;white-space:pre-wrap;word-break:break-all}
 .term-body .t-err{color:var(--rd)}
 .term-body .t-sys{color:#0984e3}
 .term-body .t-ai{color:var(--yw);font-weight:bold}
@@ -20,8 +20,8 @@ body{background:var(--bg);color:var(--tx);font-family:'JetBrains Mono',monospace
 .term-in{flex:1;padding:10px;background:transparent;border:none;color:var(--tx);font-size:13px;font-family:inherit;outline:none}
 
 /* Floating Dock */
-.dock{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:var(--sf)ee;backdrop-filter:blur(12px);border:1px solid var(--bd);padding:6px 10px;border-radius:16px;display:flex;gap:6px;z-index:90}
-.dock-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;position:relative}
+.dock{position:fixed;bottom:8px;left:50%;transform:translateX(-50%);background:var(--sf)ee;backdrop-filter:blur(12px);border:1px solid var(--bd);padding:5px 8px;border-radius:14px;display:flex;gap:4px;z-index:90;max-width:95vw}
+.dock-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;position:relative}
 .dock-btn:active{transform:scale(.9)}
 .dock-btn:hover{border-color:var(--ac);color:var(--ac2)}
 .dock-btn.active{border-color:var(--ac);color:var(--ac2);background:var(--ac)15}
@@ -32,9 +32,9 @@ body{background:var(--bg);color:var(--tx);font-family:'JetBrains Mono',monospace
 .panel-overlay{position:fixed;inset:0;background:#0008;z-index:95;display:none}
 .panel-overlay.show{display:block}
 .panel{position:fixed;top:0;height:100%;background:var(--sf);border-right:1px solid var(--bd);z-index:96;transition:transform .25s;overflow:hidden;display:flex;flex-direction:column}
-.panel-left{left:0;width:280px;transform:translateX(-100%)}
+.panel-left{left:0;width:280px;max-width:85vw;transform:translateX(-100%)}
 .panel-left.open{transform:translateX(0)}
-.panel-right{right:0;width:100%;border-right:none;border-left:1px solid var(--bd);transform:translateX(100%)}
+.panel-right{right:0;width:100%;max-width:100vw;border-right:none;border-left:1px solid var(--bd);transform:translateX(100%)}
 .panel-right.open{transform:translateX(0)}
 .panel-h{padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .panel-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
@@ -196,6 +196,22 @@ if(USER){var ud=document.getElementById('user-display');if(ud)ud.textContent=USE
 function E(s){if(!s)return'';s=s.replace(/\x1b\[[0-9;]*m/g,'').replace(/\u001b\[[0-9;]*m/g,'').replace(/\[\d+m/g,'');var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
 // ═══ Terminal WebSocket ═══
+
+var useFallback=false;
+
+async function sendCmdFallback(cmd){
+try{
+if(!fallbackTermId){
+var r=await fetch('/api/terminal/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:'~'})});
+var d=await r.json();fallbackTermId=d.id}
+await fetch('/api/terminal/'+fallbackTermId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
+setTimeout(async function(){
+var r=await fetch('/api/terminal/'+fallbackTermId+'/output');
+var d=await r.json();
+if(d.output)d.output.forEach(function(o){tWrite(o.text,o.type==='stderr'?'t-err':'')})
+},500)}catch(e){tWrite('Error: '+e.message+'\n','t-err')}}
+var fallbackTermId=null;
+
 function initTerm(){
 if(termWs&&termWs.readyState===1)return;
 var proto=location.protocol==='https:'?'wss':'ws';
@@ -210,7 +226,7 @@ if(d.type==='error')tWrite(d.text,'t-err');
 if(d.type==='exit')tWrite('\nShell exited ('+d.code+')\n','t-sys');
 }catch(e){}};
 termWs.onclose=function(){tWrite('\nDisconnected. Refresh to reconnect.\n','t-sys')};
-termWs.onerror=function(){tWrite('Connection error\n','t-err')}}
+termWs.onerror=function(){tWrite('WebSocket unavailable. Using command mode.\n','t-sys');useFallback=true}}
 
 function sendCmd(){
 var input=document.getElementById('term-cmd');
@@ -228,6 +244,7 @@ if(cmd==='newproc'){openAddProc();return}
 if(cmd==='logout'){logout();return}
 
 // Send to shell
+if(useFallback){sendCmdFallback(cmd);return}
 if(!termWs||termWs.readyState!==1){tWrite('Not connected\n','t-err');return}
 termWs.send(JSON.stringify({type:'input',text:cmd+'\n'}))}
 
