@@ -5,7 +5,7 @@
 html,body{margin:0;padding:0;width:100%;max-width:100vw;overflow:hidden}
 body{background:#000;color:var(--tx);font-family:'Courier New',monospace;height:100vh;height:100dvh;display:flex;flex-direction:column}
 
-.term{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#000}
+.term{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#000;transition:height 0.1s}
 .term-top{height:32px;background:#111;border-bottom:1px solid #222;display:flex;align-items:center;padding:0 10px;justify-content:space-between;flex-shrink:0}
 .term-top-l{font-size:11px;color:var(--gn);font-weight:700}
 .term-top-r{display:flex;gap:6px;align-items:center}
@@ -28,7 +28,7 @@ body{background:#000;color:var(--tx);font-family:'Courier New',monospace;height:
 .prompt-ps{color:var(--gn);font-weight:700;margin-right:6px;flex-shrink:0}
 .prompt-input{flex:1;background:none;border:none;color:var(--tx);font-size:12px;font-family:inherit;outline:none;padding:0;caret-color:var(--gn);letter-spacing:0.2px}
 
-.dock{position:fixed;bottom:6px;left:50%;transform:translateX(-50%);background:#111e;backdrop-filter:blur(10px);border:1px solid #222;padding:4px 6px;border-radius:12px;display:flex;gap:3px;z-index:90;max-width:96vw}
+.dock{position:fixed;bottom:env(safe-area-inset-bottom,6px);left:50%;transform:translateX(-50%);background:#111e;backdrop-filter:blur(10px);border:1px solid #222;padding:4px 6px;border-radius:12px;display:flex;gap:3px;z-index:90;max-width:96vw}
 .dk{width:32px;height:32px;border-radius:8px;border:1px solid #222;background:#000;color:#555;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-shrink:0}
 .dk:active{transform:scale(.9)}
 .dk.on{border-color:var(--ac);color:var(--ac2);background:#7c6cf015}
@@ -214,7 +214,8 @@ d.style.lineHeight='1.6';
 d.style.padding='1px 0';
 }
 ts.appendChild(d)}
-ts.scrollTop=ts.scrollHeight}
+ts.scrollTop=ts.scrollHeight;
+var inp=document.getElementById('tcmd');if(inp)inp.scrollIntoView({block:'nearest'})}
 
 function addPrompt(){
 var ts=document.getElementById('ts');
@@ -225,7 +226,14 @@ ts.appendChild(row);
 ts.scrollTop=ts.scrollHeight;
 setTimeout(function(){var inp=document.getElementById('tcmd');if(inp)inp.focus()},50)}
 
-function focusInput(){var inp=document.getElementById('tcmd');if(inp)inp.focus()}
+function focusInput(){
+var inp=document.getElementById('tcmd');
+if(inp){
+inp.focus();
+setTimeout(function(){
+var ts=document.getElementById('ts');
+if(ts)ts.scrollTop=ts.scrollHeight;
+if(inp)inp.scrollIntoView({behavior:'smooth',block:'end'})},200)}}
 
 function lockInput(){
 var inp=document.getElementById('tcmd');
@@ -456,12 +464,68 @@ async function renderExt(){var el=document.getElementById('ext-b');try{var r=awa
 async function loadExtCmds(){try{var r=await fetch('/api/extensions/commands');var d=await r.json();var cmds=d.commands||{};Object.keys(cmds).forEach(function(k){smartCmds[k]=cmds[k].command})}catch(e){}}
 
 // ═══ Init ═══
+
+function handleResize(){
+var ts=document.getElementById('ts');
+if(ts){
+ts.scrollTop=ts.scrollHeight;
+var inp=document.getElementById('tcmd');
+if(inp){
+setTimeout(function(){
+inp.scrollIntoView({behavior:'smooth',block:'end'});
+ts.scrollTop=ts.scrollHeight},100)}}}
+
+window.addEventListener('resize',handleResize);
+
+if(window.visualViewport){
+window.visualViewport.addEventListener('resize',function(){
+var ts=document.getElementById('ts');
+var vv=window.visualViewport;
+document.querySelector('.term').style.height=vv.height+'px';
+if(ts)ts.scrollTop=ts.scrollHeight});
+window.visualViewport.addEventListener('scroll',function(){
+var ts=document.getElementById('ts');
+if(ts)ts.scrollTop=ts.scrollHeight})}
+
+
+var reconnectTimer=null;
+var sessionAlive=false;
+
+async function checkSession(){
+if(!termId)return;
+try{var r=await fetch('/api/terminal/'+termId+'/output');
+var d=await r.json();
+if(d.error&&d.error==='No session'){
+sessionAlive=false;
+out('Session lost. Reconnecting...','t-sys');
+termId=null;
+clearInterval(reconnectTimer);
+reconnectTimer=setInterval(async function(){
+try{
+var r2=await fetch('/api/terminal/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:'~'})});
+var d2=await r2.json();
+if(d2.success){
+termId=d2.id;
+sessionAlive=true;
+clearInterval(reconnectTimer);
+out('Reconnected!','t-ok');
+addPrompt()}}catch(e){}},3000)}
+else{sessionAlive=true}}catch(e){}}
+
+document.addEventListener('visibilitychange',function(){
+if(document.visibilityState==='visible'){
+checkSession();
+var ts=document.getElementById('ts');
+if(ts)ts.scrollTop=ts.scrollHeight;
+setTimeout(function(){var inp=document.getElementById('tcmd');if(inp)inp.focus()},300)}});
+
 document.addEventListener('DOMContentLoaded',function(){
 initTerm();
 fetchP();
 fetchAI();
 loadExtCmds();
 setInterval(function(){fetchP();fetchAI()},8000);
+setInterval(checkSession,30000);
 document.getElementById('add-mo').addEventListener('click',function(e){if(e.target===e.currentTarget)closeAdd()})});
 </script>
 </body></html>
