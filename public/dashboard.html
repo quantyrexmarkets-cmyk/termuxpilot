@@ -141,7 +141,7 @@ var procs=[],errs=[],curDir='~',editPath=null,termId=null,active=null;
 if(USER)document.getElementById('uname').textContent=USER.name||USER.email;
 
 function E(s){if(!s)return'';s=String(s).replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'').replace(/\u001b\[[0-9;]*[a-zA-Z]/g,'').replace(/\[\d+[a-zA-Z]/g,'').replace(/\[K/g,'').replace(/\[\?\d+[a-zA-Z]/g,'').replace(/\]\d+;[^\x07]*\x07/g,'');var d=document.createElement('div');d.textContent=s;return d.innerHTML}
-function w(t,c){var o=document.getElementById('tout');var s=document.createElement('span');if(c)s.className=c;s.textContent=t;o.appendChild(s);o.scrollTop=o.scrollHeight}
+function w(t,c){var o=document.getElementById('tout');var lines=t.split('\n');lines.forEach(function(line,i){if(!line&&i===lines.length-1)return;var d=document.createElement('div');if(c)d.className=c;d.textContent=line;d.style.minHeight='1em';o.appendChild(d)});o.scrollTop=o.scrollHeight}
 
 // ═══ Terminal ═══
 async function initTerm(){
@@ -185,7 +185,7 @@ if(!termId){w('No shell session\n','t-err');return}
 try{await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
 setTimeout(readOutput,300);
 setTimeout(readOutput,800);
-setTimeout(function(){readOutput();addPrompt()},800)}catch(e){w('Error\n','t-err');addPrompt()}}
+setTimeout(function(){readOutput();setTimeout(addPrompt,300)},1000)}catch(e){w('Error\n','t-err');addPrompt()}}
 
 var lastTime=null;
 async function readOutput(){
