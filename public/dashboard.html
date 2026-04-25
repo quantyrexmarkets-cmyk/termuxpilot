@@ -185,7 +185,7 @@ if(!termId){w('No shell session\n','t-err');return}
 try{await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
 setTimeout(readOutput,300);
 setTimeout(readOutput,800);
-setTimeout(function(){readOutput().then(function(){setTimeout(function(){readOutput().then(addPrompt)},800)})},500)}catch(e){w('Error\n','t-err');addPrompt()}}
+setTimeout(function(){readOutput();addPrompt()},800)}catch(e){w('Error\n','t-err');addPrompt()}}
 
 var lastTime=null;
 async function readOutput(){

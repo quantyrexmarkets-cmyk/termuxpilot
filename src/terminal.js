@@ -120,11 +120,8 @@ class Terminal {
     const session = this.sessions.get(id);
     if (!session) return { error: 'No session' };
 
-    let output = session.output;
-    if (since) {
-      const t = new Date(since).getTime();
-      output = output.filter(o => new Date(o.time).getTime() > t);
-    }
+    const output = [...session.output];
+    session.output = [];
 
     return {
       success: true,
