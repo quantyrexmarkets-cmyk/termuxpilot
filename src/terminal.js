@@ -39,12 +39,12 @@ class Terminal {
     const resolvedCwd = this.resolveCwd(cwd);
 
     try {
-      const proc = spawn(shell, [], {
+      const proc = spawn(shell, ['--norc', '--noprofile'], {
         cwd: resolvedCwd,
         env: {
           ...process.env,
           TERM: 'xterm-256color',
-          PS1: ''
+          PS1: '',TERM: 'dumb'
         },
         stdio: ['pipe', 'pipe', 'pipe']
       });

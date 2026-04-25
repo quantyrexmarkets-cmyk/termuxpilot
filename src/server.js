@@ -316,6 +316,30 @@ app.get('/api/terminal/list', (req, res) => {
   res.json({ sessions: terminal.list() });
 });
 
+
+// ═══════════════════════════════════
+// EXTENSIONS API
+// ═══════════════════════════════════
+const extensions = require('./extensions');
+
+app.get('/api/extensions', (req, res) => {
+  res.json({ extensions: extensions.getAll() });
+});
+
+app.get('/api/extensions/commands', (req, res) => {
+  res.json({ commands: extensions.getCommands() });
+});
+
+app.post('/api/extensions/install', (req, res) => {
+  const ext = req.body;
+  if (!ext || !ext.id) return res.status(400).json({ error: 'Invalid extension' });
+  res.json(extensions.install(ext));
+});
+
+app.delete('/api/extensions/:id', (req, res) => {
+  res.json(extensions.remove(req.params.id));
+});
+
 app.use( (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'dashboard.html'));
 });

@@ -114,6 +114,7 @@ function logout(){localStorage.removeItem('codedeck_token');localStorage.removeI
 <div class="dk" onclick="toggle('editor')" id="d-editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
 <div class="dk" onclick="toggle('ai')" id="d-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="14" rx="2"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><path d="M9 16h6"/><line x1="12" y1="2" x2="12" y2="6"/><circle cx="12" cy="2" r="1"/></svg><div class="dk-badge" id="ai-badge">0</div></div>
 <div class="dk" onclick="toggle('preview')" id="d-preview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+<div class="dk" onclick="toggle('ext')" id="d-ext" title="Extensions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
 <div class="dk" onclick="openAdd()" id="d-add" style="background:#7c6cf015;border-color:#7c6cf060"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ac2)"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
 </div>
 
@@ -128,6 +129,9 @@ function logout(){localStorage.removeItem('codedeck_token');localStorage.removeI
 <div class="pnl pnl-l" id="p-ai"><div class="pnl-h"><div class="pnl-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="14" rx="2"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><path d="M9 16h6"/><line x1="12" y1="2" x2="12" y2="6"/><circle cx="12" cy="2" r="1"/></svg>AI Brain</div><button class="xbtn" onclick="closeAll()">x</button></div><div class="pnl-b" id="ai-b"><div style="padding:20px;text-align:center;color:var(--tx2);font-size:11px">All clear</div></div></div>
 
 <div class="pnl pnl-r" id="p-preview"><div class="pnl-h"><div class="pnl-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Preview</div><div style="display:flex;gap:3px"><button class="pb" onclick="rlPv()">reload</button><button class="xbtn" onclick="closeAll()">x</button></div></div><div class="pnl-b" id="pv-b"><div style="padding:20px;text-align:center;color:var(--tx2);font-size:11px">No preview available</div></div></div>
+
+
+<div class="pnl pnl-l" id="p-ext"><div class="pnl-h"><div class="pnl-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Extensions</div><button class="xbtn" onclick="closeAll()">x</button></div><div class="pnl-b" id="ext-b"></div></div>
 
 <div class="mo" id="add-mo"><div class="mbox"><h3>New Process</h3>
 <div class="ig"><label>Name</label><input type="text" id="i-n" placeholder="my-server"></div>
@@ -175,7 +179,23 @@ return mapped}
 return cmd}
 
 function E(s){if(!s)return'';s=String(s).replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'').replace(/\u001b\[[0-9;]*[a-zA-Z]/g,'').replace(/\[\d+[a-zA-Z]/g,'').replace(/\[K/g,'').replace(/\[\?\d+[a-zA-Z]/g,'').replace(/\]\d+;[^\x07]*\x07/g,'');var d=document.createElement('div');d.textContent=s;return d.innerHTML}
-function w(t,c){var o=document.getElementById('tout');var lines=t.split('\n');lines.forEach(function(line,i){if(!line&&i===lines.length-1)return;var d=document.createElement('div');if(c)d.className=c;d.textContent=line;d.style.minHeight='1em';o.appendChild(d)});o.scrollTop=o.scrollHeight}
+function w(t,c){
+var o=document.getElementById('tout');
+if(!t||t==='')return;
+var lines=t.split('\n');
+for(var i=0;i<lines.length;i++){
+var line=lines[i];
+if(line===''&&i===lines.length-1)continue;
+var d=document.createElement('div');
+d.style.padding='0';
+d.style.margin='0';
+d.style.minHeight='1.2em';
+d.style.whiteSpace='pre-wrap';
+d.style.wordBreak='break-all';
+if(c)d.className=c;
+d.textContent=line;
+o.appendChild(d)}
+o.scrollTop=o.scrollHeight}
 
 // ═══ Terminal ═══
 async function initTerm(){
@@ -260,42 +280,25 @@ return}}
 
 function addPrompt(){
 var o=document.getElementById('tout');
-var line=document.createElement('div');
-line.className='term-line';
-line.innerHTML='<span class="ps">$</span><input id="tcmd" onkeydown="if(event.key===\'Enter\')send()" autofocus>';
-o.appendChild(line);
-o.scrollTop=o.scrollHeight;
-var inp=document.getElementById('tcmd');
-if(inp)inp.focus()}
+var last=o.lastElementChild;
+if(last&&last.textContent==='$')return;
+var d=document.createElement('div');
+d.className='t-in';
+d.textContent='$';
+d.style.padding='0';d.style.margin='4px 0 0 0';
+o.appendChild(d);
+o.scrollTop=o.scrollHeight}
 
 async function send(){
 var input=document.getElementById('tcmd');
 var raw=input.value.trim();
 if(!raw)return;
 input.value='';
-
-hist.push(raw);
-histIdx=hist.length;
+hist.push(raw);histIdx=hist.length;
 
 var lower=raw.toLowerCase();
-
-if(lower==='clear'){
-  document.getElementById('tout').innerHTML='';
-  return;
-}
-if(lower==='help'){
-  w('Commands:\n','t-sys');
-  w('  clear    - clear screen\n','t-sys');
-  w('  procs    - open processes\n','t-sys');
-  w('  files    - open files\n','t-sys');
-  w('  edit     - open editor\n','t-sys');
-  w('  ai       - open AI panel\n','t-sys');
-  w('  preview  - open preview\n','t-sys');
-  w('  new      - new process\n','t-sys');
-  w('  logout   - sign out\n','t-sys');
-  w('','t-sys');
-  return;
-}
+if(lower==='clear'){document.getElementById('tout').innerHTML='';addPrompt();return}
+if(lower==='help'){w('\nCodeDeck Commands:','t-sys');w('  clear     clear screen','t-sys');w('  procs     open processes','t-sys');w('  files     open files','t-sys');w('  edit      open editor','t-sys');w('  ai        open AI brain','t-sys');w('  preview   open preview','t-sys');w('  new       new process','t-sys');w('  logout    sign out','t-sys');w('','');addPrompt();return}
 if(lower==='procs'){toggle('procs');return}
 if(lower==='files'){toggle('files');return}
 if(lower==='edit'){toggle('editor');return}
@@ -305,28 +308,15 @@ if(lower==='new'){openAdd();return}
 if(lower==='logout'){logout();return}
 
 var cmd=smartInterpret(raw);
+w('$ '+raw,'t-in');
 
-w('$ '+raw+'\n','t-in');
-
-if(!termId){
-  w('No shell session\n','t-err');
-  return;
-}
-
+if(!termId){w('No shell session','t-err');addPrompt();return}
 try{
-  await fetch('/api/terminal/'+termId+'/write',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({command:cmd})
-  });
-  setTimeout(async function(){
-    await readOutput();
-    setTimeout(addPrompt,300);
-  },700);
-}catch(e){
-  w('Error sending command\n','t-err');
-}
-}
+await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
+setTimeout(async function(){
+await readOutput();
+addPrompt()},1200)}
+catch(e){w('Error','t-err');addPrompt()}}
 
 var lastTime=null;
 async function readOutput(){
@@ -353,7 +343,8 @@ document.getElementById('d-'+name).classList.add('on');
 if(name==='procs')renderP();
 if(name==='files')renderF();
 if(name==='ai')renderAI();
-if(name==='preview')renderPV()}
+if(name==='preview')renderPV();
+if(name==='ext')renderExt()}
 
 function closeAll(){
 active=null;
@@ -448,9 +439,23 @@ function openPV(port){closeAll();toggle('preview');document.getElementById('pv-b
 function rlPv(){var f=document.querySelector('.preview-frame');if(f)f.src=f.src}
 
 // ═══ Init ═══
+
+async function renderExt(){
+var el=document.getElementById('ext-b');
+try{var r=await fetch('/api/extensions');var d=await r.json();var exts=d.extensions||[];
+el.innerHTML=exts.map(function(e){
+var cmds=Object.keys(e.commands||{}).map(function(k){return'<span style="display:inline-block;padding:1px 6px;background:var(--bg);border:1px solid var(--bd);border-radius:3px;font-size:9px;margin:2px">'+k+'</span>'}).join('');
+return'<div style="padding:10px 12px;border-bottom:1px solid var(--bd)"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div style="width:24px;height:24px;background:'+e.color+'22;border:1px solid '+e.color+'44;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:'+e.color+'">'+e.icon+'</div><div><div style="font-size:11px;font-weight:700">'+e.name+'</div><div style="font-size:9px;color:var(--tx2)">'+e.desc+'</div></div></div><div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:2px">'+cmds+'</div></div>'}).join('')}catch(e){el.innerHTML='<div style="padding:16px;color:var(--rd)">Error</div>'}}
+
+async function loadExtCmds(){
+try{var r=await fetch('/api/extensions/commands');var d=await r.json();var cmds=d.commands||{};
+Object.keys(cmds).forEach(function(k){
+smartCmds[k]=cmds[k].command})}catch(e){}}
+
 document.addEventListener('DOMContentLoaded',function(){
 document.getElementById('tout').addEventListener('click',function(){var i=document.getElementById('tcmd');if(i)i.focus()});
 initTerm();
+loadExtCmds();
 fetchP();
 fetchAI();
 setInterval(function(){fetchP();fetchAI()},8000);
