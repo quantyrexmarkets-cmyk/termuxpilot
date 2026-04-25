@@ -140,7 +140,7 @@ function logout(){localStorage.removeItem('codedeck_token');localStorage.removeI
 var procs=[],errs=[],curDir='~',editPath=null,termId=null,active=null;
 if(USER)document.getElementById('uname').textContent=USER.name||USER.email;
 
-function E(s){if(!s)return'';s=String(s).replace(/\x1b\[[0-9;]*m/g,'').replace(/\u001b\[[0-9;]*m/g,'').replace(/\[\d+m/g,'');var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function E(s){if(!s)return'';s=String(s).replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'').replace(/\u001b\[[0-9;]*[a-zA-Z]/g,'').replace(/\[\d+[a-zA-Z]/g,'').replace(/\[K/g,'').replace(/\[\?\d+[a-zA-Z]/g,'').replace(/\]\d+;[^\x07]*\x07/g,'');var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function w(t,c){var o=document.getElementById('tout');var s=document.createElement('span');if(c)s.className=c;s.textContent=t;o.appendChild(s);o.scrollTop=o.scrollHeight}
 
 // ═══ Terminal ═══
@@ -185,7 +185,7 @@ if(!termId){w('No shell session\n','t-err');return}
 try{await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
 setTimeout(readOutput,300);
 setTimeout(readOutput,800);
-setTimeout(readOutput,300);setTimeout(readOutput,1000);setTimeout(function(){readOutput().then(addPrompt)},2000)}catch(e){w('Error\n','t-err');addPrompt()}}
+setTimeout(function(){readOutput().then(function(){setTimeout(function(){readOutput().then(addPrompt)},800)})},500)}catch(e){w('Error\n','t-err');addPrompt()}}
 
 var lastTime=null;
 async function readOutput(){
@@ -198,7 +198,7 @@ if(d.output&&d.output.length){
 d.output.forEach(function(o){
 lastTime=o.time;
 var cls=o.type==='stderr'?'t-err':o.type==='system'?'t-sys':'t-out';
-w(o.text,cls);got=true})}
+var clean=o.text.replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'').replace(/\[K/g,'').replace(/\[\?\d+[a-zA-Z]/g,'').replace(/\]\d+;[^\x07]*\x07/g,'').trim();if(clean){w(clean+'\n',cls);got=true}})}
 return got}catch(e){return false}}
 
 // ═══ Panels ═══
