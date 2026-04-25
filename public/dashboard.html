@@ -126,12 +126,12 @@ body{background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;heigh
 }
 
 .term-panel{background:#050510;border-top:1px solid var(--bd);display:flex;flex-direction:column}
-.term-output{flex:1;padding:8px 12px;font-family:monospace;font-size:11px;line-height:1.6;overflow-y:auto;color:#ccc;white-space:pre-wrap;word-break:break-all}
+.term-output{flex:1;padding:10px 14px;font-family:monospace;font-size:13px;line-height:1.7;overflow-y:auto;color:#ccc;white-space:pre-wrap;word-break:break-all;background:#050510}
 .term-output .t-err{color:var(--rd)}
 .term-output .t-sys{color:#0984e3}
 .term-input{display:flex;border-top:1px solid var(--bd);background:#0a0a14}
-.term-prompt{padding:8px;color:var(--gn);font-family:monospace;font-size:12px;display:flex;align-items:center}
-.term-cmd{flex:1;padding:8px;background:transparent;border:none;color:var(--tx);font-family:monospace;font-size:12px;outline:none}
+.term-prompt{padding:10px;color:var(--gn);font-family:monospace;font-size:13px;display:flex;align-items:center}
+.term-cmd{flex:1;padding:10px;background:transparent;border:none;color:var(--tx);font-family:monospace;font-size:13px;outline:none}
 </style></head><body>
 <!-- Header -->
 <div class="hd">
@@ -300,7 +300,17 @@ async function newDir(){const n=prompt('Folder name:');if(!n)return;await fetch(
 // Footer
 function renderFT(){const running=procs.filter(p=>p.running).length;document.getElementById('ft-procs').textContent=running+' running';document.getElementById('ft-cpu').textContent=sys.loadAvg||'0.00';document.getElementById('ft-ram').textContent=(sys.memoryPercent||0)+'%';document.getElementById('ft-up').textContent=sys.uptimeFormatted||'0s';document.getElementById('ft-dot').style.background=running>0?'var(--gn)':'var(--rd)'}
 // Mode switch
-function setMode(m){mode=m;hideTerm();if(m==='code')renderEditor();else if(m==='files')renderFiles();else if(m==='terminal'){showTerm();document.getElementById('editor-body').innerHTML='<div class="editor-empty">Terminal active below</div>'}}
+function setMode(m){mode=m;hideTerm();
+document.getElementById('p-editor').style.display='';
+document.getElementById('p-preview').style.display='';
+document.getElementById('p-logs').style.display='';
+if(m==='code')renderEditor();
+else if(m==='files')renderFiles();
+else if(m==='terminal'){
+document.getElementById('p-editor').style.display='none';
+document.getElementById('p-preview').style.display='none';
+document.getElementById('p-logs').style.display='none';
+showTermFull()}}
 
 // Preview
 function renderPreview(port){
@@ -476,14 +486,24 @@ termWs.send(JSON.stringify({type:'input',text:cmd+'\n'}))}
 
 function pollTerm(){}
 
+function showTermFull(){
+var tp=document.getElementById('p-term');
+tp.style.display='flex';
+tp.style.flex='1';
+tp.style.height='100%';
+initTerm();
+setTimeout(function(){document.getElementById('term-cmd').focus()},100)}
+
 function showTerm(){
 document.getElementById('p-term').style.display='flex';
 initTerm();
 setTimeout(function(){document.getElementById('term-cmd').focus()},100)}
 
 function hideTerm(){
-document.getElementById('p-term').style.display='none';
-if(termPollTimer){clearInterval(termPollTimer);termPollTimer=null}}
+var tp=document.getElementById('p-term');
+tp.style.display='none';
+tp.style.flex='';
+tp.style.height='180px'}
 
 // Init
 document.addEventListener('DOMContentLoaded',()=>{
