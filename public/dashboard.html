@@ -88,6 +88,9 @@ body{background:var(--bg);color:var(--tx);font-family:'JetBrains Mono',monospace
 .btn{padding:5px 10px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx);font-size:10px;cursor:pointer;font-family:inherit}
 .btn:active{transform:scale(.96)}
 .btn-p{background:var(--ac);border-color:var(--ac);color:#fff}
+.term-input-bar{display:flex;align-items:center;background:#0a0a14;border-top:1px solid var(--bd);flex-shrink:0}
+.term-ps1{padding:10px;color:var(--gn);font-size:13px;font-weight:700}
+.term-in{flex:1;padding:10px;background:none;border:none;color:var(--tx);font-size:13px;font-family:inherit;outline:none}
 </style></head><body>
 <script>
 var TOKEN=localStorage.getItem('codedeck_token');
@@ -105,7 +108,7 @@ function logout(){localStorage.removeItem('codedeck_token');localStorage.removeI
 <button class="term-logout" onclick="logout()">logout</button>
 </div>
 <div class="term-body" id="tout"></div>
-
+<div class="term-input-bar"><span class="term-ps1">$</span><input class="term-in" id="tcmd" placeholder="type a command..." onkeydown="termKey(event)" autofocus></div>
 </div>
 
 <div class="dock">
