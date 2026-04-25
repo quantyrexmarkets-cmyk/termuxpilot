@@ -138,7 +138,40 @@ function logout(){localStorage.removeItem('codedeck_token');localStorage.removeI
 <div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-p" onclick="addP()" style="flex:1">Start</button><button class="btn" onclick="closeAdd()">Cancel</button></div></div></div>
 <script>
 var procs=[],errs=[],curDir='~',editPath=null,termId=null,active=null;
+var hist=[],histIdx=-1;
 if(USER)document.getElementById('uname').textContent=USER.name||USER.email;
+
+
+var smartCmds={
+'run server':'node server.js',
+'run':'node server.js',
+'start':'npm start',
+'dev':'npm run dev',
+'start dev':'npm run dev',
+'install':'npm install',
+'install deps':'npm install',
+'deps':'npm install',
+'build':'npm run build',
+'test':'npm test',
+'stop all':'pkill -f node',
+'list files':'ls -la',
+'ll':'ls -la',
+'go home':'cd ~',
+'home':'cd ~',
+'where am i':'pwd',
+'whats running':'ps aux | grep node',
+'disk':'df -h',
+'memory':'free -h',
+'processes':'ps aux',
+'ports':'netstat -tlnp 2>/dev/null || ss -tlnp'
+};
+
+function smartInterpret(cmd){
+var lower=cmd.toLowerCase().trim();
+if(smartCmds[lower]){
+w('→ '+smartCmds[lower]+'\n','t-sys');
+return smartCmds[lower]}
+return cmd}
 
 function E(s){if(!s)return'';s=String(s).replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'').replace(/\u001b\[[0-9;]*[a-zA-Z]/g,'').replace(/\[\d+[a-zA-Z]/g,'').replace(/\[K/g,'').replace(/\[\?\d+[a-zA-Z]/g,'').replace(/\]\d+;[^\x07]*\x07/g,'');var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function w(t,c){var o=document.getElementById('tout');var lines=t.split('\n');lines.forEach(function(line,i){if(!line&&i===lines.length-1)return;var d=document.createElement('div');if(c)d.className=c;d.textContent=line;d.style.minHeight='1em';o.appendChild(d)});o.scrollTop=o.scrollHeight}
@@ -150,9 +183,79 @@ w('CodeDeck Terminal v2.0\n','t-sys');
 w('Type "help" for commands\n\n','t-sys');
 try{var r=await fetch('/api/terminal/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:'~'})});
 var d=await r.json();
-if(d.success){termId=d.id;w('Shell ready ('+d.shell.split('/').pop()+')\n\n','t-sys');addPrompt()}
+if(d.success){termId=d.id;w('Shell ready ('+d.shell.split('/').pop()+')\n','t-sys');
+fetch('/api/processes').then(function(r){return r.json()}).then(function(pd){
+var running=(pd.processes||[]).filter(function(p){return p.running});
+if(running.length>0)w(running.length+' process(es) already running\n','t-sys')});
+fetch('/api/files/read?path='+encodeURIComponent('~/termuxpilot/package.json')).then(function(r){return r.json()}).then(function(pj){
+if(!pj.error){try{var pkg=JSON.parse(pj.content||'{}');w('Project: '+(pkg.name||'unknown')+' v'+(pkg.version||'?')+'\n','t-sys')}catch(e){}}});
+w('','');addPrompt()}
 else{w('Terminal error: '+(d.error||'unknown')+'\n','t-err')}}
 catch(e){w('Cannot connect to terminal\n','t-err')}}
+
+
+
+async function checkInlineAI(text){
+if(!text)return;
+try{var r=await fetch('/api/ai/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:text})});
+var d=await r.json();
+if(d.result&&d.result.detected){
+var err=d.result;
+w('','');
+w('AI: '+err.type+' - '+err.cause,'t-ai');
+w('','');
+if(err.fixes&&err.fixes.length){
+w('Fixes:','t-ai');
+err.fixes.slice(0,2).forEach(function(f){w('  '+f,'t-ai')})}
+if(err.autofix){
+w('','');
+w('Press [y] to run: '+err.autofix,'t-ai');
+pendingFix=err.autofix}
+w('','')}
+}catch(e){}}
+
+var pendingFix=null;
+
+var lastDetectedPort=null;
+function detectPort(text){
+var m=text.match(/localhost:(\d{2,5})|port (\d{2,5})|:(\d{2,5})/i);
+if(m){
+var port=parseInt(m[1]||m[2]||m[3]);
+if(port>1000&&port!==lastDetectedPort){
+lastDetectedPort=port;
+w('Preview ready on port '+port+' - open Preview panel','t-sys');
+var pv=document.getElementById('d-preview');
+if(pv){pv.style.borderColor='var(--gn)';pv.style.background='#10b98115'}}}}
+
+
+function termKey(e){
+if(e.key==='Enter'){send();return}
+if(e.key==='y'&&pendingFix&&e.target.value===''){
+e.preventDefault();
+var fix=pendingFix;pendingFix=null;
+w('$ '+fix+'\n','t-in');
+fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:fix})});
+setTimeout(function(){readOutput();setTimeout(addPrompt,300)},1000);
+return}
+if(e.key==='ArrowUp'){
+e.preventDefault();
+if(hist.length===0)return;
+histIdx=Math.max(0,histIdx-1);
+e.target.value=hist[histIdx]||'';
+return}
+if(e.key==='ArrowDown'){
+e.preventDefault();
+histIdx=Math.min(hist.length,histIdx+1);
+e.target.value=hist[histIdx]||'';
+return}
+if(e.key==='Tab'){
+e.preventDefault();
+var v=e.target.value.trim();
+if(!v)return;
+var matches=Object.keys(smartCmds).filter(function(k){return k.startsWith(v)});
+if(matches.length===1)e.target.value=matches[0];
+else if(matches.length>1){w('\n'+matches.join('  ')+'\n','t-sys');addPrompt()}
+return}}
 
 function addPrompt(){
 var o=document.getElementById('tout');
@@ -198,7 +301,7 @@ if(d.output&&d.output.length){
 d.output.forEach(function(o){
 lastTime=o.time;
 var cls=o.type==='stderr'?'t-err':o.type==='system'?'t-sys':'t-out';
-var clean=o.text.replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'').replace(/\[K/g,'').replace(/\[\?\d+[a-zA-Z]/g,'').replace(/\]\d+;[^\x07]*\x07/g,'').trim();if(clean){w(clean+'\n',cls);got=true}})}
+var clean=o.text.replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'').replace(/\[K/g,'').replace(/\[\?\d+[a-zA-Z]/g,'').replace(/\]\d+;[^\x07]*\x07/g,'').trim();if(clean){w(clean+'\n',cls);got=true;if(cls==='t-err')checkInlineAI(clean);else detectPort(clean)}})}
 return got}catch(e){return false}}
 
 // ═══ Panels ═══
