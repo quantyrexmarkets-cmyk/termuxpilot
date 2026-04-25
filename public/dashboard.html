@@ -150,7 +150,7 @@ w('CodeDeck Terminal v2.0\n','t-sys');
 w('Type "help" for commands\n\n','t-sys');
 try{var r=await fetch('/api/terminal/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:'~'})});
 var d=await r.json();
-if(d.success){termId=d.id;w('Shell ready ('+d.shell+')\n\n','t-sys')}
+if(d.success){termId=d.id;w('Shell ready ('+d.shell.split('/').pop()+')\n\n','t-sys');addPrompt()}
 else{w('Terminal error: '+(d.error||'unknown')+'\n','t-err')}}
 catch(e){w('Cannot connect to terminal\n','t-err')}}
 
@@ -185,10 +185,11 @@ if(!termId){w('No shell session\n','t-err');return}
 try{await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
 setTimeout(readOutput,300);
 setTimeout(readOutput,800);
-setTimeout(readOutput,1500);setTimeout(addPrompt,1600)}catch(e){w('Error\n','t-err');addPrompt()}}
+setTimeout(readOutput,300);setTimeout(readOutput,1000);setTimeout(function(){readOutput().then(addPrompt)},2000)}catch(e){w('Error\n','t-err');addPrompt()}}
 
 var lastTime=null;
 async function readOutput(){
+var got=false;
 if(!termId)return;
 try{var url='/api/terminal/'+termId+'/output';
 if(lastTime)url+='?since='+encodeURIComponent(lastTime);
@@ -197,7 +198,8 @@ if(d.output&&d.output.length){
 d.output.forEach(function(o){
 lastTime=o.time;
 var cls=o.type==='stderr'?'t-err':o.type==='system'?'t-sys':'t-out';
-w(o.text,cls)})}}catch(e){}}
+w(o.text,cls);got=true})}
+return got}catch(e){return false}}
 
 // ═══ Panels ═══
 function toggle(name){
