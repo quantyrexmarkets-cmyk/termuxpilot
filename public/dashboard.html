@@ -345,7 +345,15 @@ if(lower.startsWith('cd ')){var dir=raw.slice(3).trim();if(dir==='~')gitCwd='~';
 if(!termId){out('No shell','t-err');addPrompt();return}
 try{
 await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
-setTimeout(async function(){await readOutput();setTimeout(async function(){await readOutput();addPrompt()},500)},800)}
+setTimeout(async function(){
+var attempts=0;
+var maxAttempts=8;
+var pollInterval=setInterval(async function(){
+await readOutput();
+attempts++;
+if(attempts>=maxAttempts){
+clearInterval(pollInterval);
+addPrompt()}},400)},300)}
 catch(e){out('Error','t-err');addPrompt()}}
 
 async function readOutput(){
@@ -498,6 +506,27 @@ var ts=document.getElementById('ts');
 if(ts)ts.scrollTop=ts.scrollHeight})}
 
 
+
+var bgPollTimer=null;
+function startBgPoll(){
+if(bgPollTimer)return;
+bgPollTimer=setInterval(async function(){
+if(!termId)return;
+try{
+var r=await fetch('/api/terminal/'+termId+'/output');
+var d=await r.json();
+if(d.output&&d.output.length){
+d.output.forEach(function(o){
+var clean=E(o.text).trim();
+if(!clean)return;
+var cls=o.type==='stderr'?'t-err':o.type==='system'?'t-sys':'t-out';
+out(clean,cls);
+if(o.type==='stderr'&&(clean.toLowerCase().startsWith('error:')||clean.toLowerCase().includes('cannot find module')))checkAI(clean);
+else detectPort(clean)})}}catch(e){}},500)}
+
+function stopBgPoll(){
+if(bgPollTimer){clearInterval(bgPollTimer);bgPollTimer=null}}
+
 var reconnectTimer=null;
 var sessionAlive=false;
 
@@ -524,13 +553,24 @@ else{sessionAlive=true}}catch(e){}}
 
 document.addEventListener('visibilitychange',function(){
 if(document.visibilityState==='visible'){
+startBgPoll();
+if(document.visibilityState==='visible'){
 checkSession();
 var ts=document.getElementById('ts');
 if(ts)ts.scrollTop=ts.scrollHeight;
 setTimeout(function(){var inp=document.getElementById('tcmd');if(inp)inp.focus()},300)}});
 
+
+async function requestWakeLock(){
+try{if('wakeLock' in navigator){
+var wl=await navigator.wakeLock.request('screen');
+console.log('Wake lock active');
+document.addEventListener('visibilitychange',async function(){
+if(document.visibilityState==='visible'){
+wl=await navigator.wakeLock.request('screen')}})}}catch(e){}}
+
 document.addEventListener('DOMContentLoaded',function(){
-initTerm();
+initTerm();requestWakeLock();
 fetchP();
 fetchAI();
 loadExtCmds();
