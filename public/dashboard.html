@@ -2,533 +2,302 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#050510;--sf:#0a0a1a;--bd:#151530;--tx:#d4d4e8;--tx2:#555;--ac:#7c6cf0;--ac2:#b4a8ff;--gn:#10b981;--rd:#ef4444;--yw:#eab308}
-html,body{margin:0;padding:0;max-width:100vw;overflow-x:hidden}body{background:var(--bg);color:var(--tx);font-family:'JetBrains Mono',monospace;height:100vh;width:100%;display:flex;flex-direction:column;overflow:hidden}
+html,body{margin:0;padding:0;width:100%;max-width:100vw;overflow:hidden}
+body{background:var(--bg);color:var(--tx);font-family:'JetBrains Mono',monospace;height:100vh;height:100dvh;display:flex;flex-direction:column}
 
-/* Full screen terminal */
-.term-root{flex:1;display:flex;flex-direction:column;background:var(--bg);overflow:hidden;min-height:0;max-width:100vw}
-.term-header{height:40px;background:var(--sf);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 10px;gap:8px;flex-shrink:0;padding-top:env(safe-area-inset-top,0)}
-.term-title{font-size:12px;color:var(--tx2);flex:1}
-.term-tab{padding:3px 10px;font-size:11px;color:var(--tx2);border-radius:4px;cursor:pointer;border:1px solid transparent}
-.term-tab.active{color:var(--ac2);border-color:var(--ac);background:var(--ac)15}
-.term-body{flex:1;overflow-y:auto;padding:12px 14px 60px 14px;font-size:13px;line-height:1.7;color:#ccc;white-space:pre-wrap;word-break:break-all}
-.term-body .t-err{color:var(--rd)}
-.term-body .t-sys{color:#0984e3}
-.term-body .t-ai{color:var(--yw);font-weight:bold}
-.term-body .t-ok{color:var(--gn)}
-.term-input-row{display:flex;align-items:center;background:var(--sf);border-top:1px solid var(--bd);flex-shrink:0}
-.term-ps{padding:10px;color:var(--gn);font-size:13px}
-.term-in{flex:1;padding:10px;background:transparent;border:none;color:var(--tx);font-size:13px;font-family:inherit;outline:none}
+.term-root{flex:1;display:flex;flex-direction:column;min-height:0}
+.term-header{height:38px;background:var(--sf);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 12px;gap:8px;flex-shrink:0}
+.term-title{font-size:12px;color:var(--gn);flex:1;font-weight:700}
+.term-user{font-size:10px;color:var(--tx2)}
+.term-logout{padding:2px 8px;background:none;border:1px solid var(--bd);border-radius:4px;color:var(--tx2);font-size:9px;cursor:pointer;font-family:inherit}
 
-/* Floating Dock */
-.dock{position:fixed;bottom:8px;left:50%;transform:translateX(-50%);background:var(--sf)ee;backdrop-filter:blur(12px);border:1px solid var(--bd);padding:5px 8px;border-radius:14px;display:flex;gap:4px;z-index:90;max-width:95vw}
-.dock-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;position:relative}
-.dock-btn:active{transform:scale(.9)}
-.dock-btn:hover{border-color:var(--ac);color:var(--ac2)}
-.dock-btn.active{border-color:var(--ac);color:var(--ac2);background:var(--ac)15}
-.dock-btn svg{width:16px;height:16px}
-.dock-badge{position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:var(--rd);border-radius:50%;font-size:8px;color:#fff;display:none;align-items:center;justify-content:center;font-weight:700}
+.term-body{flex:1;overflow-y:auto;padding:10px 12px 70px 12px;font-size:12px;line-height:1.7;background:var(--bg);min-height:0}
+.term-body span{display:inline}
+.t-in{color:var(--gn)}
+.t-out{color:#aaa}
+.t-err{color:var(--rd)}
+.t-sys{color:#0984e3}
+.t-ai{color:var(--yw)}
 
-/* Slide Panels */
-.panel-overlay{position:fixed;inset:0;background:#0008;z-index:95;display:none}
-.panel-overlay.show{display:block}
-.panel{position:fixed;top:0;height:100%;background:var(--sf);border-right:1px solid var(--bd);z-index:96;transition:transform .25s;overflow:hidden;display:flex;flex-direction:column}
-.panel-left{left:0;width:280px;max-width:85vw;transform:translateX(-100%)}
-.panel-left.open{transform:translateX(0)}
-.panel-right{right:0;width:100%;max-width:100vw;border-right:none;border-left:1px solid var(--bd);transform:translateX(100%)}
-.panel-right.open{transform:translateX(0)}
-.panel-h{padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.panel-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
-.panel-body{flex:1;overflow-y:auto}
-.close-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--bd);background:var(--bg);color:var(--tx2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
-.close-btn:hover{border-color:var(--rd);color:var(--rd)}
+.term-input-bar{display:flex;align-items:center;background:#0a0a18;border-top:1px solid var(--bd);flex-shrink:0}
+.term-ps1{padding:8px 4px 8px 12px;color:var(--gn);font-size:13px;font-weight:700}
+.term-in{flex:1;padding:8px 12px 8px 4px;background:none;border:none;color:var(--tx);font-size:13px;font-family:inherit;outline:none}
 
-/* File tree */
-.ft-item{padding:8px 14px;font-size:12px;display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx2);border-bottom:1px solid var(--bd)08}
-.ft-item:hover{background:var(--bd);color:var(--tx)}
-.ft-item.dir{color:var(--ac2)}
-.ft-item svg{width:14px;height:14px;flex-shrink:0}
-.ft-path{padding:8px 14px;font-size:11px;color:var(--tx2);border-bottom:1px solid var(--bd);background:var(--bg)}
+.dock{position:fixed;bottom:6px;left:50%;transform:translateX(-50%);background:#0a0a1aee;backdrop-filter:blur(10px);border:1px solid var(--bd);padding:4px 6px;border-radius:12px;display:flex;gap:3px;z-index:90;max-width:96vw}
+.dk{width:34px;height:34px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx2);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-shrink:0}
+.dk:active{transform:scale(.9)}
+.dk.on{border-color:var(--ac);color:var(--ac2);background:#7c6cf015}
+.dk svg{width:15px;height:15px}
+.dk-badge{position:absolute;top:-3px;right:-3px;width:13px;height:13px;background:var(--rd);border-radius:50%;font-size:7px;color:#fff;display:none;align-items:center;justify-content:center;font-weight:700}
 
-/* Editor */
-.editor-full{width:100%;height:100%;background:var(--bg);color:var(--tx);font-family:inherit;font-size:13px;padding:14px;border:none;outline:none;resize:none;line-height:1.7}
-.editor-bar{padding:8px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:var(--bg)}
-.editor-path{font-size:11px;color:var(--tx2)}
+.overlay{position:fixed;inset:0;background:#0008;z-index:94;display:none}
+.overlay.show{display:block}
+.pnl{position:fixed;top:0;height:100%;background:var(--sf);z-index:95;transition:transform .2s;display:flex;flex-direction:column;overflow:hidden}
+.pnl-l{left:0;width:280px;max-width:82vw;transform:translateX(-100%);border-right:1px solid var(--bd)}
+.pnl-r{right:0;width:100%;transform:translateX(100%);border-left:1px solid var(--bd)}
+.pnl.open{transform:translateX(0)}
+.pnl-h{padding:10px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.pnl-t{font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px}
+.pnl-t svg{width:13px;height:13px}
+.pnl-b{flex:1;overflow-y:auto}
+.xbtn{width:26px;height:26px;border-radius:6px;border:1px solid var(--bd);background:var(--bg);color:var(--tx2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px}
+.xbtn:hover{border-color:var(--rd);color:var(--rd)}
 
-/* AI Panel */
-.ai-item{padding:12px 14px;border-bottom:1px solid var(--bd)}
-.ai-type{font-size:12px;font-weight:700;color:var(--rd);margin-bottom:4px}
-.ai-cause{font-size:11px;color:var(--tx2);margin-bottom:6px}
-.ai-fix{font-size:11px;color:var(--tx2);padding:2px 0}
-.ai-btn{padding:4px 10px;background:var(--ac);border:none;color:#fff;border-radius:4px;font-size:10px;cursor:pointer;margin-top:6px}
+.fi{padding:8px 12px;font-size:11px;display:flex;align-items:center;gap:7px;cursor:pointer;color:var(--tx2);border-bottom:1px solid #0a0a14}
+.fi:hover{background:var(--bd);color:var(--tx)}
+.fi.dir{color:var(--ac2)}
+.fi svg{width:13px;height:13px;flex-shrink:0}
+.fi-path{padding:6px 12px;font-size:10px;color:var(--tx2);background:var(--bg);border-bottom:1px solid var(--bd)}
 
-/* Process list in panel */
-.proc-item{padding:10px 14px;border-bottom:1px solid var(--bd);cursor:pointer}
-.proc-item:hover{background:var(--bd)}
-.proc-name{font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
-.proc-cmd{font-size:10px;color:var(--tx2);margin-top:2px}
-.proc-actions{display:flex;gap:4px;margin-top:6px}
-.p-btn{padding:3px 8px;border:1px solid var(--bd);border-radius:4px;background:var(--bg);color:var(--tx2);font-size:10px;cursor:pointer}
-.p-btn:hover{border-color:var(--ac)}
-.p-btn.danger{border-color:var(--rd);color:var(--rd)}
-.p-btn.green{border-color:var(--gn);color:var(--gn)}
-.sd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.sd.on{background:var(--gn);box-shadow:0 0 5px var(--gn)}
+.ed-full{width:100%;height:100%;background:var(--bg);color:var(--tx);font-family:inherit;font-size:12px;padding:12px;border:none;outline:none;resize:none;line-height:1.7}
+.ed-bar{padding:6px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:var(--bg);font-size:10px;color:var(--tx2)}
+
+.ai-item{padding:10px 12px;border-bottom:1px solid var(--bd)}
+.ai-type{font-size:11px;font-weight:700;color:var(--rd);margin-bottom:3px}
+.ai-cause{font-size:10px;color:var(--tx2);margin-bottom:5px}
+.ai-fix{font-size:10px;color:var(--tx2);padding:1px 0}
+.ai-btn{padding:3px 8px;background:var(--ac);border:none;color:#fff;border-radius:4px;font-size:9px;cursor:pointer;margin-top:4px;font-family:inherit}
+
+.pi{padding:8px 12px;border-bottom:1px solid var(--bd)}
+.pi-n{font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px}
+.pi-c{font-size:9px;color:var(--tx2);margin-top:1px}
+.pi-a{display:flex;gap:3px;margin-top:5px}
+.pb{padding:2px 6px;border:1px solid var(--bd);border-radius:3px;background:var(--bg);color:var(--tx2);font-size:9px;cursor:pointer;font-family:inherit}
+.pb:hover{border-color:var(--ac)}
+.pb.red{border-color:var(--rd);color:var(--rd)}
+.pb.grn{border-color:var(--gn);color:var(--gn)}
+.sd{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sd.on{background:var(--gn);box-shadow:0 0 4px var(--gn)}
 .sd.off{background:var(--rd)}
 
-/* Preview */
 .preview-frame{width:100%;height:100%;border:none;background:#fff}
 
-/* Modal */
 .mo{position:fixed;inset:0;background:#000a;z-index:99;display:none;align-items:center;justify-content:center}
 .mo.open{display:flex}
-.md{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:20px;width:90%;max-width:380px}
-.md h3{font-size:14px;margin-bottom:14px}
-.ig{margin-bottom:10px}
-.ig label{display:block;font-size:11px;color:var(--tx2);margin-bottom:3px}
-.ig input{width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--bd);border-radius:6px;color:var(--tx);font-size:12px;font-family:inherit;outline:none}
+.mbox{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:16px;width:90%;max-width:360px}
+.mbox h3{font-size:13px;margin-bottom:12px}
+.ig{margin-bottom:8px}
+.ig label{display:block;font-size:10px;color:var(--tx2);margin-bottom:2px}
+.ig input{width:100%;padding:6px 8px;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--tx);font-size:11px;font-family:inherit;outline:none}
 .ig input:focus{border-color:var(--ac)}
-.btn{padding:6px 12px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx);font-size:11px;cursor:pointer;display:flex;align-items:center;gap:4px}
+.btn{padding:5px 10px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx);font-size:10px;cursor:pointer;font-family:inherit}
 .btn:active{transform:scale(.96)}
-.btn svg{width:12px;height:12px}
 .btn-p{background:var(--ac);border-color:var(--ac);color:#fff}
 </style></head><body>
-
-<!-- Auth Check -->
 <script>
 var TOKEN=localStorage.getItem('codedeck_token');
 var USER=JSON.parse(localStorage.getItem('codedeck_user')||'null');
 if(!TOKEN){window.location.href='/login.html';}
 var origFetch=window.fetch;
-window.fetch=function(url,opts){
-opts=opts||{};opts.headers=opts.headers||{};
-if(typeof opts.headers==='object'&&!(opts.headers instanceof Headers)){
-opts.headers['Authorization']='Bearer '+TOKEN;}
-return origFetch(url,opts)};
+window.fetch=function(url,opts){opts=opts||{};opts.headers=opts.headers||{};if(typeof opts.headers==='object'&&!(opts.headers instanceof Headers)){opts.headers['Authorization']='Bearer '+TOKEN;}return origFetch(url,opts)};
 function logout(){localStorage.removeItem('codedeck_token');localStorage.removeItem('codedeck_user');window.location.href='/login.html'}
 </script>
 
-<!-- Terminal Root -->
 <div class="term-root">
 <div class="term-header">
-<span class="term-title" id="term-title">CodeDeck Terminal</span>
-<span style="font-size:11px;color:var(--tx2)" id="user-display"></span>
-<button class="close-btn" onclick="logout()" style="width:auto;padding:0 8px;font-size:10px">Logout</button>
+<span class="term-title">CodeDeck</span>
+<span class="term-user" id="uname"></span>
+<button class="term-logout" onclick="logout()">logout</button>
 </div>
-<div class="term-body" id="term-out"></div>
-<div class="term-input-row">
-<span class="term-ps">$</span>
-<input class="term-in" id="term-cmd" placeholder="Type a command..." onkeydown="if(event.key==='Enter')sendCmd()" autofocus>
+<div class="term-body" id="tout"></div>
+<div class="term-input-bar">
+<span class="term-ps1">$</span>
+<input class="term-in" id="tcmd" placeholder="type a command..." onkeydown="if(event.key==='Enter')send()" autofocus>
 </div>
 </div>
 
-<!-- Floating Dock -->
 <div class="dock">
-<div class="dock-btn" onclick="togglePanel('procs')" id="d-procs" title="Processes">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-</div>
-<div class="dock-btn" onclick="togglePanel('files')" id="d-files" title="Files">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
-</div>
-<div class="dock-btn" onclick="togglePanel('editor')" id="d-editor" title="Editor">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-</div>
-<div class="dock-btn" onclick="togglePanel('ai')" id="d-ai" title="AI Brain">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="14" rx="2"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><path d="M9 16h6"/><line x1="12" y1="2" x2="12" y2="6"/><circle cx="12" cy="2" r="1"/></svg>
-<div class="dock-badge" id="ai-badge">0</div>
-</div>
-<div class="dock-btn" onclick="togglePanel('preview')" id="d-preview" title="Preview">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-</div>
-<div class="dock-btn" onclick="openAddProc()" id="d-add" title="New Process" style="background:var(--ac)20;border-color:var(--ac)">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ac2)"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-</div>
+<div class="dk" onclick="toggle('procs')" id="d-procs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+<div class="dk" onclick="toggle('files')" id="d-files"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+<div class="dk" onclick="toggle('editor')" id="d-editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+<div class="dk" onclick="toggle('ai')" id="d-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="14" rx="2"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><path d="M9 16h6"/><line x1="12" y1="2" x2="12" y2="6"/><circle cx="12" cy="2" r="1"/></svg><div class="dk-badge" id="ai-badge">0</div></div>
+<div class="dk" onclick="toggle('preview')" id="d-preview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+<div class="dk" onclick="openAdd()" id="d-add" style="background:#7c6cf015;border-color:#7c6cf060"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ac2)"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
 </div>
 
-<!-- Panel Overlay -->
-<div class="panel-overlay" id="panel-overlay" onclick="closeAllPanels()"></div>
+<div class="overlay" id="ov" onclick="closeAll()"></div>
 
-<!-- Processes Panel -->
-<div class="panel panel-left" id="pan-procs">
-<div class="panel-h"><div class="panel-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Processes</div><button class="close-btn" onclick="closeAllPanels()">x</button></div>
-<div class="panel-body" id="procs-body"></div>
-</div>
+<div class="pnl pnl-l" id="p-procs"><div class="pnl-h"><div class="pnl-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Processes</div><button class="xbtn" onclick="closeAll()">x</button></div><div class="pnl-b" id="procs-b"></div></div>
 
-<!-- Files Panel -->
-<div class="panel panel-left" id="pan-files">
-<div class="panel-h"><div class="panel-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Files</div><div style="display:flex;gap:4px"><button class="p-btn" onclick="newFile()">+ File</button><button class="p-btn" onclick="newDir()">+ Folder</button><button class="close-btn" onclick="closeAllPanels()">x</button></div></div>
-<div class="ft-path" id="ft-path">~</div>
-<div class="panel-body" id="files-body"></div>
-</div>
+<div class="pnl pnl-l" id="p-files"><div class="pnl-h"><div class="pnl-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Files</div><div style="display:flex;gap:3px"><button class="pb" onclick="newFile()">+file</button><button class="pb" onclick="newDir()">+dir</button><button class="xbtn" onclick="closeAll()">x</button></div></div><div class="fi-path" id="fpath">~</div><div class="pnl-b" id="files-b"></div></div>
 
-<!-- Editor Panel -->
-<div class="panel panel-right" id="pan-editor">
-<div class="panel-h"><div class="panel-title" id="ed-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Editor</div><div style="display:flex;gap:4px"><button class="btn btn-p" onclick="saveFile()" id="save-btn" style="display:none">Save</button><button class="close-btn" onclick="closeAllPanels()">x</button></div></div>
-<div class="panel-body" id="editor-body"><div style="padding:20px;color:var(--tx2);text-align:center;font-size:12px">Open a file from Files panel</div></div>
-</div>
+<div class="pnl pnl-r" id="p-editor"><div class="pnl-h"><div class="pnl-t" id="ed-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Editor</div><div style="display:flex;gap:3px"><button class="btn btn-p" onclick="saveF()" id="sv-btn" style="display:none">Save</button><button class="xbtn" onclick="closeAll()">x</button></div></div><div class="pnl-b" id="ed-b"><div style="padding:20px;color:var(--tx2);text-align:center;font-size:11px">Open a file from Files</div></div></div>
 
-<!-- AI Panel -->
-<div class="panel panel-left" id="pan-ai">
-<div class="panel-h"><div class="panel-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="4" y="6" width="16" height="14" rx="2"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><path d="M9 16h6"/><line x1="12" y1="2" x2="12" y2="6"/><circle cx="12" cy="2" r="1"/></svg>AI Brain</div><button class="close-btn" onclick="closeAllPanels()">x</button></div>
-<div class="panel-body" id="ai-body"><div style="padding:20px;color:var(--tx2);text-align:center;font-size:12px">No errors detected</div></div>
-</div>
+<div class="pnl pnl-l" id="p-ai"><div class="pnl-h"><div class="pnl-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="14" rx="2"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><path d="M9 16h6"/><line x1="12" y1="2" x2="12" y2="6"/><circle cx="12" cy="2" r="1"/></svg>AI Brain</div><button class="xbtn" onclick="closeAll()">x</button></div><div class="pnl-b" id="ai-b"><div style="padding:20px;text-align:center;color:var(--tx2);font-size:11px">All clear</div></div></div>
 
-<!-- Preview Panel -->
-<div class="panel panel-right" id="pan-preview">
-<div class="panel-h"><div class="panel-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Preview</div><div style="display:flex;gap:4px"><button class="p-btn" onclick="reloadPreview()">Reload</button><button class="close-btn" onclick="closeAllPanels()">x</button></div></div>
-<div class="panel-body" id="preview-body"><div style="padding:20px;color:var(--tx2);text-align:center;font-size:12px">No preview available</div></div>
-</div>
+<div class="pnl pnl-r" id="p-preview"><div class="pnl-h"><div class="pnl-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Preview</div><div style="display:flex;gap:3px"><button class="pb" onclick="rlPv()">reload</button><button class="xbtn" onclick="closeAll()">x</button></div></div><div class="pnl-b" id="pv-b"><div style="padding:20px;text-align:center;color:var(--tx2);font-size:11px">No preview available</div></div></div>
 
-<!-- Add Process Modal -->
-<div class="mo" id="add-mo"><div class="md"><h3>New Process</h3>
+<div class="mo" id="add-mo"><div class="mbox"><h3>New Process</h3>
 <div class="ig"><label>Name</label><input type="text" id="i-n" placeholder="my-server"></div>
 <div class="ig"><label>Command</label><input type="text" id="i-c" placeholder="node server.js"></div>
 <div class="ig"><label>Directory</label><input type="text" id="i-d" placeholder="~/project"></div>
 <div class="ig"><label>Port</label><input type="number" id="i-p" placeholder="3000"></div>
-<div class="ig" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="i-r"><label for="i-r" style="margin:0;font-size:11px">Auto-restart</label></div>
-<div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-p" onclick="addProc()" style="flex:1">Start</button><button class="btn" onclick="closeAddProc()">Cancel</button></div>
-</div></div>
+<div class="ig" style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="i-r"><label for="i-r" style="margin:0;font-size:10px">Auto-restart</label></div>
+<div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-p" onclick="addP()" style="flex:1">Start</button><button class="btn" onclick="closeAdd()">Cancel</button></div></div></div>
 <script>
-var procs=[],errs=[],curDir='~',editPath=null,termWs=null,activePanel=null;
+var procs=[],errs=[],curDir='~',editPath=null,termId=null,active=null;
+if(USER)document.getElementById('uname').textContent=USER.name||USER.email;
 
-// User display
-if(USER){var ud=document.getElementById('user-display');if(ud)ud.textContent=USER.name||USER.email}
+function E(s){if(!s)return'';s=String(s).replace(/\x1b\[[0-9;]*m/g,'').replace(/\u001b\[[0-9;]*m/g,'').replace(/\[\d+m/g,'');var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function w(t,c){var o=document.getElementById('tout');var s=document.createElement('span');if(c)s.className=c;s.textContent=t;o.appendChild(s);o.scrollTop=o.scrollHeight}
 
-function E(s){if(!s)return'';s=s.replace(/\x1b\[[0-9;]*m/g,'').replace(/\u001b\[[0-9;]*m/g,'').replace(/\[\d+m/g,'');var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+// ═══ Terminal ═══
+async function initTerm(){
+if(termId)return;
+w('CodeDeck Terminal v2.0\n','t-sys');
+w('Type "help" for commands\n\n','t-sys');
+try{var r=await fetch('/api/terminal/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:'~'})});
+var d=await r.json();
+if(d.success){termId=d.id;w('Shell ready ('+d.shell+')\n\n','t-sys')}
+else{w('Terminal error: '+(d.error||'unknown')+'\n','t-err')}}
+catch(e){w('Cannot connect to terminal\n','t-err')}}
 
-// ═══ Terminal WebSocket ═══
-
-var useFallback=true;
-
-async function sendCmdFallback(cmd){
-try{
-  if(!fallbackTermId){
-    var r=await fetch('/api/terminal/create',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({cwd:'~'})
-    });
-    var d=await r.json();
-    fallbackTermId=d.id;
-  }
-
-  await fetch('/api/terminal/'+fallbackTermId+'/write',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({command:cmd})
-  });
-
-  setTimeout(async function(){
-    try{
-      var r=await fetch('/api/terminal/'+fallbackTermId+'/output');
-      var d=await r.json();
-      if(d.output){
-        d.output.forEach(function(o){
-          tWrite(
-            o.text,
-            o.type==='stderr'?'t-err':(o.type==='system'?'t-sys':'')
-          );
-        });
-      }
-    }catch(e){
-      tWrite('Output error: '+e.message+'
-','t-err');
-    }
-  },400);
-}catch(e){
-  tWrite('Terminal error: '+e.message+'
-','t-err');
-}
-},500)}catch(e){tWrite('Error: '+e.message+'\n','t-err')}}
-var fallbackTermId=null;
-
-function initTerm(){
-if(fallbackTermId)return;
-tWrite('CodeDeck Terminal v2.0
-','t-sys');
-tWrite('Starting local shell...
-','t-sys');
-sendCmdFallback('pwd');
-}catch(e){}};
-termWs.onclose=function(){tWrite('\nDisconnected. Refresh to reconnect.\n','t-sys')};
-termWs.onerror=function(){tWrite('WebSocket unavailable. Using command mode.\n','t-sys');useFallback=true}}
-
-function sendCmd(){
-var input=document.getElementById('term-cmd');
+async function send(){
+var input=document.getElementById('tcmd');
 var cmd=input.value.trim();
 if(!cmd)return;
 input.value='';
 
-if(cmd==='clear'){
-  document.getElementById('term-out').innerHTML='';
-  return;
-}
-if(cmd==='help'){
-  tWrite('CodeDeck commands:
-','t-sys');
-  tWrite('  clear  - clear terminal
-','t-sys');
-  tWrite('  files  - open files panel
-','t-sys');
-  tWrite('  procs  - open processes panel
-','t-sys');
-  tWrite('  ai     - open AI panel
-','t-sys');
-  tWrite('  logout - sign out
-
-','t-sys');
-  return;
-}
-if(cmd==='files'){togglePanel('files');return}
-if(cmd==='procs'){togglePanel('procs');return}
-if(cmd==='ai'){togglePanel('ai');return}
+if(cmd==='clear'){document.getElementById('tout').innerHTML='';return}
+if(cmd==='help'){w('\nCommands:\n','t-sys');w('  clear    - clear screen\n','t-sys');w('  procs    - processes panel\n','t-sys');w('  files    - files panel\n','t-sys');w('  edit     - editor panel\n','t-sys');w('  ai       - AI brain panel\n','t-sys');w('  preview  - preview panel\n','t-sys');w('  new      - new process\n','t-sys');w('  logout   - sign out\n\n','t-sys');return}
+if(cmd==='procs'){toggle('procs');return}
+if(cmd==='files'){toggle('files');return}
+if(cmd==='edit'){toggle('editor');return}
+if(cmd==='ai'){toggle('ai');return}
+if(cmd==='preview'){toggle('preview');return}
+if(cmd==='new'){openAdd();return}
 if(cmd==='logout'){logout();return}
 
-tWrite('$ '+cmd+'
-','');
-sendCmdFallback(cmd);
-}).join('')}
+w('$ '+cmd+'\n','t-in');
+if(!termId){w('No shell session\n','t-err');return}
+try{await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
+setTimeout(readOutput,300);
+setTimeout(readOutput,800);
+setTimeout(readOutput,1500)}catch(e){w('Error\n','t-err')}}
 
-async function stopProc(n){await fetch('/api/processes/'+n+'/stop',{method:'POST'});await fetchProcs();renderProcs()}
-async function restartProc(n){await fetch('/api/processes/'+n+'/restart',{method:'POST'});await fetchProcs();renderProcs()}
-async function removeProc(n){if(!confirm('Remove '+n+'?'))return;await fetch('/api/processes/'+n,{method:'DELETE'});await fetchProcs();renderProcs()}
-async function viewLogs(n){
-closeAllPanels();
-try{var r=await fetch('/api/processes/'+n+'/logs');var d=await r.json();var logs=d.logs||[];
-tWrite('\n--- Logs: '+n+' ---\n','t-sys');
-logs.forEach(function(l){
-var cls=l.type==='stderr'?'t-err':l.type==='system'?'t-sys':l.type==='ai'?'t-ai':'';
-tWrite(E(l.text)+'\n',cls)});
-tWrite('--- End logs ---\n\n','t-sys')}catch(e){}}
+var lastTime=null;
+async function readOutput(){
+if(!termId)return;
+try{var url='/api/terminal/'+termId+'/output';
+if(lastTime)url+='?since='+encodeURIComponent(lastTime);
+var r=await fetch(url);var d=await r.json();
+if(d.output&&d.output.length){
+d.output.forEach(function(o){
+lastTime=o.time;
+var cls=o.type==='stderr'?'t-err':o.type==='system'?'t-sys':'t-out';
+w(o.text,cls)})}}catch(e){}}
 
-function openAddProc(){document.getElementById('add-mo').classList.add('open')}
-function closeAddProc(){document.getElementById('add-mo').classList.remove('open')}
-async function addProc(){
+// ═══ Panels ═══
+function toggle(name){
+if(active===name){closeAll();return}
+closeAll();
+active=name;
+document.getElementById('ov').classList.add('show');
+document.getElementById('p-'+name).classList.add('open');
+document.getElementById('d-'+name).classList.add('on');
+if(name==='procs')renderP();
+if(name==='files')renderF();
+if(name==='ai')renderAI();
+if(name==='preview')renderPV()}
+
+function closeAll(){
+active=null;
+document.getElementById('ov').classList.remove('show');
+document.querySelectorAll('.pnl').forEach(function(p){p.classList.remove('open')});
+document.querySelectorAll('.dk').forEach(function(b){b.classList.remove('on')});
+setTimeout(function(){document.getElementById('tcmd').focus()},100)}
+
+// ═══ Processes ═══
+async function fetchP(){try{var r=await fetch('/api/processes');var d=await r.json();procs=d.processes||[]}catch(e){}}
+function renderP(){
+var el=document.getElementById('procs-b');
+if(!procs.length){el.innerHTML='<div style="padding:16px;text-align:center;color:var(--tx2);font-size:11px">No processes</div>';return}
+el.innerHTML=procs.map(function(p){
+var s=p.running?'on':'off';
+var a=p.running
+?'<button class="pb red" onclick="stopP(\''+E(p.name)+'\')">stop</button><button class="pb" onclick="restP(\''+E(p.name)+'\')">restart</button>'
+:'<button class="pb grn" onclick="restP(\''+E(p.name)+'\')">start</button>';
+a+='<button class="pb" onclick="viewL(\''+E(p.name)+'\')">logs</button>';
+if(p.port&&p.running)a+='<button class="pb" onclick="openPV('+p.port+')">preview</button>';
+a+='<button class="pb red" onclick="delP(\''+E(p.name)+'\')">del</button>';
+return'<div class="pi"><div class="pi-n"><span class="sd '+s+'"></span>'+E(p.name)+'</div><div class="pi-c">'+E(p.command)+'</div><div class="pi-a">'+a+'</div></div>'}).join('')}
+
+async function stopP(n){await fetch('/api/processes/'+n+'/stop',{method:'POST'});await fetchP();renderP();w('Stopped '+n+'\n','t-sys')}
+async function restP(n){await fetch('/api/processes/'+n+'/restart',{method:'POST'});await fetchP();renderP();w('Restarted '+n+'\n','t-ok')}
+async function delP(n){if(!confirm('Delete '+n+'?'))return;await fetch('/api/processes/'+n,{method:'DELETE'});await fetchP();renderP();w('Removed '+n+'\n','t-sys')}
+async function viewL(n){closeAll();try{var r=await fetch('/api/processes/'+n+'/logs');var d=await r.json();var logs=d.logs||[];w('\n--- '+n+' logs ---\n','t-sys');logs.forEach(function(l){var c=l.type==='stderr'?'t-err':l.type==='ai'?'t-ai':'t-out';w(E(l.text)+'\n',c)});w('--- end ---\n\n','t-sys')}catch(e){}}
+
+function openAdd(){document.getElementById('add-mo').classList.add('open')}
+function closeAdd(){document.getElementById('add-mo').classList.remove('open')}
+async function addP(){
 var n=document.getElementById('i-n').value.trim(),c=document.getElementById('i-c').value.trim(),d=document.getElementById('i-d').value.trim(),p=document.getElementById('i-p').value,ar=document.getElementById('i-r').checked;
 if(!n||!c)return alert('Name and command required');
 await fetch('/api/processes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,command:c,cwd:d||undefined,port:p?parseInt(p):undefined,autoRestart:ar})});
-closeAddProc();await fetchProcs();
-tWrite('Process '+n+' started\n','t-ok')}
+closeAdd();await fetchP();w('Started '+n+'\n','t-ok')}
 
 // ═══ Files ═══
-async function renderFiles(){
-var el=document.getElementById('files-body');
+async function renderF(){
+var el=document.getElementById('files-b');
 try{var r=await fetch('/api/files?path='+encodeURIComponent(curDir));var d=await r.json();
-if(d.error){el.innerHTML='<div style="padding:20px;color:var(--rd)">'+E(d.error)+'</div>';return}
+if(d.error){el.innerHTML='<div style="padding:16px;color:var(--rd);font-size:11px">'+E(d.error)+'</div>';return}
 var short=d.path.replace('/data/data/com.termux/files/home','~');
-document.getElementById('ft-path').textContent=short;
-var html='';
-if(d.parent)html+='<div class="ft-item dir" onclick="curDir=\''+E(d.parent)+'\';renderFiles()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> ..</div>';
+document.getElementById('fpath').textContent=short;
+var h='';
+if(d.parent)h+='<div class="fi dir" onclick="curDir=\''+E(d.parent)+'\';renderF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>..</div>';
 d.items.forEach(function(f){
-if(f.type==='dir')html+='<div class="ft-item dir" onclick="curDir=\''+E(f.path)+'\';renderFiles()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>'+E(f.name)+'</div>';
-else html+='<div class="ft-item" onclick="openFile(\''+E(f.path)+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+E(f.name)+'</div>'});
-el.innerHTML=html||'<div style="padding:20px;color:var(--tx2);text-align:center">Empty folder</div>'}catch(e){el.innerHTML='<div style="padding:20px;color:var(--rd)">Error loading files</div>'}}
+if(f.type==='dir')h+='<div class="fi dir" onclick="curDir=\''+E(f.path)+'\';renderF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>'+E(f.name)+'</div>';
+else h+='<div class="fi" onclick="openF(\''+E(f.path)+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+E(f.name)+'</div>'});
+el.innerHTML=h||'<div style="padding:16px;color:var(--tx2);text-align:center;font-size:11px">Empty</div>'}catch(e){el.innerHTML='<div style="padding:16px;color:var(--rd)">Error</div>'}}
 
-async function newFile(){var n=prompt('File name:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:curDir+'/'+n,type:'file'})});renderFiles()}
-async function newDir(){var n=prompt('Folder name:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:curDir+'/'+n,type:'dir'})});renderFiles()}
+async function newFile(){var n=prompt('File name:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:curDir+'/'+n,type:'file'})});renderF()}
+async function newDir(){var n=prompt('Folder name:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:curDir+'/'+n,type:'dir'})});renderF()}
 
 // ═══ Editor ═══
-async function openFile(p){
-editPath=p;
-closeAllPanels();
-togglePanel('editor');
+async function openF(p){
+editPath=p;closeAll();toggle('editor');
 try{var r=await fetch('/api/files/read?path='+encodeURIComponent(p));var d=await r.json();
-if(d.error){document.getElementById('editor-body').innerHTML='<div style="padding:20px;color:var(--rd)">'+E(d.error)+'</div>';return}
+if(d.error){document.getElementById('ed-b').innerHTML='<div style="padding:16px;color:var(--rd);font-size:11px">'+E(d.error)+'</div>';return}
 var short=d.path.replace('/data/data/com.termux/files/home','~');
-document.getElementById('ed-title').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+E(short);
-document.getElementById('save-btn').style.display='flex';
-document.getElementById('editor-body').innerHTML='<textarea class="editor-full" id="ed-area">'+E(d.content)+'</textarea>';
-document.getElementById('ed-area').addEventListener('keydown',function(e){if(e.key==='Tab'){e.preventDefault();var s=this.selectionStart,en=this.selectionEnd;this.value=this.value.substring(0,s)+'  '+this.value.substring(en);this.selectionStart=this.selectionEnd=s+2}})
-}catch(e){}}
+document.getElementById('ed-t').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+E(short);
+document.getElementById('sv-btn').style.display='block';
+document.getElementById('ed-b').innerHTML='<textarea class="ed-full" id="ed-a">'+E(d.content)+'</textarea>';
+document.getElementById('ed-a').addEventListener('keydown',function(e){if(e.key==='Tab'){e.preventDefault();var s=this.selectionStart,en=this.selectionEnd;this.value=this.value.substring(0,s)+'  '+this.value.substring(en);this.selectionStart=this.selectionEnd=s+2}})}catch(e){}}
 
-async function saveFile(){
-if(!editPath)return;var c=document.getElementById('ed-area').value;
+async function saveF(){
+if(!editPath)return;var c=document.getElementById('ed-a').value;
 try{var r=await fetch('/api/files/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:editPath,content:c})});
-var d=await r.json();if(d.success){var btn=document.getElementById('save-btn');btn.textContent='Saved!';btn.style.background='var(--gn)';setTimeout(function(){btn.textContent='Save';btn.style.background=''},1500)}}catch(e){}}
+var d=await r.json();if(d.success){var b=document.getElementById('sv-btn');b.textContent='Saved!';b.style.background='var(--gn)';setTimeout(function(){b.textContent='Save';b.style.background=''},1500);w('Saved '+editPath.split('/').pop()+'\n','t-ok')}}catch(e){}}
 
 // ═══ AI ═══
 async function fetchAI(){
 try{var r=await fetch('/api/ai/errors');var d=await r.json();errs=d.errors||[];
-var badge=document.getElementById('ai-badge');
-badge.textContent=errs.length;badge.style.display=errs.length>0?'flex':'none';
-if(errs.length>0){
-tWrite('\nAI: '+errs.length+' error(s) detected. Type "ai" to view.\n','t-ai')}}catch(e){}}
+var b=document.getElementById('ai-badge');b.textContent=errs.length;b.style.display=errs.length>0?'flex':'none'}catch(e){}}
 
 function renderAI(){
-var el=document.getElementById('ai-body');
-if(!errs.length){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--tx2);font-size:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:32px;height:32px;color:#222;margin-bottom:8px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><br>All clear. AI is watching.</div>';return}
+var el=document.getElementById('ai-b');
+if(!errs.length){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--tx2);font-size:11px">All clear. AI is watching.</div>';return}
 el.innerHTML=errs.map(function(e){
-var fixes=(e.fixes||[]).map(function(f){return'<div class="ai-fix">'+E(f)+'</div>'}).join('');
-return'<div class="ai-item"><div class="ai-type">'+E(e.type)+' <span style="float:right;font-size:10px;color:var(--tx2)">'+e.severity+'</span></div><div class="ai-cause">'+E(e.cause)+'</div>'+fixes+(e.canAutoFix?'<button class="ai-btn" onclick="healErr(\''+encodeURIComponent(JSON.stringify(e))+'\')">Fix Now</button>':'')+'<button class="ai-btn" style="background:var(--ac);margin-left:4px" onclick="explainErr(\''+encodeURIComponent(JSON.stringify(e))+'\')">Explain</button></div>'}).join('')}
+var fx=(e.fixes||[]).map(function(f){return'<div class="ai-fix">'+E(f)+'</div>'}).join('');
+return'<div class="ai-item"><div class="ai-type">'+E(e.type)+' <span style="float:right;font-size:9px;color:var(--tx2)">'+e.severity+'</span></div><div class="ai-cause">'+E(e.cause)+'</div>'+fx+(e.canAutoFix?'<button class="ai-btn" onclick="healE(\''+encodeURIComponent(JSON.stringify(e))+'\')">Fix</button>':'')+'<button class="ai-btn" style="background:var(--ac);margin-left:3px" onclick="explE(\''+encodeURIComponent(JSON.stringify(e))+'\')">Explain</button></div>'}).join('')}
 
-async function healErr(ed){try{var err=JSON.parse(decodeURIComponent(ed));var r=await fetch('/api/ai/heal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({error:err})});var d=await r.json();tWrite('\nAI: '+(d.message||'Fix applied')+'\n','t-ai');fetchProcs();fetchAI()}catch(e){}}
-async function explainErr(ed){try{var err=JSON.parse(decodeURIComponent(ed));var r=await fetch('/api/ai/explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({error:err})});var d=await r.json();tWrite('\nAI Explanation:\n'+d.explanation+'\n\n','t-ai')}catch(e){}}
+async function healE(ed){try{var err=JSON.parse(decodeURIComponent(ed));var r=await fetch('/api/ai/heal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({error:err})});var d=await r.json();w('\nAI: '+(d.message||'Fix applied')+'\n','t-ai');fetchP();fetchAI()}catch(e){}}
+async function explE(ed){try{var err=JSON.parse(decodeURIComponent(ed));var r=await fetch('/api/ai/explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({error:err})});var d=await r.json();w('\n'+d.explanation+'\n\n','t-ai')}catch(e){}}
 
 // ═══ Preview ═══
-function renderPreview(){
-var el=document.getElementById('preview-body');
+function renderPV(){
+var el=document.getElementById('pv-b');
 var running=procs.filter(function(p){return p.port&&p.running});
-if(!running.length){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--tx2);font-size:12px">No preview available.<br>Start a process with a port.</div>';return}
+if(!running.length){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--tx2);font-size:11px">No preview. Start a process with a port.</div>';return}
 el.innerHTML='<iframe class="preview-frame" src="http://localhost:'+running[0].port+'"></iframe>'}
-
-function openPreview(port){closeAllPanels();togglePanel('preview');document.getElementById('preview-body').innerHTML='<iframe class="preview-frame" src="http://localhost:'+port+'"></iframe>'}
-function reloadPreview(){var f=document.querySelector('.preview-frame');if(f)f.src=f.src}
+function openPV(port){closeAll();toggle('preview');document.getElementById('pv-b').innerHTML='<iframe class="preview-frame" src="http://localhost:'+port+'"></iframe>'}
+function rlPv(){var f=document.querySelector('.preview-frame');if(f)f.src=f.src}
 
 // ═══ Init ═══
 document.addEventListener('DOMContentLoaded',function(){
 initTerm();
-fetchProcs();
+fetchP();
 fetchAI();
-setInterval(function(){fetchProcs();fetchAI()},8000);
-document.getElementById('add-mo').addEventListener('click',function(e){if(e.target===e.currentTarget)closeAddProc()})});
-</script>
-</body></html>
-<script>
-var procs=[],errs=[],curDir='~',editPath=null,termWs=null,activePanel=null;
-
-// User display
-if(USER){var ud=document.getElementById('user-display');if(ud)ud.textContent=USER.name||USER.email}
-
-function E(s){if(!s)return'';s=s.replace(/\x1b\[[0-9;]*m/g,'').replace(/\u001b\[[0-9;]*m/g,'').replace(/\[\d+m/g,'');var d=document.createElement('div');d.textContent=s;return d.innerHTML}
-
-// ═══ Terminal WebSocket ═══
-function initTerm(){
-if(fallbackTermId)return;
-tWrite('CodeDeck Terminal v2.0
-','t-sys');
-tWrite('Starting local shell...
-','t-sys');
-sendCmdFallback('pwd');
-}catch(e){}};
-termWs.onclose=function(){tWrite('\nDisconnected. Refresh to reconnect.\n','t-sys')};
-termWs.onerror=function(){tWrite('Connection error\n','t-err')}}
-
-function sendCmd(){
-var input=document.getElementById('term-cmd');
-var cmd=input.value.trim();
-if(!cmd)return;
-input.value='';
-
-if(cmd==='clear'){
-  document.getElementById('term-out').innerHTML='';
-  return;
-}
-if(cmd==='help'){
-  tWrite('CodeDeck commands:
-','t-sys');
-  tWrite('  clear  - clear terminal
-','t-sys');
-  tWrite('  files  - open files panel
-','t-sys');
-  tWrite('  procs  - open processes panel
-','t-sys');
-  tWrite('  ai     - open AI panel
-','t-sys');
-  tWrite('  logout - sign out
-
-','t-sys');
-  return;
-}
-if(cmd==='files'){togglePanel('files');return}
-if(cmd==='procs'){togglePanel('procs');return}
-if(cmd==='ai'){togglePanel('ai');return}
-if(cmd==='logout'){logout();return}
-
-tWrite('$ '+cmd+'
-','');
-sendCmdFallback(cmd);
-}).join('')}
-
-async function stopProc(n){await fetch('/api/processes/'+n+'/stop',{method:'POST'});await fetchProcs();renderProcs()}
-async function restartProc(n){await fetch('/api/processes/'+n+'/restart',{method:'POST'});await fetchProcs();renderProcs()}
-async function removeProc(n){if(!confirm('Remove '+n+'?'))return;await fetch('/api/processes/'+n,{method:'DELETE'});await fetchProcs();renderProcs()}
-async function viewLogs(n){
-closeAllPanels();
-try{var r=await fetch('/api/processes/'+n+'/logs');var d=await r.json();var logs=d.logs||[];
-tWrite('\n--- Logs: '+n+' ---\n','t-sys');
-logs.forEach(function(l){
-var cls=l.type==='stderr'?'t-err':l.type==='system'?'t-sys':l.type==='ai'?'t-ai':'';
-tWrite(E(l.text)+'\n',cls)});
-tWrite('--- End logs ---\n\n','t-sys')}catch(e){}}
-
-function openAddProc(){document.getElementById('add-mo').classList.add('open')}
-function closeAddProc(){document.getElementById('add-mo').classList.remove('open')}
-async function addProc(){
-var n=document.getElementById('i-n').value.trim(),c=document.getElementById('i-c').value.trim(),d=document.getElementById('i-d').value.trim(),p=document.getElementById('i-p').value,ar=document.getElementById('i-r').checked;
-if(!n||!c)return alert('Name and command required');
-await fetch('/api/processes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,command:c,cwd:d||undefined,port:p?parseInt(p):undefined,autoRestart:ar})});
-closeAddProc();await fetchProcs();
-tWrite('Process '+n+' started\n','t-ok')}
-
-// ═══ Files ═══
-async function renderFiles(){
-var el=document.getElementById('files-body');
-try{var r=await fetch('/api/files?path='+encodeURIComponent(curDir));var d=await r.json();
-if(d.error){el.innerHTML='<div style="padding:20px;color:var(--rd)">'+E(d.error)+'</div>';return}
-var short=d.path.replace('/data/data/com.termux/files/home','~');
-document.getElementById('ft-path').textContent=short;
-var html='';
-if(d.parent)html+='<div class="ft-item dir" onclick="curDir=\''+E(d.parent)+'\';renderFiles()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> ..</div>';
-d.items.forEach(function(f){
-if(f.type==='dir')html+='<div class="ft-item dir" onclick="curDir=\''+E(f.path)+'\';renderFiles()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>'+E(f.name)+'</div>';
-else html+='<div class="ft-item" onclick="openFile(\''+E(f.path)+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+E(f.name)+'</div>'});
-el.innerHTML=html||'<div style="padding:20px;color:var(--tx2);text-align:center">Empty folder</div>'}catch(e){el.innerHTML='<div style="padding:20px;color:var(--rd)">Error loading files</div>'}}
-
-async function newFile(){var n=prompt('File name:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:curDir+'/'+n,type:'file'})});renderFiles()}
-async function newDir(){var n=prompt('Folder name:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:curDir+'/'+n,type:'dir'})});renderFiles()}
-
-// ═══ Editor ═══
-async function openFile(p){
-editPath=p;
-closeAllPanels();
-togglePanel('editor');
-try{var r=await fetch('/api/files/read?path='+encodeURIComponent(p));var d=await r.json();
-if(d.error){document.getElementById('editor-body').innerHTML='<div style="padding:20px;color:var(--rd)">'+E(d.error)+'</div>';return}
-var short=d.path.replace('/data/data/com.termux/files/home','~');
-document.getElementById('ed-title').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+E(short);
-document.getElementById('save-btn').style.display='flex';
-document.getElementById('editor-body').innerHTML='<textarea class="editor-full" id="ed-area">'+E(d.content)+'</textarea>';
-document.getElementById('ed-area').addEventListener('keydown',function(e){if(e.key==='Tab'){e.preventDefault();var s=this.selectionStart,en=this.selectionEnd;this.value=this.value.substring(0,s)+'  '+this.value.substring(en);this.selectionStart=this.selectionEnd=s+2}})
-}catch(e){}}
-
-async function saveFile(){
-if(!editPath)return;var c=document.getElementById('ed-area').value;
-try{var r=await fetch('/api/files/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:editPath,content:c})});
-var d=await r.json();if(d.success){var btn=document.getElementById('save-btn');btn.textContent='Saved!';btn.style.background='var(--gn)';setTimeout(function(){btn.textContent='Save';btn.style.background=''},1500)}}catch(e){}}
-
-// ═══ AI ═══
-async function fetchAI(){
-try{var r=await fetch('/api/ai/errors');var d=await r.json();errs=d.errors||[];
-var badge=document.getElementById('ai-badge');
-badge.textContent=errs.length;badge.style.display=errs.length>0?'flex':'none';
-if(errs.length>0){
-tWrite('\nAI: '+errs.length+' error(s) detected. Type "ai" to view.\n','t-ai')}}catch(e){}}
-
-function renderAI(){
-var el=document.getElementById('ai-body');
-if(!errs.length){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--tx2);font-size:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:32px;height:32px;color:#222;margin-bottom:8px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><br>All clear. AI is watching.</div>';return}
-el.innerHTML=errs.map(function(e){
-var fixes=(e.fixes||[]).map(function(f){return'<div class="ai-fix">'+E(f)+'</div>'}).join('');
-return'<div class="ai-item"><div class="ai-type">'+E(e.type)+' <span style="float:right;font-size:10px;color:var(--tx2)">'+e.severity+'</span></div><div class="ai-cause">'+E(e.cause)+'</div>'+fixes+(e.canAutoFix?'<button class="ai-btn" onclick="healErr(\''+encodeURIComponent(JSON.stringify(e))+'\')">Fix Now</button>':'')+'<button class="ai-btn" style="background:var(--ac);margin-left:4px" onclick="explainErr(\''+encodeURIComponent(JSON.stringify(e))+'\')">Explain</button></div>'}).join('')}
-
-async function healErr(ed){try{var err=JSON.parse(decodeURIComponent(ed));var r=await fetch('/api/ai/heal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({error:err})});var d=await r.json();tWrite('\nAI: '+(d.message||'Fix applied')+'\n','t-ai');fetchProcs();fetchAI()}catch(e){}}
-async function explainErr(ed){try{var err=JSON.parse(decodeURIComponent(ed));var r=await fetch('/api/ai/explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({error:err})});var d=await r.json();tWrite('\nAI Explanation:\n'+d.explanation+'\n\n','t-ai')}catch(e){}}
-
-// ═══ Preview ═══
-function renderPreview(){
-var el=document.getElementById('preview-body');
-var running=procs.filter(function(p){return p.port&&p.running});
-if(!running.length){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--tx2);font-size:12px">No preview available.<br>Start a process with a port.</div>';return}
-el.innerHTML='<iframe class="preview-frame" src="http://localhost:'+running[0].port+'"></iframe>'}
-
-function openPreview(port){closeAllPanels();togglePanel('preview');document.getElementById('preview-body').innerHTML='<iframe class="preview-frame" src="http://localhost:'+port+'"></iframe>'}
-function reloadPreview(){var f=document.querySelector('.preview-frame');if(f)f.src=f.src}
-
-// ═══ Init ═══
-document.addEventListener('DOMContentLoaded',function(){
-initTerm();
-fetchProcs();
-fetchAI();
-setInterval(function(){fetchProcs();fetchAI()},8000);
-document.getElementById('add-mo').addEventListener('click',function(e){if(e.target===e.currentTarget)closeAddProc()})});
+setInterval(function(){fetchP();fetchAI()},8000);
+document.getElementById('add-mo').addEventListener('click',function(e){if(e.target===e.currentTarget)closeAdd()})});
 </script>
 </body></html>
