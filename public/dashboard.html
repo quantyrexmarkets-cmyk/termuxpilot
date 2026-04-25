@@ -307,6 +307,7 @@ if(lower==='branches'){gitCmd('branch');return}
 
 
 var cmd=smartInterpret(raw);
+if(lower.startsWith('cd ')){var dir=raw.slice(3).trim();if(dir==='~')gitCwd='~';else if(dir==='..')gitCwd=gitCwd.split('/').slice(0,-1).join('/')||'~';else gitCwd=gitCwd==='~'?'~/'+dir:gitCwd+'/'+dir}
 if(!termId){out('No shell','t-err');addPrompt();return}
 try{
 await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
@@ -327,19 +328,21 @@ if(o.type==='stderr')checkAI(clean);
 else detectPort(clean)})}}catch(e){}}
 
 
+var gitCwd='~';
 async function gitCmd(action,arg){
+var cwd=gitCwd;
 try{var r,d;
-if(action==='status'){r=await fetch('/api/git/status');d=await r.json();out(d.output||'Clean','t-ok')}
-else if(action==='log'){r=await fetch('/api/git/log');d=await r.json();out(d.output||'No commits','t-out')}
-else if(action==='diff'){r=await fetch('/api/git/diff');d=await r.json();out(d.output||'No changes','t-out')}
-else if(action==='push'){r=await fetch('/api/git/push',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});d=await r.json();out(d.output||d.error,'t-ok')}
-else if(action==='pull'){r=await fetch('/api/git/pull',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});d=await r.json();out(d.output||d.error,'t-ok')}
+if(action==='status'){r=await fetch('/api/git/status?cwd='+encodeURIComponent(cwd));d=await r.json();out(d.output||'Clean','t-ok')}
+else if(action==='log'){r=await fetch('/api/git/log?cwd='+encodeURIComponent(cwd));d=await r.json();out(d.output||'No commits','t-out')}
+else if(action==='diff'){r=await fetch('/api/git/diff?cwd='+encodeURIComponent(cwd));d=await r.json();out(d.output||'No changes','t-out')}
+else if(action==='push'){r=await fetch('/api/git/push',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:cwd})});d=await r.json();out(d.output||d.error,'t-ok')}
+else if(action==='pull'){r=await fetch('/api/git/pull',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:cwd})});d=await r.json();out(d.output||d.error,'t-ok')}
 else if(action==='commit'){
 if(!arg){out('Usage: commit "your message"','t-err');addPrompt();return}
-r=await fetch('/api/git/commit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:arg})});
+r=await fetch('/api/git/commit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:arg,cwd:cwd})}); 
 d=await r.json();out(d.output||d.error||'Done',d.success?'t-ok':'t-err')}
 else if(action==='branch'){
-r=await fetch('/api/git/branch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:arg})});
+r=await fetch('/api/git/branch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:arg,cwd:cwd})}); 
 d=await r.json();out(d.output||d.error,'t-ok')}
 else if(action==='clone'){
 if(!arg){out('Usage: clone <url>','t-err');addPrompt();return}
