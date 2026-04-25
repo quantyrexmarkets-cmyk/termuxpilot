@@ -1,9 +1,12 @@
 const { exec } = require('child_process');
+const HOME = process.env.HOME || '/data/data/com.termux/files/home';
+const SHELL = process.env.SHELL || '/data/data/com.termux/files/usr/bin/bash';
 const path = require('path');
 
 function run(cmd, cwd) {
   return new Promise((resolve) => {
-    exec(cmd, { cwd: cwd || process.env.HOME }, (err, stdout, stderr) => {
+    const resolvedCwd = cwd ? cwd.replace(/^~/, HOME) : HOME;
+exec(cmd, { cwd: resolvedCwd, shell: SHELL, env: process.env }, (err, stdout, stderr) => {
       resolve({
         success: !err,
         output: (stdout || stderr || '').trim(),

@@ -333,7 +333,7 @@ async function gitCmd(action,arg){
 var cwd=gitCwd;
 try{var r,d;
 if(action==='status'){r=await fetch('/api/git/status?cwd='+encodeURIComponent(cwd));d=await r.json();out(d.output||'Clean','t-ok')}
-else if(action==='log'){r=await fetch('/api/git/log?cwd='+encodeURIComponent(cwd));d=await r.json();out(d.output||'No commits','t-out')}
+else if(action==='log'){r=await fetch('/api/git/log?cwd='+encodeURIComponent(cwd));d=await r.json();out(d.output||(d.success?'No commits yet':'Not a git repo'),'t-out')}
 else if(action==='diff'){r=await fetch('/api/git/diff?cwd='+encodeURIComponent(cwd));d=await r.json();out(d.output||'No changes','t-out')}
 else if(action==='push'){r=await fetch('/api/git/push',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:cwd})});d=await r.json();out(d.output||d.error,'t-ok')}
 else if(action==='pull'){r=await fetch('/api/git/pull',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:cwd})});d=await r.json();out(d.output||d.error,'t-ok')}
