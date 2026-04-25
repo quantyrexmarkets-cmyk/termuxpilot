@@ -426,36 +426,14 @@ alert((d.source==='llm'?'AI: ':'')+ d.explanation + (d.fixes.length?'\n\nFixes:\
 catch(e){alert('Explain error')}}
 
 
-var termId=null;
-var termPollTimer=null;
-var lastTermTime=null;
+var termWs=null;
+var termConnected=false;
 
-async function initTerm(){
-if(termId)return;
-try{var r=await fetch('/api/terminal/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:'~'})});
-var d=await r.json();
-if(d.id){termId=d.id;lastTermTime=null;pollTerm();termPollTimer=setInterval(pollTerm,1000)}
-}catch(e){}}
 
-async function sendCmd(){
-var input=document.getElementById('term-cmd');
-var cmd=input.value;
-if(!cmd||!termId)return;
-input.value='';
-appendTerm('$ '+cmd+'\n','stdout');
-try{await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})})}catch(e){}
-setTimeout(pollTerm,200)}
 
-async function pollTerm(){
-if(!termId)return;
-try{var url='/api/terminal/'+termId+'/output';
-if(lastTermTime)url+='?since='+encodeURIComponent(lastTermTime);
-var r=await fetch(url);var d=await r.json();
-if(d.output&&d.output.length){
-d.output.forEach(function(o){
-lastTermTime=o.time;
-var cls=o.type==='stderr'?'t-err':o.type==='system'?'t-sys':'';
-appendTerm(o.text,cls)})}}catch(e){}}
+
+
+
 
 function appendTerm(text,cls){
 var out=document.getElementById('term-out');
@@ -466,6 +444,37 @@ out.appendChild(span);
 out.scrollTop=out.scrollHeight}
 
 function clearTerm(){document.getElementById('term-out').innerHTML=''}
+
+
+function initTerm(){
+if(termWs&&termWs.readyState===1)return;
+var proto=location.protocol==='https:'?'wss':'ws';
+var url=proto+'://'+location.host+'/ws/terminal';
+termWs=new WebSocket(url);
+termWs.onopen=function(){
+termConnected=true;
+termWs.send(JSON.stringify({type:'create',cwd:'~'}));
+appendTerm('Connected to shell...\n','t-sys')};
+termWs.onmessage=function(e){
+try{var d=JSON.parse(e.data);
+if(d.type==='output')appendTerm(d.text,'');
+if(d.type==='error')appendTerm(d.text,'t-err');
+if(d.type==='exit')appendTerm('\nShell exited (code '+d.code+')\n','t-sys');
+if(d.type==='created')appendTerm('Session '+d.id+'\n','t-sys');
+}catch(e){}};
+termWs.onclose=function(){
+termConnected=false;
+appendTerm('\nDisconnected\n','t-sys')};
+termWs.onerror=function(){appendTerm('Connection error\n','t-err')}}
+
+function sendCmd(){
+var input=document.getElementById('term-cmd');
+var cmd=input.value;
+if(!cmd||!termWs||termWs.readyState!==1)return;
+input.value='';
+termWs.send(JSON.stringify({type:'input',text:cmd+'\n'}))}
+
+function pollTerm(){}
 
 function showTerm(){
 document.getElementById('p-term').style.display='flex';
