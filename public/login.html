@@ -168,4 +168,24 @@ async function doAuth(){
 if(localStorage.getItem('codedeck_token')){window.location.href='/app';}
 document.addEventListener('keydown',function(e){if(e.key==='Enter')doAuth()});
 </script>
+
+<script>
+// Keep page alive on Android
+if('wakeLock' in navigator){
+  var wl=null;
+  async function keepAwake(){
+    try{wl=await navigator.wakeLock.request('screen')}catch(e){}
+  }
+  keepAwake();
+  document.addEventListener('visibilitychange',function(){
+    if(document.visibilityState==='visible')keepAwake()});
+}
+// Force repaint when keyboard closes
+window.addEventListener('resize',function(){
+  document.body.style.height=window.innerHeight+'px';
+  setTimeout(function(){document.body.style.height=''},100)});
+// Keep connection alive
+setInterval(function(){
+  fetch('/health').catch(function(){})},10000);
+</script>
 </body></html>

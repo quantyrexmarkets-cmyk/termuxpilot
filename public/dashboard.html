@@ -61,19 +61,7 @@ body{display:flex;flex-direction:column}
 .ig label{display:block;font-size:10px;color:var(--tx2);margin-bottom:2px}
 .ig input{width:100%;padding:6px 8px;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--tx);font-size:11px;font-family:inherit;outline:none}
 .ig input:focus{border-color:var(--ac)}
-</style>
-<style>
-#out{counter-reset:lc}
-.ln{counter-increment:lc;display:flex;gap:8px}
-.ln::before{content:counter(lc);min-width:28px;text-align:right;color:#444;font-size:10px;line-height:1.8;user-select:none;flex-shrink:0}
-.pr{counter-increment:lc;display:flex;align-items:center}
-.pr::before{content:counter(lc);min-width:28px;text-align:right;color:#2a5a2a;font-size:10px;margin-right:8px;user-select:none;flex-shrink:0}
-.ln.cmd::before{color:#2a5a2a}
-.ln.err::before{color:#5a2a2a}
-.ln.sys::before{color:#2a2a5a}
-.ln.ai::before{color:#5a5a2a}
-</style>
-</head><body>
+</style></head><body>
 <script>
 var TK=localStorage.getItem('codedeck_token');
 var USR=JSON.parse(localStorage.getItem('codedeck_user')||'null');
@@ -177,32 +165,11 @@ if(cmd!==raw)pr('→ '+cmd,'sys');
 pr('$ '+raw,'cmd');
 snd(cmd)}
 
-var sseStream=null;
-
-function startSSE(){
-if(!tid)return;
-if(sseStream)sseStream.close();
-sseStream=new EventSource('/api/terminal/'+tid+'/stream');
-sseStream.onmessage=function(e){
-try{var d=JSON.parse(e.data);
-if(d.type==='connected')return;
-var c=E(d.text).trim();
-if(!c)return;
-var cl=d.type==='stderr'?'err':'';
-pr(c,cl);
-if(d.type==='stderr'&&(c.toLowerCase().startsWith('error:')||c.includes('cannot find module')))aiC(c);
-else dp(c)}catch(e){}};
-sseStream.onerror=function(){
-setTimeout(startSSE,2000)}}
-
-var waitingPrompt=false;
 async function snd(cmd){
 if(!tid){pr('No shell','err');addP();return}
 try{
 await fetch('/api/terminal/'+tid+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
-if(waitingPrompt)return;
-waitingPrompt=true;
-setTimeout(function(){waitingPrompt=false;addP()},1500)}
+var n=0;var t=setInterval(async function(){await ro();n++;if(n>=6){clearInterval(t);addP()}},500)}
 catch(e){pr('Error','err');addP()}}
 
 async function ro(){
@@ -270,5 +237,26 @@ document.addEventListener('DOMContentLoaded',function(){
 initT();fP();fAI();
 setInterval(function(){fP();fAI()},8000);
 document.getElementById('admo').addEventListener('click',function(e){if(e.target===e.currentTarget)cAd()})});
+</script>
+<script src="/terminal.js"></script>
+
+<script>
+// Keep page alive on Android
+if('wakeLock' in navigator){
+  var wl=null;
+  async function keepAwake(){
+    try{wl=await navigator.wakeLock.request('screen')}catch(e){}
+  }
+  keepAwake();
+  document.addEventListener('visibilitychange',function(){
+    if(document.visibilityState==='visible')keepAwake()});
+}
+// Force repaint when keyboard closes
+window.addEventListener('resize',function(){
+  document.body.style.height=window.innerHeight+'px';
+  setTimeout(function(){document.body.style.height=''},100)});
+// Keep connection alive
+setInterval(function(){
+  fetch('/health').catch(function(){})},10000);
 </script>
 </body></html>

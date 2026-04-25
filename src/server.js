@@ -407,6 +407,10 @@ app.post('/api/git/init', async (req, res) => {
 // TERMINAL SSE (Real-time streaming)
 // ═══════════════════════════════════
 app.get('/api/terminal/:id/stream', (req, res) => {
+  // Allow token via query param for EventSource
+  if (!req.headers.authorization && req.query.token) {
+    req.headers.authorization = 'Bearer ' + req.query.token;
+  }
   const id = req.params.id;
   const session = terminal.sessions.get(id);
   if (!session) return res.status(404).json({ error: 'No session' });
