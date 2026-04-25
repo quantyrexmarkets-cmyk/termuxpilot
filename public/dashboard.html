@@ -197,33 +197,57 @@ function E(s){if(!s)return'';s=s.replace(/\x1b\[[0-9;]*m/g,'').replace(/\u001b\[
 
 // ═══ Terminal WebSocket ═══
 
-var useFallback=false;
+var useFallback=true;
 
 async function sendCmdFallback(cmd){
 try{
-if(!fallbackTermId){
-var r=await fetch('/api/terminal/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:'~'})});
-var d=await r.json();fallbackTermId=d.id}
-await fetch('/api/terminal/'+fallbackTermId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
-setTimeout(async function(){
-var r=await fetch('/api/terminal/'+fallbackTermId+'/output');
-var d=await r.json();
-if(d.output)d.output.forEach(function(o){tWrite(o.text,o.type==='stderr'?'t-err':'')})
+  if(!fallbackTermId){
+    var r=await fetch('/api/terminal/create',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({cwd:'~'})
+    });
+    var d=await r.json();
+    fallbackTermId=d.id;
+  }
+
+  await fetch('/api/terminal/'+fallbackTermId+'/write',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({command:cmd})
+  });
+
+  setTimeout(async function(){
+    try{
+      var r=await fetch('/api/terminal/'+fallbackTermId+'/output');
+      var d=await r.json();
+      if(d.output){
+        d.output.forEach(function(o){
+          tWrite(
+            o.text,
+            o.type==='stderr'?'t-err':(o.type==='system'?'t-sys':'')
+          );
+        });
+      }
+    }catch(e){
+      tWrite('Output error: '+e.message+'
+','t-err');
+    }
+  },400);
+}catch(e){
+  tWrite('Terminal error: '+e.message+'
+','t-err');
+}
 },500)}catch(e){tWrite('Error: '+e.message+'\n','t-err')}}
 var fallbackTermId=null;
 
 function initTerm(){
-if(termWs&&termWs.readyState===1)return;
-var proto=location.protocol==='https:'?'wss':'ws';
-termWs=new WebSocket(proto+'://'+location.host+'/ws/terminal');
-termWs.onopen=function(){
-termWs.send(JSON.stringify({type:'create',cwd:'~'}));
-tWrite('CodeDeck Terminal v2.0\nType commands below\n\n','t-sys')};
-termWs.onmessage=function(e){
-try{var d=JSON.parse(e.data);
-if(d.type==='output')tWrite(d.text,'');
-if(d.type==='error')tWrite(d.text,'t-err');
-if(d.type==='exit')tWrite('\nShell exited ('+d.code+')\n','t-sys');
+if(fallbackTermId)return;
+tWrite('CodeDeck Terminal v2.0
+','t-sys');
+tWrite('Starting local shell...
+','t-sys');
+sendCmdFallback('pwd');
 }catch(e){}};
 termWs.onclose=function(){tWrite('\nDisconnected. Refresh to reconnect.\n','t-sys')};
 termWs.onerror=function(){tWrite('WebSocket unavailable. Using command mode.\n','t-sys');useFallback=true}}
@@ -234,63 +258,34 @@ var cmd=input.value.trim();
 if(!cmd)return;
 input.value='';
 
-// Local commands
-if(cmd==='clear'){document.getElementById('term-out').innerHTML='';return}
-if(cmd==='help'){tWrite('\nCodeDeck Commands:\n  clear     - Clear terminal\n  procs     - Show processes\n  newproc   - Add process\n  files     - Open files\n  ai        - Show AI errors\n  logout    - Sign out\n\n','t-sys');return}
-if(cmd==='procs'){togglePanel('procs');return}
+if(cmd==='clear'){
+  document.getElementById('term-out').innerHTML='';
+  return;
+}
+if(cmd==='help'){
+  tWrite('CodeDeck commands:
+','t-sys');
+  tWrite('  clear  - clear terminal
+','t-sys');
+  tWrite('  files  - open files panel
+','t-sys');
+  tWrite('  procs  - open processes panel
+','t-sys');
+  tWrite('  ai     - open AI panel
+','t-sys');
+  tWrite('  logout - sign out
+
+','t-sys');
+  return;
+}
 if(cmd==='files'){togglePanel('files');return}
+if(cmd==='procs'){togglePanel('procs');return}
 if(cmd==='ai'){togglePanel('ai');return}
-if(cmd==='newproc'){openAddProc();return}
 if(cmd==='logout'){logout();return}
 
-// Send to shell
-if(useFallback){sendCmdFallback(cmd);return}
-if(!termWs||termWs.readyState!==1){tWrite('Not connected\n','t-err');return}
-termWs.send(JSON.stringify({type:'input',text:cmd+'\n'}))}
-
-function tWrite(text,cls){
-var out=document.getElementById('term-out');
-var span=document.createElement('span');
-if(cls)span.className=cls;
-span.textContent=text;
-out.appendChild(span);
-out.scrollTop=out.scrollHeight}
-
-// ═══ Panel System ═══
-function togglePanel(name){
-if(activePanel===name){closeAllPanels();return}
-closeAllPanels();
-activePanel=name;
-document.getElementById('panel-overlay').classList.add('show');
-document.getElementById('pan-'+name).classList.add('open');
-document.getElementById('d-'+name).classList.add('active');
-if(name==='procs')renderProcs();
-if(name==='files')renderFiles();
-if(name==='ai')renderAI();
-if(name==='preview')renderPreview()}
-
-function closeAllPanels(){
-activePanel=null;
-document.getElementById('panel-overlay').classList.remove('show');
-document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('open')});
-document.querySelectorAll('.dock-btn').forEach(function(b){b.classList.remove('active')})}
-
-// ═══ Processes ═══
-async function fetchProcs(){
-try{var r=await fetch('/api/processes');var d=await r.json();procs=d.processes||[]}catch(e){}}
-
-function renderProcs(){
-var el=document.getElementById('procs-body');
-if(!procs.length){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--tx2);font-size:12px">No processes running</div>';return}
-el.innerHTML=procs.map(function(p){
-var s=p.running?'on':'off';
-var acts=p.running
-?'<button class="p-btn danger" onclick="stopProc(\''+E(p.name)+'\')">Stop</button><button class="p-btn" onclick="restartProc(\''+E(p.name)+'\')">Restart</button>'
-:'<button class="p-btn green" onclick="restartProc(\''+E(p.name)+'\')">Start</button>';
-acts+='<button class="p-btn" onclick="viewLogs(\''+E(p.name)+'\')">Logs</button>';
-if(p.port&&p.running)acts+='<button class="p-btn" onclick="openPreview('+p.port+')">Preview</button>';
-acts+='<button class="p-btn danger" onclick="removeProc(\''+E(p.name)+'\')">Del</button>';
-return'<div class="proc-item"><div class="proc-name"><span class="sd '+s+'"></span>'+E(p.name)+'</div><div class="proc-cmd">'+E(p.command)+'</div><div class="proc-actions">'+acts+'</div></div>'
+tWrite('$ '+cmd+'
+','');
+sendCmdFallback(cmd);
 }).join('')}
 
 async function stopProc(n){await fetch('/api/processes/'+n+'/stop',{method:'POST'});await fetchProcs();renderProcs()}
@@ -397,17 +392,12 @@ function E(s){if(!s)return'';s=s.replace(/\x1b\[[0-9;]*m/g,'').replace(/\u001b\[
 
 // ═══ Terminal WebSocket ═══
 function initTerm(){
-if(termWs&&termWs.readyState===1)return;
-var proto=location.protocol==='https:'?'wss':'ws';
-termWs=new WebSocket(proto+'://'+location.host+'/ws/terminal');
-termWs.onopen=function(){
-termWs.send(JSON.stringify({type:'create',cwd:'~'}));
-tWrite('CodeDeck Terminal v2.0\nType commands below\n\n','t-sys')};
-termWs.onmessage=function(e){
-try{var d=JSON.parse(e.data);
-if(d.type==='output')tWrite(d.text,'');
-if(d.type==='error')tWrite(d.text,'t-err');
-if(d.type==='exit')tWrite('\nShell exited ('+d.code+')\n','t-sys');
+if(fallbackTermId)return;
+tWrite('CodeDeck Terminal v2.0
+','t-sys');
+tWrite('Starting local shell...
+','t-sys');
+sendCmdFallback('pwd');
 }catch(e){}};
 termWs.onclose=function(){tWrite('\nDisconnected. Refresh to reconnect.\n','t-sys')};
 termWs.onerror=function(){tWrite('Connection error\n','t-err')}}
@@ -418,62 +408,34 @@ var cmd=input.value.trim();
 if(!cmd)return;
 input.value='';
 
-// Local commands
-if(cmd==='clear'){document.getElementById('term-out').innerHTML='';return}
-if(cmd==='help'){tWrite('\nCodeDeck Commands:\n  clear     - Clear terminal\n  procs     - Show processes\n  newproc   - Add process\n  files     - Open files\n  ai        - Show AI errors\n  logout    - Sign out\n\n','t-sys');return}
-if(cmd==='procs'){togglePanel('procs');return}
+if(cmd==='clear'){
+  document.getElementById('term-out').innerHTML='';
+  return;
+}
+if(cmd==='help'){
+  tWrite('CodeDeck commands:
+','t-sys');
+  tWrite('  clear  - clear terminal
+','t-sys');
+  tWrite('  files  - open files panel
+','t-sys');
+  tWrite('  procs  - open processes panel
+','t-sys');
+  tWrite('  ai     - open AI panel
+','t-sys');
+  tWrite('  logout - sign out
+
+','t-sys');
+  return;
+}
 if(cmd==='files'){togglePanel('files');return}
+if(cmd==='procs'){togglePanel('procs');return}
 if(cmd==='ai'){togglePanel('ai');return}
-if(cmd==='newproc'){openAddProc();return}
 if(cmd==='logout'){logout();return}
 
-// Send to shell
-if(!termWs||termWs.readyState!==1){tWrite('Not connected\n','t-err');return}
-termWs.send(JSON.stringify({type:'input',text:cmd+'\n'}))}
-
-function tWrite(text,cls){
-var out=document.getElementById('term-out');
-var span=document.createElement('span');
-if(cls)span.className=cls;
-span.textContent=text;
-out.appendChild(span);
-out.scrollTop=out.scrollHeight}
-
-// ═══ Panel System ═══
-function togglePanel(name){
-if(activePanel===name){closeAllPanels();return}
-closeAllPanels();
-activePanel=name;
-document.getElementById('panel-overlay').classList.add('show');
-document.getElementById('pan-'+name).classList.add('open');
-document.getElementById('d-'+name).classList.add('active');
-if(name==='procs')renderProcs();
-if(name==='files')renderFiles();
-if(name==='ai')renderAI();
-if(name==='preview')renderPreview()}
-
-function closeAllPanels(){
-activePanel=null;
-document.getElementById('panel-overlay').classList.remove('show');
-document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('open')});
-document.querySelectorAll('.dock-btn').forEach(function(b){b.classList.remove('active')})}
-
-// ═══ Processes ═══
-async function fetchProcs(){
-try{var r=await fetch('/api/processes');var d=await r.json();procs=d.processes||[]}catch(e){}}
-
-function renderProcs(){
-var el=document.getElementById('procs-body');
-if(!procs.length){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--tx2);font-size:12px">No processes running</div>';return}
-el.innerHTML=procs.map(function(p){
-var s=p.running?'on':'off';
-var acts=p.running
-?'<button class="p-btn danger" onclick="stopProc(\''+E(p.name)+'\')">Stop</button><button class="p-btn" onclick="restartProc(\''+E(p.name)+'\')">Restart</button>'
-:'<button class="p-btn green" onclick="restartProc(\''+E(p.name)+'\')">Start</button>';
-acts+='<button class="p-btn" onclick="viewLogs(\''+E(p.name)+'\')">Logs</button>';
-if(p.port&&p.running)acts+='<button class="p-btn" onclick="openPreview('+p.port+')">Preview</button>';
-acts+='<button class="p-btn danger" onclick="removeProc(\''+E(p.name)+'\')">Del</button>';
-return'<div class="proc-item"><div class="proc-name"><span class="sd '+s+'"></span>'+E(p.name)+'</div><div class="proc-cmd">'+E(p.command)+'</div><div class="proc-actions">'+acts+'</div></div>'
+tWrite('$ '+cmd+'
+','');
+sendCmdFallback(cmd);
 }).join('')}
 
 async function stopProc(n){await fetch('/api/processes/'+n+'/stop',{method:'POST'});await fetchProcs();renderProcs()}
