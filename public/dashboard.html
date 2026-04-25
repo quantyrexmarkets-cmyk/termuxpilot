@@ -299,7 +299,7 @@ if(lower==='git diff'||lower==='diff'){gitCmd('diff');return}
 if(lower==='git push'||lower==='push'){gitCmd('push');return}
 if(lower==='git pull'||lower==='pull'){gitCmd('pull');return}
 if(lower==='git init'||lower==='init'){gitCmd('init');return}
-if(lower.startsWith('commit ')){gitCmd('commit',raw.slice(7));return}
+if(lower.startsWith('commit ')){var msg=raw.slice(7).replace(/^["']/,'').replace(/["']$/,'');gitCmd('commit',msg);return}
 if(lower.startsWith('git commit -m ')){gitCmd('commit',raw.slice(14));return}
 if(lower.startsWith('branch ')){gitCmd('branch',raw.slice(7));return}
 if(lower.startsWith('git clone ')){gitCmd('clone',raw.slice(10));return}
