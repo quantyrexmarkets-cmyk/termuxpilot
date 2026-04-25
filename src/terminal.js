@@ -39,7 +39,7 @@ class Terminal {
     const resolvedCwd = this.resolveCwd(cwd);
 
     try {
-      const proc = spawn(shell, ['--norc', '--noprofile'], {
+      const proc = spawn(shell, [], {
         cwd: resolvedCwd,
         env: {
           ...process.env,

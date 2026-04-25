@@ -345,7 +345,7 @@ if(lower.startsWith('cd ')){var dir=raw.slice(3).trim();if(dir==='~')gitCwd='~';
 if(!termId){out('No shell','t-err');addPrompt();return}
 try{
 await fetch('/api/terminal/'+termId+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
-setTimeout(async function(){await readOutput();addPrompt()},1000)}
+setTimeout(async function(){await readOutput();setTimeout(async function(){await readOutput();addPrompt()},500)},800)}
 catch(e){out('Error','t-err');addPrompt()}}
 
 async function readOutput(){

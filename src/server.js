@@ -3,6 +3,15 @@ const path = require('path');
 const os = require('os');
 const readline = require('readline');
 const { exec } = require('child_process');
+
+// ═══════════════════════════════════
+// ENVIRONMENT DETECTION
+// ═══════════════════════════════════
+const isTermux = (process.env.PREFIX || '').includes('com.termux');
+const isRender = !!process.env.RENDER;
+const ENV_MODE = isTermux ? 'local' : isRender ? 'cloud' : 'unknown';
+console.log('  Mode: ' + ENV_MODE.toUpperCase());
+
 const pm = require('./processManager');
 const auth = require('./auth');
 const projects = require('./projects');
@@ -548,3 +557,14 @@ process.on('exit', (code) => {
 
 // Temporary keepalive for debugging
 setInterval(() => {}, 60000);
+
+// Environment API
+app.get('/api/env', (req, res) => {
+  res.json({
+    mode: ENV_MODE,
+    isTermux: isTermux,
+    isRender: isRender,
+    platform: process.platform,
+    home: process.env.HOME
+  });
+});
