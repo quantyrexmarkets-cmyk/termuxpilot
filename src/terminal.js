@@ -50,6 +50,7 @@ class Terminal {
       });
 
       const session = {
+      listeners: new Set(),
         id,
         proc,
         cwd: resolvedCwd,
@@ -61,12 +62,14 @@ class Terminal {
       proc.stdout.on('data', (d) => {
         const text = d.toString();
         session.output.push({ type: 'stdout', text, time: new Date() });
+      session.listeners.forEach(fn => { try { fn({ type: 'stdout', text }) } catch(e) {} });
         if (session.output.length > session.maxOutput) session.output.shift();
       });
 
       proc.stderr.on('data', (d) => {
         const text = d.toString();
         session.output.push({ type: 'stderr', text, time: new Date() });
+      session.listeners.forEach(fn => { try { fn({ type: 'stderr', text }) } catch(e) {} });
         if (session.output.length > session.maxOutput) session.output.shift();
       });
 
@@ -129,6 +132,13 @@ class Terminal {
       cwd: session.cwd,
       output
     };
+  }
+
+  subscribe(id, fn) {
+    const session = this.sessions.get(id);
+    if (!session) return null;
+    session.listeners.add(fn);
+    return () => session.listeners.delete(fn);
   }
 
   destroy(id) {

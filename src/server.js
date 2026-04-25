@@ -402,6 +402,32 @@ app.post('/api/git/init', async (req, res) => {
   res.json(await git.init(cwd));
 });
 
+
+// ═══════════════════════════════════
+// TERMINAL SSE (Real-time streaming)
+// ═══════════════════════════════════
+app.get('/api/terminal/:id/stream', (req, res) => {
+  const id = req.params.id;
+  const session = terminal.sessions.get(id);
+  if (!session) return res.status(404).json({ error: 'No session' });
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.flushHeaders();
+
+  res.write('data: {"type":"connected"}\n\n');
+
+  const unsub = terminal.subscribe(id, (data) => {
+    res.write('data: ' + JSON.stringify(data) + '\n\n');
+  });
+
+  req.on('close', () => {
+    if (unsub) unsub();
+  });
+});
+
 app.use( (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'dashboard.html'));
 });
