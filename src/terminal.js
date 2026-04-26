@@ -7,7 +7,7 @@ class Terminal {
   }
 
   resolveCwd(cwd) {
-    const home = process.env.HOME || '/data/data/com.termux/files/home';
+    const home = process.env.HOME || '/opt/render' || '/data/data/com.termux/files/home';
     const resolved = (cwd || '~').replace(/^~/, home);
     try {
       if (fs.existsSync(resolved)) return resolved;

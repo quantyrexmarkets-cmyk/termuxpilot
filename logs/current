@@ -1,0 +1,22 @@
+2026-04-26_07:41:47.66429   Mode: LOCAL
+2026-04-26_07:41:47.89255 
+2026-04-26_07:41:47.89258   CodeDeck v1.0.0
+2026-04-26_07:41:47.89258   ----------------------
+2026-04-26_07:41:47.89258   Local:   http://localhost:3100
+2026-04-26_07:41:47.89258   Network: http://10.34.246.156:3100
+2026-04-26_07:41:47.89258   API:     http://localhost:3100/api/processes
+2026-04-26_07:41:47.89259 
+2026-04-26_07:41:47.89259   o - Open    l - List    r - Restart
+2026-04-26_07:41:47.89259   s - Stats   q - Quit    h - Help
+2026-04-26_07:41:47.89259   
+2026-04-26_07:41:47.90011 SERVER_ERROR: Error: listen EADDRINUSE: address already in use 0.0.0.0:3100
+2026-04-26_07:41:47.90013     at Server.setupListenHandle [as _listen2] (node:net:2008:16)
+2026-04-26_07:41:47.90013     at listenInCluster (node:net:2065:12)
+2026-04-26_07:41:47.90013     at node:net:2274:7
+2026-04-26_07:41:47.90013     at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+2026-04-26_07:41:47.90014   code: 'EADDRINUSE',
+2026-04-26_07:41:47.90014   errno: -98,
+2026-04-26_07:41:47.90014   syscall: 'listen',
+2026-04-26_07:41:47.90016   address: '0.0.0.0',
+2026-04-26_07:41:47.90016   port: 3100
+2026-04-26_07:41:47.90016 }
