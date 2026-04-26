@@ -311,13 +311,6 @@ app.post('/api/terminal/:id/write', (req, res) => {
   res.json(terminal.write(req.params.id, command));
 });
 
-
-app.get('/api/terminal/:id/wait', async (req, res) => {
-  const timeout = parseInt(req.query.timeout || '12000', 10);
-  const result = await terminal.waitForOutput(req.params.id, timeout);
-  res.json(result);
-});
-
 app.get('/api/terminal/:id/output', (req, res) => {
   const since = req.query.since;
   res.json(terminal.getOutput(req.params.id, since));
