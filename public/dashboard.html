@@ -1,11 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"><title>CodeDeck</title>
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#0d0d0d">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="CodeDeck">
-<link rel="apple-touch-icon" href="/icon-192.svg">
-<style>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"><title>CodeDeck</title><style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0d0d0d;--sf:#161616;--bd:#252525;--tx:#e0e0e0;--tx2:#666;--ac:#7c6cf0;--ac2:#a89cf0;--gn:#22c55e;--rd:#ef4444;--yw:#eab308}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:'Courier New',monospace}
@@ -175,54 +168,19 @@ snd(cmd)}
 async function snd(cmd){
 if(!tid){pr('No shell','err');addP();return}
 try{
-  await fetch('/api/terminal/'+tid+'/write',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({command:cmd})
-  });
-
-  // First output burst
-  var first = await waitOut();
-  renderChunk(first);
-
-  // Small follow-up burst for slower commands
-  var second = await waitOut();
-  renderChunk(second);
-
-  addP();
-}catch(e){
-  pr('Error','err');
-  addP();
-}}
-
-function renderChunk(items){
-  if(!items || !items.length) return false;
-  var got = false;
-  items.forEach(function(o){
-    var txt = E(o.text||'').trim();
-    if(!txt) return;
-    got = true;
-    var cls = o.type==='stderr' ? 'err' : (o.type==='system' ? 'sys' : '');
-    txt.split('\n').forEach(function(line){
-      if(!line.trim()) return;
-      pr(line, cls);
-      if(cls==='err' && (line.toLowerCase().startsWith('error:') || line.toLowerCase().includes('cannot find module'))) aiC(line);
-      else dp(line);
-    });
-  });
-  return got;
-}
-
+await fetch('/api/terminal/'+tid+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
+var n=0;var t=setInterval(async function(){await ro();n++;if(n>=6){clearInterval(t);addP()}},500)}
+catch(e){pr('Error','err');addP()}}
 
 async function ro(){
 if(!tid)return;
 try{var r=await fetch('/api/terminal/'+tid+'/output');var d=await r.json();
-if(d.output&&d.output.length){d.output.forEach(function(o){var c=E(o.text).trim();if(!c || c==='Error') return;var cl=o.type==='stderr'?'err':o.type==='system'?'sys':'';pr(c,cl);if(o.type==='stderr'&&(c.toLowerCase().startsWith('error:')||c.includes('cannot find module')))aiC(c);else dp(c)})}}catch(e){}}
+if(d.output&&d.output.length){d.output.forEach(function(o){var c=E(o.text).trim();if(!c)return;var cl=o.type==='stderr'?'err':o.type==='system'?'sys':'';pr(c,cl);if(o.type==='stderr'&&(c.toLowerCase().startsWith('error:')||c.includes('cannot find module')))aiC(c);else dp(c)})}}catch(e){}}
 
 async function initT(){
 pr('CodeDeck Terminal','sys');pr('Type "help" for commands','sys');pr('');
 try{var r=await fetch('/api/terminal/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:'~'})});var d=await r.json();
-if(d.success){tid=d.id;if(d.cwd)gcwd=d.cwd;pr('Shell ready ('+d.shell.split('/').pop()+')','sys');pr('')}
+if(d.success){tid=d.id;pr('Shell ready ('+d.shell.split('/').pop()+')','sys');pr('')}
 else pr('Shell error','err')}
 catch(e){pr('Cannot start shell','err')}
 addP()}
@@ -279,31 +237,5 @@ document.addEventListener('DOMContentLoaded',function(){
 initT();fP();fAI();
 setInterval(function(){fP();fAI()},8000);
 document.getElementById('admo').addEventListener('click',function(e){if(e.target===e.currentTarget)cAd()})});
-</script>
-
-<script>
-// Keep page alive on Android
-if('wakeLock' in navigator){
-  var wl=null;
-  async function keepAwake(){
-    try{wl=await navigator.wakeLock.request('screen')}catch(e){}
-  }
-  keepAwake();
-  document.addEventListener('visibilitychange',function(){
-    if(document.visibilityState==='visible')keepAwake()});
-}
-// Force repaint when keyboard closes
-window.addEventListener('resize',function(){
-  document.body.style.height=window.innerHeight+'px';
-  setTimeout(function(){document.body.style.height=''},100)});
-// Keep connection alive
-setInterval(function(){
-  fetch('/health').catch(function(){})},10000);
-</script>
-
-<script>
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('/sw.js').catch(function(){});
-}
 </script>
 </body></html>
