@@ -21,6 +21,7 @@
         d.output.forEach(function(item){
           (item.text||'').replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'').split('\n').forEach(function(line){
             if(!line.trim())return;
+            if(line.trim()==='Error')return;
             var div=document.createElement('div');
             div.className='ln'+(item.type==='stderr'?' err':'');
             div.textContent=line;
