@@ -61,6 +61,48 @@ body{display:flex;flex-direction:column}
 .ig label{display:block;font-size:10px;color:var(--tx2);margin-bottom:2px}
 .ig input{width:100%;padding:6px 8px;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--tx);font-size:11px;font-family:inherit;outline:none}
 .ig input:focus{border-color:var(--ac)}
+
+#modebar{
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 12px;
+  background:#0f1117;
+  border-bottom:1px solid #20242f;
+  font-size:11px;
+  color:#8b93a7;
+  flex-shrink:0;
+}
+#mode-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:3px 10px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.2px;
+}
+#mode-pill.local{
+  background:#0f2a19;
+  color:#6ee7a1;
+  border:1px solid #214d31;
+}
+#mode-pill.cloud{
+  background:#1a2230;
+  color:#8ec5ff;
+  border:1px solid #2c3c57;
+}
+#mode-note{
+  font-size:10px;
+  color:#6b7280;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  margin-left:10px;
+}
+
 </style></head><body>
 <script>
 var TK=localStorage.getItem('codedeck_token');
@@ -74,6 +116,11 @@ function logout(){localStorage.removeItem('codedeck_token');localStorage.removeI
 <div id="tb">
 <span id="tbl">CodeDeck</span>
 <div id="tbr"><span id="uname"></span><button onclick="logout()">logout</button></div>
+</div>
+
+<div id="modebar">
+  <div id="mode-pill">Detecting mode...</div>
+  <div id="mode-note"></div>
 </div>
 
 <div id="term"><div id="out" onclick="fi()"></div></div>
@@ -244,7 +291,33 @@ else if(a==='branch'){r=await fetch('/api/git/branch',{method:'POST',headers:{'C
 }catch(e){pr('Git error','err')}
 addP()}
 
+
+function detectMode(){
+  var h = location.hostname || '';
+  var isLocal =
+    h === 'localhost' ||
+    h === '127.0.0.1' ||
+    /^10\./.test(h) ||
+    /^192\.168\./.test(h) ||
+    /^172\.(1[6-9]|2\d|3[0-1])\./.test(h);
+
+  var pill = document.getElementById('mode-pill');
+  var note = document.getElementById('mode-note');
+  if(!pill || !note) return;
+
+  if(isLocal){
+    pill.className = 'local';
+    pill.textContent = '🟢 Local Mode — Full Power';
+    note.textContent = 'Real Termux shell • Real files • Real Node/Python';
+  }else{
+    pill.className = 'cloud';
+    pill.textContent = '☁️ Cloud Mode — Demo / Sandbox';
+    note.textContent = 'Remote shell • Instant output • Not your phone filesystem';
+  }
+}
+
 document.addEventListener('DOMContentLoaded',function(){
+detectMode();
 initT();fP();fAI();
 setInterval(function(){fP();fAI()},8000);
 document.getElementById('admo').addEventListener('click',function(e){if(e.target===e.currentTarget)cAd()})});
