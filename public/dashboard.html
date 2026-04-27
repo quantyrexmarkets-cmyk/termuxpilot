@@ -162,7 +162,7 @@ if(low.startsWith('branch ')){gC('branch',raw.slice(7));return}
 if(low.startsWith('cd ')){var nd=raw.slice(3).trim();gcwd=nd==='~'?'~':nd==='..'?gcwd.split('/').slice(0,-1).join('/')||'~':gcwd==='~'?'~/'+nd:gcwd+'/'+nd}
 var cmd=SC[low]||raw;
 if(cmd!==raw)pr('→ '+cmd,'sys');
-pr('$ '+raw,'cmd');
+
 snd(cmd)}
 
 async function snd(cmd){
