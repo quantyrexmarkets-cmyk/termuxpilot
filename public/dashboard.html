@@ -117,7 +117,7 @@ function addP(){
 var o=document.getElementById('out');
 var r=document.createElement('div');r.className='pr';
 var short=gcwd.replace('/data/data/com.termux/files/home','~');
-r.innerHTML='<span class="ps">'+short+' $</span><input placeholder="type command...">';
+r.innerHTML='<span class="ps">'+short+' $ </span><input placeholder="type command...">';
 var inp=r.querySelector('input');
 inp.onkeydown=function(e){
 if(e.key==='Enter'){e.preventDefault();go(this);return}
@@ -132,7 +132,7 @@ function fi(){var i=document.querySelector('.pr input');if(i)i.focus()}
 function lk(row,val){
 var s=document.createElement('div');s.className='pr';
 var short=gcwd.replace('/data/data/com.termux/files/home','~');
-s.innerHTML='<span class="ps">'+short+' $</span><span style="color:var(--tx)">'+E(val)+'</span>';
+s.innerHTML='<span class="ps">'+short+' $ </span><span style="color:var(--tx)">'+E(val)+'</span>';
 row.parentNode.replaceChild(s,row)}
 
 function go(inp){
@@ -180,7 +180,7 @@ if(d.output&&d.output.length){d.output.forEach(function(o){var c=E(o.text).trim(
 async function initT(){
 pr('CodeDeck Terminal','sys');pr('Type "help" for commands','sys');pr('');
 try{var r=await fetch('/api/terminal/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:'~'})});var d=await r.json();
-if(d.success){tid=d.id;pr('Shell ready ('+d.shell.split('/').pop()+')','sys');pr('')}
+if(d.success){tid=d.id;if(d.cwd)gcwd=d.cwd;pr('Shell ready ('+d.shell.split('/').pop()+')','sys');pr('')}
 else pr('Shell error','err')}
 catch(e){pr('Cannot start shell','err')}
 addP()}
