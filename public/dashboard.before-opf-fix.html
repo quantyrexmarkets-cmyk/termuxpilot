@@ -239,22 +239,7 @@ async function rF(){var el=document.getElementById('files-b');try{var r=await fe
 async function nf(){var n=prompt('File name:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:cdir+'/'+n,type:'file'})});rF()}
 async function nd(){var n=prompt('Folder:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:cdir+'/'+n,type:'dir'})});rF()}
 
-async function opF(p){
-epath=p;
-ca();
-setTimeout(async function(){
-tg('editor');
-try{
-var r=await fetch('/api/files/read?path='+encodeURIComponent(p));
-var d=await r.json();
-if(d.error){
-document.getElementById('ed-b').innerHTML='<div style="padding:16px;color:var(--rd)">'+d.error+'</div>';
-return}
-document.getElementById('edt').textContent=shortPath(d.path);
-document.getElementById('svb').style.display='block';
-document.getElementById('ed-b').innerHTML='<textarea class="ef" id="ea">'+E(d.content)+'</textarea>';
-}catch(e){}
-},200)}
+async function opF(p){epath=p;ca();tg('editor');try{var r=await fetch('/api/files/read?path='+encodeURIComponent(p));var d=await r.json();if(d.error){document.getElementById('ed-b').innerHTML='<div style="padding:16px;color:var(--rd)">'+d.error+'</div>';return}document.getElementById('edt').textContent=shortPath(d.path);document.getElementById('svb').style.display='block';document.getElementById('ed-b').innerHTML='<textarea class="ef" id="ea">'+E(d.content)+'</textarea>'}catch(e){}}
 async function svf(){if(!epath)return;var c=document.getElementById('ea').value;try{var r=await fetch('/api/files/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:epath,content:c})});var d=await r.json();if(d.success){var b=document.getElementById('svb');b.textContent='Saved!';b.style.background='var(--gn)';setTimeout(function(){b.textContent='Save';b.style.background=''},1500)}}catch(e){}}
 
 async function fAI(){try{var r=await fetch('/api/ai/errors');var d=await r.json();errs=d.errors||[];var b=document.getElementById('aibdg');b.textContent=errs.length;b.style.display=errs.length>0?'flex':'none'}catch(e){}}
