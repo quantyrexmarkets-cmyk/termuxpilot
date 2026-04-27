@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "name": "preview-test",
+    "command": "node server.js",
+    "cwd": "/data/data/com.termux/files/home/termuxpilot/workspaces/u_1777018276978",
+    "port": 4000,
+    "autoRestart": true,
+    "env": {}
+  }
+]
