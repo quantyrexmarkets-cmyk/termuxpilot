@@ -4,13 +4,8 @@ const os = require('os');
 const readline = require('readline');
 const { exec } = require('child_process');
 
-// ═══════════════════════════════════
-// ENVIRONMENT DETECTION
-// ═══════════════════════════════════
-const isTermux = (process.env.PREFIX || '').includes('com.termux');
-const isRender = !!process.env.RENDER;
-const ENV_MODE = isTermux ? 'local' : isRender ? 'cloud' : 'unknown';
-console.log('  Mode: ' + ENV_MODE.toUpperCase());
+// Cloud mode only
+console.log('  Mode: CLOUD');
 
 const pm = require('./processManager');
 const wsTerminal = require('./wsTerminal');
@@ -568,7 +563,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   s - Stats   q - Quit    h - Help
   `);
 
-  if (process.env.CODEDECK_LOCAL === '1') {
+  if (false) {
     setTimeout(() => openBrowser(`http://localhost:${PORT}`), 1500);
     setupCLI(PORT);
   }
