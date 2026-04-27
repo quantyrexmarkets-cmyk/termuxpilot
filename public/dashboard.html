@@ -158,7 +158,20 @@ if(USR)document.getElementById('uname').textContent=USR.name||USR.email;
 
 function E(s){if(!s)return'';return String(s).replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'').replace(/\u001b\[[0-9;]*[a-zA-Z]/g,'').replace(/\[[\d;]*[a-zA-Z]/g,'')}
 
-function pr(t,c){if(String(t).trim()==='Error')return;var o=document.getElementById('out');var d=document.createElement('div');d.className='ln'+(c?' '+c:'');if(String(t).trim()==='Error') return; d.textContent=t===undefined?'':t;o.appendChild(d);o.scrollTop=o.scrollHeight;repaintTerm()}
+function pr(t,c){
+var clean=String(t===undefined?'':t)
+  .replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'')
+  .replace(/[\u200B-\u200D\uFEFF]/g,'')
+  .replace(/\r/g,'')
+  .trim();
+if(clean.toLowerCase()==='error') return;
+var o=document.getElementById('out');
+var d=document.createElement('div');
+d.className='ln'+(c?' '+c:'');
+d.textContent=clean;
+o.appendChild(d);
+o.scrollTop=o.scrollHeight;
+}
 
 function addP(){
 var o=document.getElementById('out');
@@ -348,7 +361,7 @@ document.getElementById('admo').addEventListener('click',function(e){if(e.target
           if(d.type === 'output'){
             var clean = stripAnsi(d.text);
             clean.split('\n').forEach(function(line){
-              if(!line.trim() || line.trim()==='Error') return;
+              var norm=String(line).replace(/[\u200B-\u200D\uFEFF]/g,'').replace(/\r/g,'').trim(); if(!norm || norm.toLowerCase()==='error') return;
               if(typeof pr === 'function') pr(line,'');
               if(typeof dp === 'function') dp(line);
               if(typeof aiC === 'function' && (line.toLowerCase().startsWith('error:') || line.includes('cannot find module'))){
