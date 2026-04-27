@@ -61,48 +61,6 @@ body{display:flex;flex-direction:column}
 .ig label{display:block;font-size:10px;color:var(--tx2);margin-bottom:2px}
 .ig input{width:100%;padding:6px 8px;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--tx);font-size:11px;font-family:inherit;outline:none}
 .ig input:focus{border-color:var(--ac)}
-
-#modebar{
-  height:28px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 12px;
-  background:#0f1117;
-  border-bottom:1px solid #20242f;
-  font-size:11px;
-  color:#8b93a7;
-  flex-shrink:0;
-}
-#mode-pill{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:3px 10px;
-  border-radius:999px;
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.2px;
-}
-#mode-pill.local{
-  background:#0f2a19;
-  color:#6ee7a1;
-  border:1px solid #214d31;
-}
-#mode-pill.cloud{
-  background:#1a2230;
-  color:#8ec5ff;
-  border:1px solid #2c3c57;
-}
-#mode-note{
-  font-size:10px;
-  color:#6b7280;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  margin-left:10px;
-}
-
 </style></head><body>
 <script>
 var TK=localStorage.getItem('codedeck_token');
@@ -116,11 +74,6 @@ function logout(){localStorage.removeItem('codedeck_token');localStorage.removeI
 <div id="tb">
 <span id="tbl">CodeDeck</span>
 <div id="tbr"><span id="uname"></span><button onclick="logout()">logout</button></div>
-</div>
-
-<div id="modebar">
-  <div id="mode-pill">Detecting mode...</div>
-  <div id="mode-note"></div>
 </div>
 
 <div id="term"><div id="out" onclick="fi()"></div></div>
@@ -158,26 +111,13 @@ if(USR)document.getElementById('uname').textContent=USR.name||USR.email;
 
 function E(s){if(!s)return'';return String(s).replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'').replace(/\u001b\[[0-9;]*[a-zA-Z]/g,'').replace(/\[[\d;]*[a-zA-Z]/g,'')}
 
-function pr(t,c){
-var clean=String(t===undefined?'':t)
-  .replace(/\x1b\[[0-9;]*[a-zA-Z]/g,'')
-  .replace(/[\u200B-\u200D\uFEFF]/g,'')
-  .replace(/\r/g,'')
-  .trim();
-if(clean.toLowerCase()==='error') return;
-var o=document.getElementById('out');
-var d=document.createElement('div');
-d.className='ln'+(c?' '+c:'');
-d.textContent=clean;
-o.appendChild(d);
-o.scrollTop=o.scrollHeight;
-}
+function pr(t,c){var o=document.getElementById('out');var d=document.createElement('div');d.className='ln'+(c?' '+c:'');d.textContent=t===undefined?'':t;o.appendChild(d);o.scrollTop=o.scrollHeight}
 
 function addP(){
 var o=document.getElementById('out');
 var r=document.createElement('div');r.className='pr';
 var short=gcwd.replace('/data/data/com.termux/files/home','~');
-r.innerHTML='<span class="ps">'+short+' $ </span><input placeholder="type command...">';
+r.innerHTML='<span class="ps">'+short+' $</span><input placeholder="type command...">';
 var inp=r.querySelector('input');
 inp.onkeydown=function(e){
 if(e.key==='Enter'){e.preventDefault();go(this);return}
@@ -189,27 +129,16 @@ setTimeout(function(){inp.focus()},50)}
 
 function fi(){var i=document.querySelector('.pr input');if(i)i.focus()}
 
-function repaintTerm(){
-  var o=document.getElementById('out');
-  if(!o)return;
-  o.style.transform='translateZ(0)';
-  o.offsetHeight;
-  o.style.transform='';
-  o.scrollTop=o.scrollHeight;
-}
-
-
 function lk(row,val){
 var s=document.createElement('div');s.className='pr';
 var short=gcwd.replace('/data/data/com.termux/files/home','~');
-s.innerHTML='<span class="ps">'+short+' $ </span><span style="color:var(--tx)">'+E(val)+'</span>';
+s.innerHTML='<span class="ps">'+short+' $</span><span style="color:var(--tx)">'+E(val)+'</span>';
 row.parentNode.replaceChild(s,row)}
 
 function go(inp){
 var raw=inp.value.trim();
 lk(inp.parentNode,raw);
 if(!raw){addP();return}
-try{inp.blur()}catch(e){}
 hist.push(raw);hidx=hist.length;
 var low=raw.toLowerCase();
 if(low==='clear'){document.getElementById('out').innerHTML='';addP();return}
@@ -233,14 +162,28 @@ if(low.startsWith('branch ')){gC('branch',raw.slice(7));return}
 if(low.startsWith('cd ')){var nd=raw.slice(3).trim();gcwd=nd==='~'?'~':nd==='..'?gcwd.split('/').slice(0,-1).join('/')||'~':gcwd==='~'?'~/'+nd:gcwd+'/'+nd}
 var cmd=SC[low]||raw;
 if(cmd!==raw)pr('→ '+cmd,'sys');
-
+pr('$ '+raw,'cmd');
 snd(cmd)}
 
-async function snd(cmd){ /* replaced by WS override */ }
+async function snd(cmd){
+if(!tid){pr('No shell','err');addP();return}
+try{
+await fetch('/api/terminal/'+tid+'/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
+var n=0;var t=setInterval(async function(){await ro();n++;if(n>=6){clearInterval(t);addP()}},500)}
+catch(e){pr('Error','err');addP()}}
 
-async function ro(){ /* disabled */ }
+async function ro(){
+if(!tid)return;
+try{var r=await fetch('/api/terminal/'+tid+'/output');var d=await r.json();
+if(d.output&&d.output.length){d.output.forEach(function(o){var c=E(o.text).trim();if(!c)return;var cl=o.type==='stderr'?'err':o.type==='system'?'sys':'';pr(c,cl);if(o.type==='stderr'&&(c.toLowerCase().startsWith('error:')||c.includes('cannot find module')))aiC(c);else dp(c)})}}catch(e){}}
 
-async function initT(){ /* replaced by WS override */ }
+async function initT(){
+pr('CodeDeck Terminal','sys');pr('Type "help" for commands','sys');pr('');
+try{var r=await fetch('/api/terminal/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:'~'})});var d=await r.json();
+if(d.success){tid=d.id;pr('Shell ready ('+d.shell.split('/').pop()+')','sys');pr('')}
+else pr('Shell error','err')}
+catch(e){pr('Cannot start shell','err')}
+addP()}
 
 async function aiC(t){
 try{var r=await fetch('/api/ai/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:t})});var d=await r.json();
@@ -290,38 +233,9 @@ else if(a==='branch'){r=await fetch('/api/git/branch',{method:'POST',headers:{'C
 }catch(e){pr('Git error','err')}
 addP()}
 
-
-function detectMode(){
-  var h = location.hostname || '';
-  var isLocal =
-    h === 'localhost' ||
-    h === '127.0.0.1' ||
-    /^10\./.test(h) ||
-    /^192\.168\./.test(h) ||
-    /^172\.(1[6-9]|2\d|3[0-1])\./.test(h);
-
-  var pill = document.getElementById('mode-pill');
-  var note = document.getElementById('mode-note');
-  if(!pill || !note) return;
-
-  if(isLocal){
-    pill.className = 'local';
-    pill.textContent = '🟢 Local Mode — Full Power';
-    note.textContent = 'Real Termux shell • Real files • Real Node/Python';
-  }else{
-    pill.className = 'cloud';
-    pill.textContent = '☁️ Cloud Mode — Demo / Sandbox';
-    note.textContent = 'Remote shell • Instant output • Not your phone filesystem';
-  }
-}
-
 document.addEventListener('DOMContentLoaded',function(){
-detectMode();
 initT();fP();fAI();
 setInterval(function(){fP();fAI()},8000);
 document.getElementById('admo').addEventListener('click',function(e){if(e.target===e.currentTarget)cAd()})});
 </script>
-
-
-
 </body></html>
