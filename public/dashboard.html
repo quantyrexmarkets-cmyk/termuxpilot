@@ -180,7 +180,7 @@ if(d.output&&d.output.length){d.output.forEach(function(o){var c=E(o.text).trim(
 async function initT(){
 pr('CodeDeck Terminal','sys');pr('Type "help" for commands','sys');pr('');
 try{var r=await fetch('/api/terminal/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cwd:'~'})});var d=await r.json();
-if(d.success){tid=d.id;pr('Shell ready ('+d.shell.split('/').pop()+')','sys');pr('')}
+if(d.success){tid=d.id;if(d.cwd)gcwd=d.cwd;pr('Shell ready ('+d.shell.split('/').pop()+')','sys');pr('')}
 else pr('Shell error','err')}
 catch(e){pr('Cannot start shell','err')}
 addP()}
