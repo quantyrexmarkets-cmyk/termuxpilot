@@ -13,6 +13,7 @@ const ENV_MODE = isTermux ? 'local' : isRender ? 'cloud' : 'unknown';
 console.log('  Mode: ' + ENV_MODE.toUpperCase());
 
 const pm = require('./processManager');
+const wsTerminal = require('./wsTerminal');
 const auth = require('./auth');
 const projects = require('./projects');
 
