@@ -297,20 +297,9 @@ app.get('/app', (req, res) => {
 const terminal = require('./terminal');
 
 app.post('/api/terminal/create', (req, res) => {
-  const { cwd } = req.body || {};
+  const { cwd } = req.body;
   const id = 'term_' + Date.now();
-
-  let finalCwd = cwd || '~';
-
-  const header = req.headers.authorization || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
-  const user = token ? auth.verify(token) : null;
-
-  if (user && (!cwd || cwd === '~')) {
-    finalCwd = workspace.getPath(user.id);
-  }
-
-  res.json(terminal.create(id, finalCwd));
+  res.json(terminal.create(id, cwd || '~'));
 });
 
 app.post('/api/terminal/:id/write', (req, res) => {

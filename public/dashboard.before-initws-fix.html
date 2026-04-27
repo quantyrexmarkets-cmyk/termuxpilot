@@ -266,12 +266,7 @@ addP()}
 
 async function initWorkspace(){
   try{
-    var tk = localStorage.getItem('codedeck_token');
-    if(!tk) return;
-    var r = await fetch('/api/workspace/me', {
-      headers: { 'Authorization': 'Bearer ' + tk }
-    });
-    if(!r.ok) return;
+    var r = await fetch('/api/workspace/me');
     var d = await r.json();
     if(d && d.success && d.workspace){
       cdir = d.workspace;

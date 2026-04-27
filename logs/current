@@ -207,3 +207,934 @@
 2026-04-27_04:32:01.19959   o - Open    l - List    r - Restart
 2026-04-27_04:32:01.19960   s - Stats   q - Quit    h - Help
 2026-04-27_04:32:01.19960   
+2026-04-27_06:17:58.97823   Mode: CLOUD
+2026-04-27_06:17:59.27554 
+2026-04-27_06:17:59.27560   CodeDeck v1.0.0
+2026-04-27_06:17:59.27561   ----------------------
+2026-04-27_06:17:59.27563   Local:   http://localhost:3100
+2026-04-27_06:17:59.27564   Network: http://10.80.37.90:3100
+2026-04-27_06:17:59.27565   API:     http://localhost:3100/api/processes
+2026-04-27_06:17:59.27566 
+2026-04-27_06:17:59.27568   o - Open    l - List    r - Restart
+2026-04-27_06:17:59.27569   s - Stats   q - Quit    h - Help
+2026-04-27_06:17:59.27571   
+2026-04-27_07:06:28.51227   Mode: CLOUD
+2026-04-27_07:06:28.83108 
+2026-04-27_07:06:28.83110   CodeDeck v1.0.0
+2026-04-27_07:06:28.83110   ----------------------
+2026-04-27_07:06:28.83111   Local:   http://localhost:3100
+2026-04-27_07:06:28.83111   Network: http://10.80.37.90:3100
+2026-04-27_07:06:28.83111   API:     http://localhost:3100/api/processes
+2026-04-27_07:06:28.83111 
+2026-04-27_07:06:28.83111   o - Open    l - List    r - Restart
+2026-04-27_07:06:28.83112   s - Stats   q - Quit    h - Help
+2026-04-27_07:06:28.83112   
+2026-04-27_07:22:29.00614   Mode: CLOUD
+2026-04-27_07:22:29.38956 
+2026-04-27_07:22:29.38958   CodeDeck v1.0.0
+2026-04-27_07:22:29.38959   ----------------------
+2026-04-27_07:22:29.38959   Local:   http://localhost:3100
+2026-04-27_07:22:29.38959   Network: http://10.80.37.90:3100
+2026-04-27_07:22:29.38959   API:     http://localhost:3100/api/processes
+2026-04-27_07:22:29.38959 
+2026-04-27_07:22:29.38960   o - Open    l - List    r - Restart
+2026-04-27_07:22:29.38960   s - Stats   q - Quit    h - Help
+2026-04-27_07:22:29.38960   
+2026-04-27_07:39:31.52451   Mode: CLOUD
+2026-04-27_07:39:31.84149 
+2026-04-27_07:39:31.84152   CodeDeck v1.0.0
+2026-04-27_07:39:31.84152   ----------------------
+2026-04-27_07:39:31.84152   Local:   http://localhost:3100
+2026-04-27_07:39:31.84152   Network: http://10.58.50.104:3100
+2026-04-27_07:39:31.84152   API:     http://localhost:3100/api/processes
+2026-04-27_07:39:31.84155 
+2026-04-27_07:39:31.84155   o - Open    l - List    r - Restart
+2026-04-27_07:39:31.84155   s - Stats   q - Quit    h - Help
+2026-04-27_07:39:31.84155   
+2026-04-27_07:43:54.44107   Mode: CLOUD
+2026-04-27_07:43:54.77600 
+2026-04-27_07:43:54.77602   CodeDeck v1.0.0
+2026-04-27_07:43:54.77602   ----------------------
+2026-04-27_07:43:54.77602   Local:   http://localhost:3100
+2026-04-27_07:43:54.77603   Network: http://10.58.50.104:3100
+2026-04-27_07:43:54.77603   API:     http://localhost:3100/api/processes
+2026-04-27_07:43:54.77603 
+2026-04-27_07:43:54.77603   o - Open    l - List    r - Restart
+2026-04-27_07:43:54.77603   s - Stats   q - Quit    h - Help
+2026-04-27_07:43:54.77603   
+2026-04-27_07:46:33.38706   Mode: CLOUD
+2026-04-27_07:46:33.83953 
+2026-04-27_07:46:33.83956   CodeDeck v1.0.0
+2026-04-27_07:46:33.83956   ----------------------
+2026-04-27_07:46:33.83956   Local:   http://localhost:3100
+2026-04-27_07:46:33.83957   Network: http://10.58.50.104:3100
+2026-04-27_07:46:33.83957   API:     http://localhost:3100/api/processes
+2026-04-27_07:46:33.83957 
+2026-04-27_07:46:33.83957   o - Open    l - List    r - Restart
+2026-04-27_07:46:33.83958   s - Stats   q - Quit    h - Help
+2026-04-27_07:46:33.83958   
+2026-04-27_07:53:30.88874   Mode: CLOUD
+2026-04-27_07:53:31.87123 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:53:31.87126   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:53:31.87126                                              ^
+2026-04-27_07:53:31.87127 
+2026-04-27_07:53:31.87127 SyntaxError: Invalid or unexpected token
+2026-04-27_07:53:31.87127     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:53:31.87128     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:53:31.87128     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:53:31.87128     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:53:31.87129     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:53:31.87129     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:53:31.87129     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:53:31.87130     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:53:31.87130     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:53:31.87130     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:53:31.87139 
+2026-04-27_07:53:31.87140 Node.js v25.8.2
+2026-04-27_07:53:33.93275   Mode: CLOUD
+2026-04-27_07:53:34.32261 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:53:34.32264   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:53:34.32265                                              ^
+2026-04-27_07:53:34.32265 
+2026-04-27_07:53:34.32265 SyntaxError: Invalid or unexpected token
+2026-04-27_07:53:34.32266     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:53:34.32266     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:53:34.32266     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:53:34.32267     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:53:34.32267     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:53:34.32267     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:53:34.32268     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:53:34.32268     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:53:34.32268     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:53:34.32269     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:53:34.32280 
+2026-04-27_07:53:34.32281 Node.js v25.8.2
+2026-04-27_07:53:35.55144   Mode: CLOUD
+2026-04-27_07:55:08.58658 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:08.59007   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:08.59011                                              ^
+2026-04-27_07:55:08.59013 
+2026-04-27_07:55:08.59014 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:08.59016     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:08.59017     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:08.59019     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:08.59021     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:08.59022     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:08.59024     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:08.59025     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:08.59027     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:08.59028     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:08.59030     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:08.59032 
+2026-04-27_07:55:08.59033 Node.js v25.8.2
+2026-04-27_07:55:10.63427   Mode: CLOUD
+2026-04-27_07:55:10.97839 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:10.97842   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:10.97842                                              ^
+2026-04-27_07:55:10.97843 
+2026-04-27_07:55:10.97843 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:10.97843     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:10.97843     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:10.97844     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:10.97844     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:10.97844     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:10.97845     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:10.97845     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:10.97845     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:10.97846     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:10.97846     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:10.97852 
+2026-04-27_07:55:10.97853 Node.js v25.8.2
+2026-04-27_07:55:12.08625   Mode: CLOUD
+2026-04-27_07:55:12.29909 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:12.29939   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:12.29940                                              ^
+2026-04-27_07:55:12.29941 
+2026-04-27_07:55:12.29941 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:12.29941     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:12.29941     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:12.29942     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:12.29942     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:12.29942     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:12.29942     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:12.29943     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:12.29943     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:12.29943     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:12.29943     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:12.29944 
+2026-04-27_07:55:12.29944 Node.js v25.8.2
+2026-04-27_07:55:13.42946   Mode: CLOUD
+2026-04-27_07:55:13.79808 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:13.79811   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:13.79811                                              ^
+2026-04-27_07:55:13.79812 
+2026-04-27_07:55:13.79812 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:13.79812     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:13.79812     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:13.79813     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:13.79813     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:13.79813     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:13.79814     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:13.79814     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:13.79814     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:13.79815     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:13.79815     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:13.79821 
+2026-04-27_07:55:13.79822 Node.js v25.8.2
+2026-04-27_07:55:15.79726   Mode: CLOUD
+2026-04-27_07:55:16.13111 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:16.13114   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:16.13114                                              ^
+2026-04-27_07:55:16.13115 
+2026-04-27_07:55:16.13115 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:16.13115     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:16.13116     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:16.13116     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:16.13116     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:16.13116     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:16.13117     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:16.13117     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:16.13117     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:16.13118     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:16.13118     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:16.13125 
+2026-04-27_07:55:16.13126 Node.js v25.8.2
+2026-04-27_07:55:17.67069   Mode: CLOUD
+2026-04-27_07:55:19.16254 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:19.16257   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:19.16257                                              ^
+2026-04-27_07:55:19.16257 
+2026-04-27_07:55:19.16257 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:19.16258     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:19.16258     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:19.16258     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:19.16259     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:19.16259     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:19.16259     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:19.16259     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:19.16260     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:19.16260     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:19.16260     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:19.16267 
+2026-04-27_07:55:19.16268 Node.js v25.8.2
+2026-04-27_07:55:20.85140   Mode: CLOUD
+2026-04-27_07:55:21.27245 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:21.27248   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:21.27248                                              ^
+2026-04-27_07:55:21.27249 
+2026-04-27_07:55:21.27249 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:21.27249     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:21.27249     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:21.27250     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:21.27250     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:21.27250     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:21.27251     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:21.27251     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:21.27251     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:21.27251     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:21.27252     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:21.27259 
+2026-04-27_07:55:21.27260 Node.js v25.8.2
+2026-04-27_07:55:22.34826   Mode: CLOUD
+2026-04-27_07:55:22.65992 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:22.65995   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:22.65995                                              ^
+2026-04-27_07:55:22.65996 
+2026-04-27_07:55:22.65996 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:22.65996     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:22.65996     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:22.65997     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:22.65997     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:22.65997     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:22.65998     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:22.65998     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:22.65998     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:22.65999     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:22.65999     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:22.66006 
+2026-04-27_07:55:22.66007 Node.js v25.8.2
+2026-04-27_07:55:23.55758   Mode: CLOUD
+2026-04-27_07:55:23.75580 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:23.75586   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:23.75588                                              ^
+2026-04-27_07:55:23.75589 
+2026-04-27_07:55:23.75591 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:23.75592     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:23.75594     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:23.75595     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:23.75597     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:23.75599     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:23.75600     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:23.75602     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:23.75603     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:23.75605     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:23.75606     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:23.75608 
+2026-04-27_07:55:23.75615 Node.js v25.8.2
+2026-04-27_07:55:24.63734   Mode: CLOUD
+2026-04-27_07:55:24.82397 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:24.82399   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:24.82400                                              ^
+2026-04-27_07:55:24.82400 
+2026-04-27_07:55:24.82400 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:24.82401     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:24.82401     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:24.82401     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:24.82401     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:24.82401     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:24.82402     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:24.82402     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:24.82402     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:24.82402     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:24.82403     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:24.82403 
+2026-04-27_07:55:24.82403 Node.js v25.8.2
+2026-04-27_07:55:25.59994   Mode: CLOUD
+2026-04-27_07:55:25.86141 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:25.86144   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:25.86144                                              ^
+2026-04-27_07:55:25.86145 
+2026-04-27_07:55:25.86145 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:25.86145     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:25.86145     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:25.86146     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:25.86146     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:25.86146     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:25.86146     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:25.86147     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:25.86147     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:25.86147     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:25.86148     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:25.86155 
+2026-04-27_07:55:25.86156 Node.js v25.8.2
+2026-04-27_07:55:26.76422   Mode: CLOUD
+2026-04-27_07:55:27.07452 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:27.07454   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:27.07455                                              ^
+2026-04-27_07:55:27.07455 
+2026-04-27_07:55:27.07455 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:27.07456     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:27.07456     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:27.07456     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:27.07456     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:27.07457     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:27.07457     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:27.07457     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:27.07457     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:27.07458     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:27.07458     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:27.07467 
+2026-04-27_07:55:27.07468 Node.js v25.8.2
+2026-04-27_07:55:28.01381   Mode: CLOUD
+2026-04-27_07:55:28.22935 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:28.22938   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:28.22938                                              ^
+2026-04-27_07:55:28.22939 
+2026-04-27_07:55:28.22939 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:28.22939     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:28.22939     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:28.22940     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:28.22940     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:28.22940     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:28.22940     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:28.22941     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:28.22941     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:28.22941     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:28.22941     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:28.22942 
+2026-04-27_07:55:28.22942 Node.js v25.8.2
+2026-04-27_07:55:29.21378   Mode: CLOUD
+2026-04-27_07:55:29.42622 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:29.42625   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:29.42625                                              ^
+2026-04-27_07:55:29.42625 
+2026-04-27_07:55:29.42625 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:29.42626     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:29.42626     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:29.42626     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:29.42626     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:29.42626     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:29.42627     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:29.42627     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:29.42627     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:29.42627     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:29.42628     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:29.42628 
+2026-04-27_07:55:29.42628 Node.js v25.8.2
+2026-04-27_07:55:30.71294   Mode: CLOUD
+2026-04-27_07:55:30.99291 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:30.99293   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:30.99294                                              ^
+2026-04-27_07:55:30.99294 
+2026-04-27_07:55:30.99294 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:30.99295     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:30.99295     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:30.99295     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:30.99295     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:30.99296     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:30.99296     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:30.99296     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:30.99296     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:30.99297     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:30.99297     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:30.99306 
+2026-04-27_07:55:30.99307 Node.js v25.8.2
+2026-04-27_07:55:32.44463   Mode: CLOUD
+2026-04-27_07:55:32.86445 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:32.86448   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:32.86448                                              ^
+2026-04-27_07:55:32.86449 
+2026-04-27_07:55:32.86449 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:32.86449     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:32.86449     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:32.86450     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:32.86450     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:32.86450     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:32.86450     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:32.86451     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:32.86451     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:32.86451     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:32.86452     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:32.86458 
+2026-04-27_07:55:32.86459 Node.js v25.8.2
+2026-04-27_07:55:34.16402   Mode: CLOUD
+2026-04-27_07:55:34.41964 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:34.41971   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:34.41973                                              ^
+2026-04-27_07:55:34.41974 
+2026-04-27_07:55:34.41976 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:34.41977     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:34.41979     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:34.41980     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:34.41982     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:34.41984     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:34.41985     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:34.41987     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:34.41988     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:34.41990     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:34.41991     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:34.41993 
+2026-04-27_07:55:34.41994 Node.js v25.8.2
+2026-04-27_07:55:36.27758   Mode: CLOUD
+2026-04-27_07:55:36.48411 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:36.48413   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:36.48413                                              ^
+2026-04-27_07:55:36.48414 
+2026-04-27_07:55:36.48414 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:36.48414     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:36.48414     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:36.48414     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:36.48415     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:36.48415     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:36.48415     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:36.48415     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:36.48416     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:36.48416     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:36.48418     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:36.48419 
+2026-04-27_07:55:36.48419 Node.js v25.8.2
+2026-04-27_07:55:37.33515   Mode: CLOUD
+2026-04-27_07:55:37.54642 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:37.54648   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:37.54650                                              ^
+2026-04-27_07:55:37.54651 
+2026-04-27_07:55:37.54653 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:37.54654     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:37.54656     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:37.54658     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:37.54660     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:37.54661     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:37.54663     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:37.54664     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:37.54666     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:37.54667     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:37.54669     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:37.54671 
+2026-04-27_07:55:37.54672 Node.js v25.8.2
+2026-04-27_07:55:38.45833   Mode: CLOUD
+2026-04-27_07:55:38.74870 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:38.74877   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:38.74879                                              ^
+2026-04-27_07:55:38.74881 
+2026-04-27_07:55:38.74882 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:38.74884     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:38.74885     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:38.74887     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:38.74888     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:38.74890     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:38.74891     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:38.74893     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:38.74895     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:38.74896     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:38.74898     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:38.74919 
+2026-04-27_07:55:38.74922 Node.js v25.8.2
+2026-04-27_07:55:39.68925   Mode: CLOUD
+2026-04-27_07:55:39.90032 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:39.90033   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:39.90034                                              ^
+2026-04-27_07:55:39.90034 
+2026-04-27_07:55:39.90034 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:39.90035     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:39.90035     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:39.90035     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:39.90035     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:39.90035     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:39.90036     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:39.90036     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:39.90036     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:39.90036     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:39.90039     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:39.90050 
+2026-04-27_07:55:39.90051 Node.js v25.8.2
+2026-04-27_07:55:40.73899   Mode: CLOUD
+2026-04-27_07:55:46.43366 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:46.43370   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:46.43370                                              ^
+2026-04-27_07:55:46.43370 
+2026-04-27_07:55:46.43371 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:46.43371     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:46.43371     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:46.43372     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:46.43372     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:46.43372     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:46.43372     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:46.43373     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:46.43373     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:46.43373     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:46.43374     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:46.43380 
+2026-04-27_07:55:46.43381 Node.js v25.8.2
+2026-04-27_07:55:48.15325   Mode: CLOUD
+2026-04-27_07:55:48.56303 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:48.56306   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:48.56306                                              ^
+2026-04-27_07:55:48.56307 
+2026-04-27_07:55:48.56307 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:48.56307     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:48.56308     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:48.56308     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:48.56308     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:48.56308     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:48.56309     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:48.56309     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:48.56309     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:48.56310     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:48.56310     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:48.56317 
+2026-04-27_07:55:48.56318 Node.js v25.8.2
+2026-04-27_07:55:49.41068   Mode: CLOUD
+2026-04-27_07:55:49.60491 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:49.60494   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:49.60494                                              ^
+2026-04-27_07:55:49.60494 
+2026-04-27_07:55:49.60495 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:49.60495     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:49.60495     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:49.60495     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:49.60495     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:49.60496     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:49.60496     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:49.60496     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:49.60496     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:49.60497     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:49.60499     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:49.60500 
+2026-04-27_07:55:49.60500 Node.js v25.8.2
+2026-04-27_07:55:50.56981   Mode: CLOUD
+2026-04-27_07:55:50.82327 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:50.82330   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:50.82331                                              ^
+2026-04-27_07:55:50.82331 
+2026-04-27_07:55:50.82331 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:50.82331     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:50.82332     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:50.82332     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:50.82332     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:50.82332     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:50.82333     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:50.82333     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:50.82333     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:50.82334     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:50.82334     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:50.82341 
+2026-04-27_07:55:50.82342 Node.js v25.8.2
+2026-04-27_07:55:51.87451   Mode: CLOUD
+2026-04-27_07:55:52.09493 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:52.09500   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:52.09501                                              ^
+2026-04-27_07:55:52.09503 
+2026-04-27_07:55:52.09504 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:52.09506     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:52.09507     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:52.09509     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:52.09511     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:52.09512     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:52.09514     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:52.09515     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:52.09517     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:52.09518     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:52.09520     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:52.09521 
+2026-04-27_07:55:52.09523 Node.js v25.8.2
+2026-04-27_07:55:52.94626   Mode: CLOUD
+2026-04-27_07:55:53.15774 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:53.15777   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:53.15777                                              ^
+2026-04-27_07:55:53.15777 
+2026-04-27_07:55:53.15777 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:53.15778     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:53.15778     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:53.15778     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:53.15778     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:53.15779     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:53.15779     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:53.15779     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:53.15779     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:53.15782     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:53.15782     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:53.15788 
+2026-04-27_07:55:53.15789 Node.js v25.8.2
+2026-04-27_07:55:55.17760   Mode: CLOUD
+2026-04-27_07:55:55.47419 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:55.47422   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:55.47422                                              ^
+2026-04-27_07:55:55.47422 
+2026-04-27_07:55:55.47423 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:55.47423     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:55.47423     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:55.47423     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:55.47424     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:55.47424     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:55.47424     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:55.47425     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:55.47425     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:55.47425     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:55.47426     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:55.47432 
+2026-04-27_07:55:55.47433 Node.js v25.8.2
+2026-04-27_07:55:56.64513   Mode: CLOUD
+2026-04-27_07:55:56.89911 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:55:56.89917   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:55:56.89919                                              ^
+2026-04-27_07:55:56.89921 
+2026-04-27_07:55:56.89922 SyntaxError: Invalid or unexpected token
+2026-04-27_07:55:56.89924     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:55:56.89925     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:55:56.89927     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:55:56.89928     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:55:56.89930     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:55:56.89931     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:55:56.89933     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:55:56.89935     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:55:56.89936     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:55:56.89938     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:55:56.89939 
+2026-04-27_07:55:56.89941 Node.js v25.8.2
+2026-04-27_07:55:57.98110   Mode: CLOUD
+2026-04-27_07:57:11.00395 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:11.00840   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:11.00842                                              ^
+2026-04-27_07:57:11.00843 
+2026-04-27_07:57:11.00843 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:11.00843     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:11.00843     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:11.00844     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:11.00844     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:11.00844     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:11.00845     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:11.00845     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:11.00845     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:11.00847     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:11.00848     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:11.00851 
+2026-04-27_07:57:11.00851 Node.js v25.8.2
+2026-04-27_07:57:13.35000   Mode: CLOUD
+2026-04-27_07:57:13.86366 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:13.86372   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:13.86374                                              ^
+2026-04-27_07:57:13.86376 
+2026-04-27_07:57:13.86377 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:13.86379     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:13.86380     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:13.86382     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:13.86383     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:13.86385     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:13.86387     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:13.86388     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:13.86390     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:13.86391     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:13.86393     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:13.86394 
+2026-04-27_07:57:13.86396 Node.js v25.8.2
+2026-04-27_07:57:15.14224   Mode: CLOUD
+2026-04-27_07:57:15.39518 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:15.39525   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:15.39527                                              ^
+2026-04-27_07:57:15.39528 
+2026-04-27_07:57:15.39530 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:15.39531     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:15.39533     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:15.39534     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:15.39536     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:15.39537     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:15.39539     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:15.39541     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:15.39542     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:15.39544     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:15.39545     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:15.39547 
+2026-04-27_07:57:15.39548 Node.js v25.8.2
+2026-04-27_07:57:16.56921   Mode: CLOUD
+2026-04-27_07:57:16.80425 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:16.80431   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:16.80433                                              ^
+2026-04-27_07:57:16.80435 
+2026-04-27_07:57:16.80436 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:16.80438     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:16.80439     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:16.80441     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:16.80443     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:16.80452     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:16.80454     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:16.80455     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:16.80501     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:16.80503     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:16.80503     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:16.80503 
+2026-04-27_07:57:16.80504 Node.js v25.8.2
+2026-04-27_07:57:17.77065   Mode: CLOUD
+2026-04-27_07:57:18.20994 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:18.20997   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:18.20997                                              ^
+2026-04-27_07:57:18.20997 
+2026-04-27_07:57:18.20998 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:18.20998     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:18.20998     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:18.20999     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:18.20999     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:18.20999     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:18.21000     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:18.21000     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:18.21000     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:18.21001     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:18.21001     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:18.21016 
+2026-04-27_07:57:18.21021 Node.js v25.8.2
+2026-04-27_07:57:19.37099   Mode: CLOUD
+2026-04-27_07:57:19.66713 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:19.66716   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:19.66717                                              ^
+2026-04-27_07:57:19.66717 
+2026-04-27_07:57:19.66717 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:19.66717     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:19.66718     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:19.66718     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:19.66718     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:19.66719     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:19.66719     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:19.66719     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:19.66720     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:19.66720     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:19.66720     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:19.66727 
+2026-04-27_07:57:19.66728 Node.js v25.8.2
+2026-04-27_07:57:20.98648   Mode: CLOUD
+2026-04-27_07:57:21.27410 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:21.27417   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:21.27419                                              ^
+2026-04-27_07:57:21.27421 
+2026-04-27_07:57:21.27422 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:21.27424     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:21.27425     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:21.27427     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:21.27428     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:21.27430     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:21.27432     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:21.27433     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:21.27442     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:21.27444     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:21.27446     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:21.27448 
+2026-04-27_07:57:21.27449 Node.js v25.8.2
+2026-04-27_07:57:22.48355   Mode: CLOUD
+2026-04-27_07:57:22.74099 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:22.74118   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:22.74121                                              ^
+2026-04-27_07:57:22.74122 
+2026-04-27_07:57:22.74124 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:22.74126     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:22.74128     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:22.74129     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:22.74132     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:22.74134     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:22.74135     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:22.74137     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:22.74138     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:22.74140     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:22.74142     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:22.74144 
+2026-04-27_07:57:22.74145 Node.js v25.8.2
+2026-04-27_07:57:23.61181   Mode: CLOUD
+2026-04-27_07:57:24.15073 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:24.15089   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:24.15089                                              ^
+2026-04-27_07:57:24.15090 
+2026-04-27_07:57:24.15090 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:24.15090     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:24.15091     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:24.15091     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:24.15091     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:24.15091     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:24.15092     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:24.15092     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:24.15092     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:24.15093     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:24.15093     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:24.15102 
+2026-04-27_07:57:24.15103 Node.js v25.8.2
+2026-04-27_07:57:25.77139   Mode: CLOUD
+2026-04-27_07:57:26.21365 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:26.21368   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:26.21369                                              ^
+2026-04-27_07:57:26.21369 
+2026-04-27_07:57:26.21369 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:26.21370     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:26.21370     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:26.21370     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:26.21371     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:26.21371     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:26.21371     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:26.21374     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:26.21374     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:26.21375     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:26.21375     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:26.21382 
+2026-04-27_07:57:26.21383 Node.js v25.8.2
+2026-04-27_07:57:28.44163   Mode: CLOUD
+2026-04-27_07:57:29.71812 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:29.71815   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:29.71815                                              ^
+2026-04-27_07:57:29.71816 
+2026-04-27_07:57:29.71816 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:29.71816     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:29.71817     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:29.71817     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:29.71817     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:29.71817     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:29.71818     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:29.71818     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:29.71818     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:29.71818     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:29.71819     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:29.71825 
+2026-04-27_07:57:29.71826 Node.js v25.8.2
+2026-04-27_07:57:31.48097   Mode: CLOUD
+2026-04-27_07:57:31.84130 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:31.84137   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:31.84138                                              ^
+2026-04-27_07:57:31.84140 
+2026-04-27_07:57:31.84141 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:31.84143     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:31.84144     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:31.84146     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:31.84148     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:31.84149     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:31.84151     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:31.84152     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:31.84154     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:31.84155     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:31.84157     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:31.84159 
+2026-04-27_07:57:31.84160 Node.js v25.8.2
+2026-04-27_07:57:33.61210   Mode: CLOUD
+2026-04-27_07:57:34.01818 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:34.01822   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:34.01822                                              ^
+2026-04-27_07:57:34.01822 
+2026-04-27_07:57:34.01823 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:34.01823     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:34.01823     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:34.01823     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:34.01824     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:34.01824     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:34.01824     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:34.01827     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:34.01828     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:34.01828     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:34.01829     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:34.01836 
+2026-04-27_07:57:34.01837 Node.js v25.8.2
+2026-04-27_07:57:35.40771   Mode: CLOUD
+2026-04-27_07:57:35.63501 /data/data/com.termux/files/home/termuxpilot/src/workspace.js:60
+2026-04-27_07:57:35.63507   ensureStarterFiles(dir, userId || 'guest');\n  return dir;
+2026-04-27_07:57:35.63509                                              ^
+2026-04-27_07:57:35.63510 
+2026-04-27_07:57:35.63512 SyntaxError: Invalid or unexpected token
+2026-04-27_07:57:35.63513     at wrapSafe (node:internal/modules/cjs/loader:1762:18)
+2026-04-27_07:57:35.63515     at Module._compile (node:internal/modules/cjs/loader:1803:20)
+2026-04-27_07:57:35.63516     at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)
+2026-04-27_07:57:35.63518     at Module.load (node:internal/modules/cjs/loader:1552:32)
+2026-04-27_07:57:35.63520     at Module._load (node:internal/modules/cjs/loader:1354:12)
+2026-04-27_07:57:35.63521     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+2026-04-27_07:57:35.63523     at Module.require (node:internal/modules/cjs/loader:1575:12)
+2026-04-27_07:57:35.63524     at require (node:internal/modules/helpers:191:16)
+2026-04-27_07:57:35.63526     at Object.<anonymous> (/data/data/com.termux/files/home/termuxpilot/src/server.js:14:19)
+2026-04-27_07:57:35.63527     at Module._compile (node:internal/modules/cjs/loader:1829:14)
+2026-04-27_07:57:35.63529 
+2026-04-27_07:57:35.63530 Node.js v25.8.2
+2026-04-27_07:57:36.51702   Mode: CLOUD
+2026-04-27_07:57:37.26610 
+2026-04-27_07:57:37.26617   CodeDeck v1.0.0
+2026-04-27_07:57:37.26619   ----------------------
+2026-04-27_07:57:37.26622   Local:   http://localhost:3100
+2026-04-27_07:57:37.26624   Network: http://10.58.50.104:3100
+2026-04-27_07:57:37.26625   API:     http://localhost:3100/api/processes
+2026-04-27_07:57:37.26627 
+2026-04-27_07:57:37.26628   o - Open    l - List    r - Restart
+2026-04-27_07:57:37.26630   s - Stats   q - Quit    h - Help
+2026-04-27_07:57:37.26631   
+2026-04-27_07:58:00.69637   Mode: CLOUD
+2026-04-27_07:58:01.07093 
+2026-04-27_07:58:01.07096   CodeDeck v1.0.0
+2026-04-27_07:58:01.07096   ----------------------
+2026-04-27_07:58:01.07096   Local:   http://localhost:3100
+2026-04-27_07:58:01.07097   Network: http://10.58.50.104:3100
+2026-04-27_07:58:01.07097   API:     http://localhost:3100/api/processes
+2026-04-27_07:58:01.07097 
+2026-04-27_07:58:01.07097   o - Open    l - List    r - Restart
+2026-04-27_07:58:01.07098   s - Stats   q - Quit    h - Help
+2026-04-27_07:58:01.07098   
+2026-04-27_07:58:04.35842   Mode: CLOUD
+2026-04-27_07:58:04.58263 
+2026-04-27_07:58:04.58269   CodeDeck v1.0.0
+2026-04-27_07:58:04.58270   ----------------------
+2026-04-27_07:58:04.58272   Local:   http://localhost:3100
+2026-04-27_07:58:04.58273   Network: http://10.58.50.104:3100
+2026-04-27_07:58:04.58280   API:     http://localhost:3100/api/processes
+2026-04-27_07:58:04.58288 
+2026-04-27_07:58:04.58290   o - Open    l - List    r - Restart
+2026-04-27_07:58:04.58292   s - Stats   q - Quit    h - Help
+2026-04-27_07:58:04.58294   
+2026-04-27_08:02:15.99307   Mode: CLOUD
+2026-04-27_08:02:16.40434 
+2026-04-27_08:02:16.40440   CodeDeck v1.0.0
+2026-04-27_08:02:16.40442   ----------------------
+2026-04-27_08:02:16.40443   Local:   http://localhost:3100
+2026-04-27_08:02:16.40445   Network: http://10.58.50.104:3100
+2026-04-27_08:02:16.40446   API:     http://localhost:3100/api/processes
+2026-04-27_08:02:16.40448 
+2026-04-27_08:02:16.40449   o - Open    l - List    r - Restart
+2026-04-27_08:02:16.40450   s - Stats   q - Quit    h - Help
+2026-04-27_08:02:16.40452   
+2026-04-27_08:15:33.61303   Mode: CLOUD
+2026-04-27_08:15:34.72590 
+2026-04-27_08:15:34.72595   CodeDeck v1.0.0
+2026-04-27_08:15:34.72596   ----------------------
+2026-04-27_08:15:34.72596   Local:   http://localhost:3100
+2026-04-27_08:15:34.72596   Network: http://10.58.50.104:3100
+2026-04-27_08:15:34.72596   API:     http://localhost:3100/api/processes
+2026-04-27_08:15:34.72597 
+2026-04-27_08:15:34.72597   o - Open    l - List    r - Restart
+2026-04-27_08:15:34.72597   s - Stats   q - Quit    h - Help
+2026-04-27_08:15:34.72598   

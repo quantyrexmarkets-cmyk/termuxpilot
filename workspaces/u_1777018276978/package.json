@@ -1,0 +1,8 @@
+{
+  "name": "workspace-u_1777018276978",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node index.js"
+  }
+}

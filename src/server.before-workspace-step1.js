@@ -11,7 +11,6 @@ const pm = require('./processManager');
 const wsTerminal = require('./wsTerminal');
 const auth = require('./auth');
 const projects = require('./projects');
-const workspace = require('./workspace');
 
 const app = express();
 app.use(express.json());
@@ -297,20 +296,9 @@ app.get('/app', (req, res) => {
 const terminal = require('./terminal');
 
 app.post('/api/terminal/create', (req, res) => {
-  const { cwd } = req.body || {};
+  const { cwd } = req.body;
   const id = 'term_' + Date.now();
-
-  let finalCwd = cwd || '~';
-
-  const header = req.headers.authorization || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
-  const user = token ? auth.verify(token) : null;
-
-  if (user && (!cwd || cwd === '~')) {
-    finalCwd = workspace.getPath(user.id);
-  }
-
-  res.json(terminal.create(id, finalCwd));
+  res.json(terminal.create(id, cwd || '~'));
 });
 
 app.post('/api/terminal/:id/write', (req, res) => {
@@ -444,33 +432,6 @@ app.get('/api/terminal/:id/stream', (req, res) => {
 
   req.on('close', () => {
     if (unsub) unsub();
-  });
-});
-
-
-// ═══════════════════════════════════
-// WORKSPACE INFO API
-// ═══════════════════════════════════
-
-
-
-app.get('/api/workspace/me', (req, res) => {
-  const header = req.headers.authorization || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
-  if (!token) return res.status(401).json({ error: 'Not authenticated' });
-
-  const user = auth.verify(token);
-  if (!user) return res.status(401).json({ error: 'Invalid or expired token' });
-
-  const dir = workspace.getPath(user.id);
-  res.json({
-    success: true,
-    user: {
-      id: user.id,
-      email: user.email,
-      name: user.name
-    },
-    workspace: dir
   });
 });
 

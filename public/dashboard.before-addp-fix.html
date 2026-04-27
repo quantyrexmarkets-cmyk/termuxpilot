@@ -115,53 +115,23 @@ function pr(t,c){if(String(t).trim()==='Error')return;var o=document.getElementB
 
 function addP(){
 var o=document.getElementById('out');
-
-// remove any existing active prompt row first
-o.querySelectorAll('.pr').forEach(function(row){
-  if(row.querySelector('input')) row.remove();
-});
-
 var r=document.createElement('div');r.className='pr';
-var short=shortPath(gcwd);
+var short=gcwd.replace('/data/data/com.termux/files/home','~');
 r.innerHTML='<span class="ps">'+short+' $ </span><input placeholder="type command...">';
 var inp=r.querySelector('input');
 inp.onkeydown=function(e){
 if(e.key==='Enter'){e.preventDefault();go(this);return}
 if(e.key==='ArrowUp'){e.preventDefault();if(hidx>0)hidx--;this.value=hist[hidx]||'';return}
 if(e.key==='ArrowDown'){e.preventDefault();if(hidx<hist.length-1)hidx++;this.value=hist[hidx]||'';return}
-if(e.key==='y'&&pfix&&!this.value){
-  e.preventDefault();
-  var f=pfix;pfix=null;
-  lk(this.parentNode,'');
-  snd(f);
-  return;
-}};
+if(e.key==='y'&&pfix&&!this.value){e.preventDefault();var f=pfix;pfix=null;lk(this.parentNode,'');pr('$ '+f,'cmd');snd(f);return}};
 o.appendChild(r);o.scrollTop=o.scrollHeight;
 setTimeout(function(){inp.focus()},50)}
 
 function fi(){var i=document.querySelector('.pr input');if(i)i.focus()}
 
-
-function shortPath(p){
-  p = String(p || '');
-
-  // local paths
-  p = p.replace('/data/data/com.termux/files/home','~');
-  p = p.replace(/~\/termuxpilot\/workspaces\/[^/]+/, '~/workspace');
-
-  // cloud paths
-  p = p.replace('/opt/render/project/src/workspaces/', '/workspace/');
-  p = p.replace('/opt/render/workspaces/', '/workspace/');
-  p = p.replace(/\/workspace\/[^/]+/, '/workspace');
-
-  return p;
-}
-
-
-
 function lk(row,val){
 var s=document.createElement('div');s.className='pr';
-var short=shortPath(gcwd);
+var short=gcwd.replace('/data/data/com.termux/files/home','~');
 s.innerHTML='<span class="ps">'+short+' $ </span><span style="color:var(--tx)">'+E(val)+'</span>';
 row.parentNode.replaceChild(s,row)}
 
@@ -235,11 +205,11 @@ function oAd(){document.getElementById('admo').classList.add('open')}
 function cAd(){document.getElementById('admo').classList.remove('open')}
 async function aP(){var n=document.getElementById('in').value.trim(),c=document.getElementById('ic').value.trim(),d=document.getElementById('id').value.trim(),p=document.getElementById('ip').value,ar=document.getElementById('ir').checked;if(!n||!c)return alert('Required');await fetch('/api/processes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,command:c,cwd:d||undefined,port:p?parseInt(p):undefined,autoRestart:ar})});cAd();await fP();pr('Started '+n,'ok')}
 
-async function rF(){var el=document.getElementById('files-b');try{var r=await fetch('/api/files?path='+encodeURIComponent(cdir));var d=await r.json();if(d.error){el.innerHTML='<div style="padding:16px;color:var(--rd);font-size:11px">'+d.error+'</div>';return}document.getElementById('fpath').textContent=shortPath(d.path);var h='';if(d.parent)h+='<div class="fi d" onclick="cdir=\''+d.parent+'\';rF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>..</div>';d.items.forEach(function(f){if(f.type==='dir')h+='<div class="fi d" onclick="cdir=\''+f.path+'\';rF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>'+f.name+'</div>';else h+='<div class="fi" onclick="opF(\''+f.path+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+f.name+'</div>'});el.innerHTML=h||'<div style="padding:16px;color:var(--tx2);text-align:center;font-size:11px">Empty</div>'}catch(e){}}
+async function rF(){var el=document.getElementById('files-b');try{var r=await fetch('/api/files?path='+encodeURIComponent(cdir));var d=await r.json();if(d.error){el.innerHTML='<div style="padding:16px;color:var(--rd);font-size:11px">'+d.error+'</div>';return}document.getElementById('fpath').textContent=d.path.replace('/data/data/com.termux/files/home','~');var h='';if(d.parent)h+='<div class="fi d" onclick="cdir=\''+d.parent+'\';rF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>..</div>';d.items.forEach(function(f){if(f.type==='dir')h+='<div class="fi d" onclick="cdir=\''+f.path+'\';rF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>'+f.name+'</div>';else h+='<div class="fi" onclick="opF(\''+f.path+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+f.name+'</div>'});el.innerHTML=h||'<div style="padding:16px;color:var(--tx2);text-align:center;font-size:11px">Empty</div>'}catch(e){}}
 async function nf(){var n=prompt('File name:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:cdir+'/'+n,type:'file'})});rF()}
 async function nd(){var n=prompt('Folder:');if(!n)return;await fetch('/api/files/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:cdir+'/'+n,type:'dir'})});rF()}
 
-async function opF(p){epath=p;ca();tg('editor');try{var r=await fetch('/api/files/read?path='+encodeURIComponent(p));var d=await r.json();if(d.error){document.getElementById('ed-b').innerHTML='<div style="padding:16px;color:var(--rd)">'+d.error+'</div>';return}document.getElementById('edt').textContent=shortPath(d.path);document.getElementById('svb').style.display='block';document.getElementById('ed-b').innerHTML='<textarea class="ef" id="ea">'+E(d.content)+'</textarea>'}catch(e){}}
+async function opF(p){epath=p;ca();tg('editor');try{var r=await fetch('/api/files/read?path='+encodeURIComponent(p));var d=await r.json();if(d.error){document.getElementById('ed-b').innerHTML='<div style="padding:16px;color:var(--rd)">'+d.error+'</div>';return}document.getElementById('edt').textContent=d.path.replace('/data/data/com.termux/files/home','~');document.getElementById('svb').style.display='block';document.getElementById('ed-b').innerHTML='<textarea class="ef" id="ea">'+E(d.content)+'</textarea>'}catch(e){}}
 async function svf(){if(!epath)return;var c=document.getElementById('ea').value;try{var r=await fetch('/api/files/write',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:epath,content:c})});var d=await r.json();if(d.success){var b=document.getElementById('svb');b.textContent='Saved!';b.style.background='var(--gn)';setTimeout(function(){b.textContent='Save';b.style.background=''},1500)}}catch(e){}}
 
 async function fAI(){try{var r=await fetch('/api/ai/errors');var d=await r.json();errs=d.errors||[];var b=document.getElementById('aibdg');b.textContent=errs.length;b.style.display=errs.length>0?'flex':'none'}catch(e){}}
@@ -263,26 +233,8 @@ else if(a==='branch'){r=await fetch('/api/git/branch',{method:'POST',headers:{'C
 }catch(e){pr('Git error','err')}
 addP()}
 
-
-async function initWorkspace(){
-  try{
-    var tk = localStorage.getItem('codedeck_token');
-    if(!tk) return;
-    var r = await fetch('/api/workspace/me', {
-      headers: { 'Authorization': 'Bearer ' + tk }
-    });
-    if(!r.ok) return;
-    var d = await r.json();
-    if(d && d.success && d.workspace){
-      cdir = d.workspace;
-      gcwd = d.workspace;
-    }
-  }catch(e){}
-}
-
-
 document.addEventListener('DOMContentLoaded',function(){
-initWorkspace().then(function(){ initT(); });fP();fAI();
+initT();fP();fAI();
 setInterval(function(){fP();fAI()},8000);
 document.getElementById('admo').addEventListener('click',function(e){if(e.target===e.currentTarget)cAd()})});
 </script>

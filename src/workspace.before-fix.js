@@ -57,8 +57,7 @@ function getPath(userId) {
       'utf8'
     );
   }
-  ensureStarterFiles(dir, userId || 'guest');
-  return dir;
+  ensureStarterFiles(dir, userId || 'guest');\n  return dir;
 }
 
 function getUserStore(userId) {

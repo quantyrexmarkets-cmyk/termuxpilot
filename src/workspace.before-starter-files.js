@@ -8,44 +8,6 @@ if (!fs.existsSync(WORKSPACES_DIR)) {
   fs.mkdirSync(WORKSPACES_DIR, { recursive: true });
 }
 
-
-function ensureStarterFiles(dir, userId) {
-  const readme = path.join(dir, 'README.md');
-  const pkg = path.join(dir, 'package.json');
-  const index = path.join(dir, 'index.js');
-
-  if (!fs.existsSync(readme)) {
-    fs.writeFileSync(
-      readme,
-      '# Welcome to your CodeDeck workspace\n\nThis is your personal cloud workspace.\n\nStart by editing `index.js` or installing packages.\n',
-      'utf8'
-    );
-  }
-
-  if (!fs.existsSync(pkg)) {
-    fs.writeFileSync(
-      pkg,
-      JSON.stringify({
-        name: 'workspace-' + userId,
-        version: '1.0.0',
-        private: true,
-        scripts: {
-          start: 'node index.js'
-        }
-      }, null, 2),
-      'utf8'
-    );
-  }
-
-  if (!fs.existsSync(index)) {
-    fs.writeFileSync(
-      index,
-      "console.log('Hello from CodeDeck workspace');\n",
-      'utf8'
-    );
-  }
-}
-
 function getPath(userId) {
   const dir = path.join(WORKSPACES_DIR, userId || 'guest');
   if (!fs.existsSync(dir)) {
@@ -57,7 +19,6 @@ function getPath(userId) {
       'utf8'
     );
   }
-  ensureStarterFiles(dir, userId || 'guest');
   return dir;
 }
 
